@@ -1,0 +1,29 @@
+/* Logo Component Styles */
+
+.logo-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.logo-link:hover {
+  transform: scale(1.05);
+}
+
+.logo-image {
+  display: block;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.3));
+}
+
+.logo-image:hover {
+  filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5));
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .logo-link:hover {
+    transform: scale(1.02);
+  }
+}

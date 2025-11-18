@@ -1,0 +1,397 @@
+/* ========================================
+   PORTFOLIO WEB STYLES
+   (Agregar al final de Services.css)
+   ======================================== */
+
+.portfolio-grid-section {
+  padding: 5rem 2rem;
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+}
+
+.portfolio-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 4rem;
+}
+
+.portfolio-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.portfolio-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 60px rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Project Image/Mockup */
+.project-image-container {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  padding: 3rem 2rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-image-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.project-mockup {
+  position: relative;
+  z-index: 1;
+}
+
+.mockup-devices {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+/* Desktop Device */
+.device-desktop {
+  flex: 1;
+  max-width: 350px;
+  background: #1e293b;
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(59, 130, 246, 0.3);
+}
+
+.device-screen {
+  background: #0f172a;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.screen-header {
+  background: #1e293b;
+  padding: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.screen-dots {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.screen-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #475569;
+}
+
+.screen-content {
+  aspect-ratio: 16/10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+.content-placeholder {
+  text-align: center;
+}
+
+.placeholder-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5));
+}
+
+.placeholder-text {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* Mobile Device */
+.device-mobile {
+  width: 100px;
+  background: #1e293b;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(59, 130, 246, 0.3);
+  position: relative;
+  top: 2rem;
+}
+
+.mobile-screen {
+  background: #0f172a;
+  border-radius: 0.75rem;
+  aspect-ratio: 9/16;
+  position: relative;
+  overflow: hidden;
+}
+
+.mobile-notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40%;
+  height: 20px;
+  background: #1e293b;
+  border-radius: 0 0 10px 10px;
+  z-index: 2;
+}
+
+.mobile-content {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+.mobile-icon {
+  font-size: 2rem;
+  filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
+}
+
+/* Project Info */
+.project-info {
+  padding: 2rem;
+}
+
+.project-name {
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: white;
+  line-height: 1.2;
+}
+
+.project-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.meta-icon {
+  font-size: 1.1rem;
+}
+
+.meta-label {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.meta-value {
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+.project-description {
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+/* Tags */
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.project-tag {
+  padding: 0.4rem 1rem;
+  background: rgba(236, 72, 153, 0.1);
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  border-radius: 2rem;
+  color: #ec4899;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* Technologies */
+.project-technologies {
+  margin-bottom: 2rem;
+}
+
+.tech-label {
+  display: block;
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.tech-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tech-item {
+  padding: 0.4rem 0.875rem;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 0.5rem;
+  color: #60a5fa;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* View Project Button */
+.btn-view-project {
+  display: inline-block;
+  width: 100%;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  color: white;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  font-weight: bold;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn-view-project:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+}
+
+/* ========================================
+   RESPONSIVE - PORTFOLIO WEB
+   ======================================== */
+
+/* Tablets */
+@media (max-width: 768px) {
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .mockup-devices {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .device-desktop {
+    max-width: 100%;
+  }
+
+  .device-mobile {
+    width: 80px;
+    top: 0;
+  }
+
+  .project-name {
+    font-size: 1.5rem;
+  }
+}
+
+/* Móviles */
+@media (max-width: 480px) {
+  .portfolio-grid-section {
+    padding: 3rem 1rem;
+  }
+
+  .portfolio-grid {
+    gap: 2rem;
+  }
+
+  .project-image-container {
+    padding: 2rem 1rem 1rem;
+  }
+
+  .device-desktop {
+    max-width: 100%;
+  }
+
+  .device-mobile {
+    width: 70px;
+  }
+
+  .mobile-icon {
+    font-size: 1.5rem;
+  }
+
+  .placeholder-icon {
+    font-size: 2rem;
+  }
+
+  .placeholder-text {
+    font-size: 0.75rem;
+  }
+
+  .project-info {
+    padding: 1.5rem;
+  }
+
+  .project-name {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .meta-item {
+    font-size: 0.85rem;
+  }
+
+  .project-description {
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+  }
+
+  .project-tag {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.75rem;
+  }
+
+  .tech-item {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.75rem;
+  }
+
+  .btn-view-project {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
