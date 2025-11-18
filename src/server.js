@@ -26,35 +26,46 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const httpServer = createServer(app);
 
-// Configurar Socket.IO
+// =======================
+//   ORÍGENES PERMITIDOS
+// =======================
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'https://gabrieldisena.com'
+];
+
+// =======================
+//   CORS HTTP
+// =======================
+
+// CORS principal para TODAS las rutas
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true
+  })
+);
+
+// Preflight global (OPTIONS)
+app.options(
+  '*',
+  cors({
+    origin: allowedOrigins,
+    credentials: true
+  })
+);
+
+// =======================
+//   SOCKET.IO
+// =======================
+
 const io = new Server(httpServer, {
   cors: {
-    origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true
   }
-});
-
-// 🆕 CONFIGURACIÓN MEJORADA DE CORS
-app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
-// 🆕 MIDDLEWARE ADICIONAL PARA CORS
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', req.headers.origin || 'http://localhost:5173');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
-  
-  next();
 });
 
 app.use(express.json());
@@ -67,7 +78,8 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.set('io', io);
 
 // Conectar a MongoDB
-mongoose.connect(process.env.MONGO_URI)
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => {
     console.log('✅ Conectado a MongoDB Atlas');
   })
@@ -129,7 +141,7 @@ app.use('/api/payments', paymentRoutes);
 
 // Ruta de prueba
 app.get('/', (req, res) => {
-  res.json({ 
+  res.json({
     message: '✅ API de Gabriel Diseña funcionando correctamente',
     version: '1.0.0',
     endpoints: {
@@ -143,9 +155,9 @@ app.get('/', (req, res) => {
 
 // Manejo de rutas no encontradas
 app.use((req, res) => {
-  res.status(404).json({ 
+  res.status(404).json({
     message: '❌ Ruta no encontrada',
-    path: req.path 
+    path: req.path
   });
 });
 
@@ -199,3 +211,5 @@ process.on('unhandledRejection', (err) => {
 });
 
 export default app;
+
+
