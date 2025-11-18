@@ -8,14 +8,14 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 // Importar rutas
-import authRoutes from './routes/auth.js';
-import adminRoutes from './routes/admin.js';
-import projectRoutes from './routes/projects.js';
-import analyticsRoutes from './routes/analyticsRoutes.js';
-import paymentRoutes from './routes/payments.js';
+import authRoutes from './src/routes/auth.js';
+import adminRoutes from './src/routes/admin.js';
+import projectRoutes from './src/routes/projects.js';
+import analyticsRoutes from './src/routes/analytics.js';
+import paymentRoutes from './src/routes/payments.js';
 
 // Importar middleware
-import authMiddleware from './middleware/auth.js';
+import authMiddleware from './src/middleware/auth.js';
 
 // Configuración
 dotenv.config();
@@ -71,8 +71,8 @@ const io = new Server(httpServer, {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Servir archivos estáticos (uploads) -> ahora subimos un nivel
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+// Servir archivos estáticos (uploads)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Hacer io accesible en las rutas
 app.set('io', io);
