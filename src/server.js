@@ -11,7 +11,7 @@ import { fileURLToPath } from 'url';
 import authRoutes from './routes/auth.js';
 import adminRoutes from './routes/admin.js';
 import projectRoutes from './routes/projects.js';
-import analyticsRoutes from './routes/analytics.js';
+import analyticsRoutes from './routes/analyticsRoutes.js';
 import paymentRoutes from './routes/payments.js';
 
 // Importar middleware
