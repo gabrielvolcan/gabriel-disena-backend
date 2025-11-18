@@ -8,14 +8,14 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 // Importar rutas
-import authRoutes from './src/routes/auth.js';
-import adminRoutes from './src/routes/admin.js';
-import projectRoutes from './src/routes/projects.js';
-import analyticsRoutes from './src/routes/analytics.js';
-import paymentRoutes from './src/routes/payments.js';
+import authRoutes from './routes/auth.js';
+import adminRoutes from './routes/admin.js';
+import projectRoutes from './routes/projects.js';
+import analyticsRoutes from './routes/analytics.js';
+import paymentRoutes from './routes/payments.js';
 
 // Importar middleware
-import authMiddleware from './src/middleware/auth.js';
+import authMiddleware from './middleware/auth.js';
 
 // Configuración
 dotenv.config();
