@@ -16,7 +16,7 @@ export const SocketProvider = ({ children }) => {
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
-    const SOCKET_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
+    const SOCKET_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://gabriel-disena-backend.onrender.com';
     const newSocket = io(SOCKET_URL, {
       transports: ['websocket'],
       autoConnect: true,

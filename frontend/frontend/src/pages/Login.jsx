@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
+const API_URL = 'https://gabriel-disena-backend.onrender.com';
+
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -17,28 +19,42 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
+        credentials: 'include'
       });
 
       const data = await response.json();
 
-      if (response.ok) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('userId', data.userId);
-        localStorage.setItem('userRole', data.role);
-
-        if (data.role === 'admin') {
-          navigate('/admin');
-        } else {
-          navigate('/dashboard');
-        }
-      } else {
+      if (!response.ok) {
         setError(data.message || 'Error al iniciar sesión');
+        setLoading(false);
+        return;
+      }
+
+      // 👇 Ajusta a la estructura típica de tu backend:
+      // { token, user: { _id, role, ... } }
+      const { token, user } = data;
+
+      if (!token || !user) {
+        setError('Respuesta inesperada del servidor');
+        setLoading(false);
+        return;
+      }
+
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', user._id);
+      localStorage.setItem('userRole', user.role);
+
+      // 🔐 Redirección según rol
+      if (user.role === 'admin' || user.role === 'superadmin') {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -103,8 +119,8 @@ const Login = () => {
               />
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="btn-login"
               disabled={loading}
             >
@@ -113,7 +129,10 @@ const Login = () => {
           </form>
 
           <div className="login-footer">
-            <p>¿Olvidaste tu contraseña? <a href="mailto:contacto@gabrieldisena.com">Contáctanos</a></p>
+            <p>
+              ¿Olvidaste tu contraseña?{' '}
+              <a href="mailto:contacto@gabrieldisena.com">Contáctanos</a>
+            </p>
           </div>
         </div>
       </div>

@@ -1,9 +1,9 @@
 import express from 'express';
-import Project from '../models/Project.js';
-import User from '../models/User.js';
-import auth from '../middleware/auth.js';
-import upload from '../config/multer.js';
-import { sendFileUploadedEmail, sendProjectCompletedEmail } from '../config/email.js';
+import Project from '../../../models/Project.js';
+import User from '../../../models/User.js';
+import auth from '../../../middleware/auth.js';
+import upload from '../../../config/multer.js';
+import { sendFileUploadedEmail, sendProjectCompletedEmail } from '../../../config/email.js';
 
 const router = express.Router();
 
@@ -282,7 +282,7 @@ router.post('/:id/upload', auth, upload.single('file'), async (req, res) => {
     }
 
     // Crear URL del archivo
-    const fileUrl = `http://localhost:5000/uploads/${req.file.filename}`;
+    const fileUrl = `https://gabriel-disena-backend.onrender.com/uploads/${req.file.filename}`;
 
     // Agregar archivo al proyecto
     const newFile = {

@@ -74,7 +74,7 @@ const Admin = () => {
 
     setCurrentUserRole(userRole);
 
-    const newSocket = io('http://localhost:5000', {
+    const newSocket = io('https://gabriel-disena-backend.onrender.com', {
       auth: { token }
     });
 
@@ -127,7 +127,7 @@ const Admin = () => {
   const fetchProjects = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/admin/projects', {
+      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/admin/projects', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -143,7 +143,7 @@ const Admin = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/admin/users', {
+      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/admin/users', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -156,7 +156,7 @@ const Admin = () => {
   const fetchAdministrators = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/admin/administrators', {
+      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/admin/administrators', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -218,7 +218,7 @@ const Admin = () => {
       const token = localStorage.getItem('token');
       const endpoint = paymentData.paymentType === 'deposit' ? 'deposit' : 'final';
       
-      const response = await fetch(`http://localhost:5000/api/payments/${endpoint}/${paymentData.projectId}`, {
+      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/payments/${endpoint}/${paymentData.projectId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -269,7 +269,7 @@ const Admin = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/admin/users', {
+      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/admin/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -298,7 +298,7 @@ const Admin = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/admin/administrators', {
+      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/admin/administrators', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -328,7 +328,7 @@ const Admin = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/administrators/${adminId}`, {
+      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/admin/administrators/${adminId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -389,7 +389,7 @@ const Admin = () => {
         status: newProject.status
       };
       
-      const response = await fetch('http://localhost:5000/api/admin/projects', {
+      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/admin/projects', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -444,7 +444,7 @@ const Admin = () => {
         updatePayload.message = updateData.message.trim();
       }
 
-      const response = await fetch(`http://localhost:5000/api/admin/projects/${projectId}`, {
+      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/admin/projects/${projectId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -486,7 +486,7 @@ const Admin = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/projects/${selectedProject._id}/comment`, {
+      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/projects/${selectedProject._id}/comment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -534,7 +534,7 @@ const Admin = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/projects/${selectedProject._id}/comment/${commentId}`, {
+      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/projects/${selectedProject._id}/comment/${commentId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -595,7 +595,7 @@ const Admin = () => {
       formData.append('file', file);
 
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/projects/${selectedProject._id}/upload`, {
+      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/projects/${selectedProject._id}/upload`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData
@@ -635,7 +635,7 @@ const Admin = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/projects/${projectId}`, {
+      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/admin/projects/${projectId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -654,7 +654,7 @@ const Admin = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/users/${userId}`, {
+      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/admin/users/${userId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });

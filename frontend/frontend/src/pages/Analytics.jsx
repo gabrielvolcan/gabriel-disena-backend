@@ -6,6 +6,8 @@ import {
 } from 'recharts';
 import './Analytics.css';
 
+const API_URL = 'https://gabriel-disena-backend.onrender.com';
+
 const Analytics = () => {
   const navigate = useNavigate();
   const [analytics, setAnalytics] = useState(null);
@@ -32,7 +34,8 @@ const Analytics = () => {
     const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
 
-    if (!token || userRole !== 'admin') {
+    // ✅ Permitir admin y superadmin, y exigir token
+    if (!token || (userRole !== 'admin' && userRole !== 'superadmin')) {
       navigate('/login');
       return;
     }
@@ -46,12 +49,13 @@ const Analytics = () => {
     if (analytics !== null) {
       fetchAnalytics();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   const fetchClients = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/admin/users', {
+      const response = await fetch(`${API_URL}/api/admin/users`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -96,7 +100,7 @@ const Analytics = () => {
       }
 
       const queryString = params.toString();
-      const url = `http://localhost:5000/api/analytics${queryString ? `?${queryString}` : ''}`;
+      const url = `${API_URL}/api/analytics${queryString ? `?${queryString}` : ''}`;
 
       const response = await fetch(url, {
         headers: {
@@ -138,38 +142,38 @@ const Analytics = () => {
   };
 
   const formatCurrency = (value, currency = 'USD') => {
-  const symbols = {
-    'USD': 'US$',
-    'PEN': 'S/',
-    'CLP': 'CLP$',
-    'ARS': 'ARS$',
-    'VES': 'Bs.',
-    'EUR': '€',
-    'MXN': 'MX$',
-    'COP': 'COL$',
-    'BRL': 'R$',
-    'UYU': 'UY$'
+    const symbols = {
+      'USD': 'US$',
+      'PEN': 'S/',
+      'CLP': 'CLP$',
+      'ARS': 'ARS$',
+      'VES': 'Bs.',
+      'EUR': '€',
+      'MXN': 'MX$',
+      'COP': 'COL$',
+      'BRL': 'R$',
+      'UYU': 'UY$'
+    };
+
+    const symbol = symbols[currency] || currency;
+    return `${symbol}${parseFloat(value).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
-  const symbol = symbols[currency] || currency;
-  return `${symbol}${parseFloat(value).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-};
-
-// 🆕 OBTENER MONEDA SEGÚN PAÍS
-const getCurrencyByCountry = (country) => {
-  const currencyMap = {
-    'peru': 'PEN',
-    'chile': 'CLP',
-    'argentina': 'ARS',
-    'uruguay': 'UYU',
-    'venezuela': 'VES',
-    'mexico': 'MXN',
-    'colombia': 'COP',
-    'brasil': 'BRL',
-    'internacional': 'USD'
+  // 🆕 OBTENER MONEDA SEGÚN PAÍS
+  const getCurrencyByCountry = (country) => {
+    const currencyMap = {
+      'peru': 'PEN',
+      'chile': 'CLP',
+      'argentina': 'ARS',
+      'uruguay': 'UYU',
+      'venezuela': 'VES',
+      'mexico': 'MXN',
+      'colombia': 'COP',
+      'brasil': 'BRL',
+      'internacional': 'USD'
+    };
+    return currencyMap[country?.toLowerCase()] || 'USD';
   };
-  return currencyMap[country?.toLowerCase()] || 'USD';
-};
 
   // 🆕 FUNCIÓN PARA FORMATEAR SOLO EN USD (para totales generales)
   const formatUSD = (value) => {
@@ -222,7 +226,7 @@ const getCurrencyByCountry = (country) => {
             <h1>📊 Dashboard de Analytics</h1>
             <p>Métricas y estadísticas de tu negocio</p>
           </div>
-          <button onClick={() => navigate('/admin')} className="btn-back">
+          <button onClick={() => navigate('/superadmin')} className="btn-back">
             ← Volver al Admin
           </button>
         </div>
@@ -436,7 +440,6 @@ const getCurrencyByCountry = (country) => {
           </div>
           <div className="stat-data">
             <h3>{formatCurrency(analytics.stats.averagePrice, getCurrencyByCountry(filters.country))}</h3>
-
             <p>Precio Promedio</p>
           </div>
         </div>

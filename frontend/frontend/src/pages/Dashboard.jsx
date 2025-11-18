@@ -23,7 +23,7 @@ const Dashboard = () => {
       return;
     }
 
-    const newSocket = io('http://localhost:5000', {
+    const newSocket = io('https://gabriel-disena-backend.onrender.com', {
       auth: { token }
     });
 
@@ -134,7 +134,8 @@ const Dashboard = () => {
 
   const fetchProject = async (userId, token) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/projects/user/${userId}`, {
+      const response = await fetch(`https://gabriel-disena-backend.onrender.com
+/api/projects/user/${userId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -162,7 +163,8 @@ const Dashboard = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/projects/${project._id}/comment`, {
+      const response = await fetch(`https://gabriel-disena-backend.onrender.com
+/api/projects/${project._id}/comment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -325,7 +327,8 @@ const handleDownloadInvoice = async (invoiceNumber) => {
     showNotification('📥 Generando factura...', 'info');
 
     const response = await fetch(
-      `http://localhost:5000/api/payments/invoice/${project._id}/${invoiceNumber}`,
+      `https://gabriel-disena-backend.onrender.com
+/api/payments/invoice/${project._id}/${invoiceNumber}`,
       {
         method: 'GET',
         headers: {

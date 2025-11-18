@@ -5,11 +5,11 @@ import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Obtener analytics completos (solo admin) con filtros
+// Obtener analytics completos (admin y superadmin) con filtros
 router.get('/', auth, async (req, res) => {
   try {
-    // Verificar que sea admin
-    if (req.user.role !== 'admin') {
+    // ✅ Verificar que sea admin O superadmin
+    if (!req.user || !['admin', 'superadmin'].includes(req.user.role)) {
       return res.status(403).json({ message: 'No tienes permisos para ver analytics' });
     }
 
