@@ -1,9 +1,9 @@
 import express from 'express';
-import Project from '../../../models/Project.js';
-import User from '../../../models/User.js';
-import auth from '../../../middleware/auth.js';
-import upload from '../../../config/multer.js';
-import { sendFileUploadedEmail, sendProjectCompletedEmail } from '../../../config/email.js';
+import Project from '../../models/Project.js';
+import User from '../../models/User.js';
+import auth from '../../middleware/auth.js';
+import upload from '../../config/multer.js';
+import { sendFileUploadedEmail, sendProjectCompletedEmail } from '../../config/email.js';
 
 const router = express.Router();
 
