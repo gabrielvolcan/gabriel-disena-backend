@@ -60,8 +60,8 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Servir archivos estáticos (uploads)
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Servir archivos estáticos (uploads) -> ahora subimos un nivel
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Hacer io accesible en las rutas
 app.set('io', io);
@@ -79,37 +79,31 @@ mongoose.connect(process.env.MONGO_URI)
 io.on('connection', (socket) => {
   console.log('🔌 Cliente conectado:', socket.id);
 
-  // Unirse a sala de proyecto
   socket.on('join-project', (projectId) => {
     socket.join(projectId);
     console.log(`📂 Socket ${socket.id} se unió al proyecto ${projectId}`);
   });
 
-  // Escuchar comentarios enviados
   socket.on('commentSent', (data) => {
     console.log('💬 Comentario enviado vía socket:', data);
     io.to(data.projectId).emit('newComment', data);
   });
 
-  // Escuchar cuando se crea un proyecto
   socket.on('projectCreated', (data) => {
     console.log('✨ Proyecto creado:', data);
     io.emit('projectUpdate', data);
   });
 
-  // Escuchar cuando se actualiza un proyecto
   socket.on('projectUpdated', (data) => {
     console.log('🔄 Proyecto actualizado:', data);
     io.to(data.projectId).emit('projectUpdate', data);
   });
 
-  // Escuchar cuando se sube un archivo
   socket.on('fileUploaded', (data) => {
     console.log('📎 Archivo subido:', data);
     io.to(data.projectId).emit('fileUpdate', data);
   });
 
-  // Escuchar cuando se elimina un comentario
   socket.on('commentDeleted', (data) => {
     console.log('🗑️ Comentario eliminado:', data);
     io.to(data.projectId).emit('commentDeleted', data);
