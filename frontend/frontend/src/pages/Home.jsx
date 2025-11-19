@@ -21,7 +21,6 @@ function Home() {
     const handleScroll = () => {
       setScrollY(window.scrollY);
       
-      // Detect visible sections for animations
       Object.keys(sectionRefs).forEach(key => {
         const element = sectionRefs[key].current;
         if (element) {
@@ -32,12 +31,11 @@ function Home() {
       });
     };
     
-    handleScroll(); // Check initial visibility
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Auto-rotate testimonials
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTestimonial(prev => (prev + 1) % testimonials.length);
@@ -97,7 +95,6 @@ function Home() {
 
   return (
     <div className="home-container">
-      {/* Animated Background */}
       <div 
         className="animated-background"
         style={{
@@ -105,11 +102,28 @@ function Home() {
         }}
       />
 
-      {/* Navigation */}
+      {/* Navigation with LOGO */}
       <nav className="home-nav">
         <div className="nav-container">
-          <Link to="/" className="nav-logo">
-            Gabriel<span style={{ color: '#3b82f6' }}>.design</span>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
+            <img 
+              src="/logo GD.svg" 
+              alt="Gabriel Diseña" 
+              style={{
+                height: '50px',
+                width: 'auto',
+                filter: 'drop-shadow(0 0 10px rgba(59, 130, 246, 0.3))',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.05)';
+                e.currentTarget.style.filter = 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.5))';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.filter = 'drop-shadow(0 0 10px rgba(59, 130, 246, 0.3))';
+              }}
+            />
           </Link>
           <div className="nav-links">
             <Link to="/services" className="nav-link">Servicios</Link>
@@ -129,7 +143,6 @@ function Home() {
             transition: 'all 1s cubic-bezier(0.16, 1, 0.3, 1)'
           }}
         >
-          {/* Badge */}
           <div 
             className="hero-badge"
             style={{
@@ -167,7 +180,7 @@ function Home() {
             desarrollo web moderno y aplicaciones personalizadas. 
             <br />
             <span style={{ color: '#60a5fa', fontWeight: '600' }}>
-              Trabajo directo, sin intermediarios, resultados únicos
+              Trabajo directo, sin intermediarios, resultados únicos.
             </span>
           </p>
 
@@ -186,38 +199,127 @@ function Home() {
             </a>
           </div>
 
+          {/* Contact Icons usando SVG */}
           <div 
-            className="hero-contact"
             style={{
+              display: 'flex',
+              gap: '1.5rem',
+              marginTop: '2rem',
+              justifyContent: 'center',
+              alignItems: 'center',
               animation: mounted ? 'fadeIn 1s ease-out 1.1s forwards' : 'none',
               opacity: 0
             }}
           >
-            📧 Contáctame en Instagram, WhatsApp o Email
+            <a 
+              href="https://www.instagram.com/gabrieldisena25/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              title="Instagram"
+            >
+              <img 
+                src="/instagram.svg" 
+                alt="Instagram" 
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  transition: 'all 0.3s ease',
+                  filter: 'brightness(0.8)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.2)';
+                  e.currentTarget.style.filter = 'brightness(1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.filter = 'brightness(0.8)';
+                }}
+              />
+            </a>
+            <a 
+              href="https://wa.me/51957949278" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              title="WhatsApp"
+            >
+              <img 
+                src="/whatsapp.svg" 
+                alt="WhatsApp" 
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  transition: 'all 0.3s ease',
+                  filter: 'brightness(0.8)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.2)';
+                  e.currentTarget.style.filter = 'brightness(1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.filter = 'brightness(0.8)';
+                }}
+              />
+            </a>
+            <a 
+              href="mailto:contacto@gabrieldisena.com"
+              title="Email"
+            >
+              <img 
+                src="/correo.svg" 
+                alt="Email" 
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  transition: 'all 0.3s ease',
+                  filter: 'brightness(0.8)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.2)';
+                  e.currentTarget.style.filter = 'brightness(1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.filter = 'brightness(0.8)';
+                }}
+              />
+            </a>
           </div>
         </div>
       </div>
-
       {/* Logos Portfolio Section */}
       <div ref={sectionRefs.portfolio} className="portfolio-section" id="portfolio">
         <div className="portfolio-container">
-          {/* Left Content */}
           <div 
             className="portfolio-content"
             style={{
               opacity: visibleSections.portfolio ? 1 : 0,
-              transform: visibleSections.portfolio ? 'translateX(0)' : 'translateX(-50px)'
+              transform: visibleSections.portfolio ? 'translateX(0)' : 'translateX(-50px)',
+              maxWidth: '100%',
+              margin: '0 auto'
             }}
           >
             <div className="section-label pink">
               CASOS DE ÉXITO
             </div>
 
-            <h2 className="section-title">
-              Portfolio{' '}
-              <span className="section-title-accent pink">
-                Logos
-              </span>
+            <h2 className="section-title" style={{ color: 'white' }}>
+              Portfolio <span style={{ 
+                fontStyle: 'italic',
+                background: 'linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>Logos</span> <img 
+                src="/diseño.svg" 
+                alt="Diseño" 
+                style={{
+                  width: '60px',
+                  height: '60px',
+                  verticalAlign: 'middle',
+                  filter: 'drop-shadow(0 0 20px rgba(236, 72, 153, 0.5))'
+                }}
+              />
             </h2>
 
             <p className="section-description">
@@ -268,67 +370,42 @@ function Home() {
               Ver Portfolio en Behance
             </a>
           </div>
-
-          {/* Right Mockup - Logos */}
-          <div 
-            className="mockup-container"
-            style={{
-              opacity: visibleSections.portfolio ? 1 : 0,
-              transform: visibleSections.portfolio ? 'translateX(0)' : 'translateX(50px)'
-            }}
-          >
-            {/* Decorative gradient */}
-            <div className="mockup-gradient pink" />
-
-            {/* Main device mockup */}
-            <div className="mockup-grid">
-              {/* Desktop mockup */}
-              <div className="mockup-card desktop">
-                <div className="mockup-icon pink">
-                  🎨
-                </div>
-                <div className="mockup-title">
-                  Diseño
-                </div>
-                <div className="mockup-subtitle pink">
-                  de Logos
-                </div>
-              </div>
-
-              {/* Mobile mockup */}
-              <div className="mockup-card mobile pink">
-                <div className="mockup-icon-small pink">
-                  ✨
-                </div>
-                <div className="mockup-text">
-                  Logos únicos y profesionales
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
       {/* Web Development Portfolio Section */}
       <div className="portfolio-section web-portfolio">
         <div className="portfolio-container">
-          {/* Left Content */}
           <div 
             className="portfolio-content"
             style={{
               opacity: visibleSections.portfolio ? 1 : 0,
-              transform: visibleSections.portfolio ? 'translateX(0)' : 'translateX(-50px)'
+              transform: visibleSections.portfolio ? 'translateX(0)' : 'translateX(-50px)',
+              maxWidth: '100%',
+              margin: '0 auto'
             }}
           >
             <div className="section-label blue">
               CASOS DE ÉXITO
             </div>
 
-            <h2 className="section-title">
-              Portfolio{' '}
-              <span className="section-title-accent blue">
-                web
-              </span>
+            <h2 className="section-title" style={{ color: 'white' }}>
+              Portfolio <span style={{ 
+                fontStyle: 'italic',
+                background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>Web</span> <img 
+                src="/web.svg" 
+                alt="Web" 
+                style={{
+                  width: '60px',
+                  height: '60px',
+                  verticalAlign: 'middle',
+                  filter: 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.5))'
+                }}
+              />
             </h2>
 
             <p className="section-description">
@@ -357,65 +434,9 @@ function Home() {
               ))}
             </ul>
 
-            <Link to="/services" className="portfolio-cta blue">
+            <Link to="/portfolio-web" className="portfolio-cta blue">
               Ver Portfolio Web
             </Link>
-          </div>
-
-          {/* Right Mockup - Web */}
-          <div 
-            className="mockup-container"
-            style={{
-              opacity: visibleSections.portfolio ? 1 : 0,
-              transform: visibleSections.portfolio ? 'translateX(0)' : 'translateX(50px)'
-            }}
-          >
-            {/* Decorative gradient */}
-            <div className="mockup-gradient blue" />
-
-            <div className="mockup-grid">
-              {/* Desktop mockup */}
-              <div className="mockup-card desktop blue">
-                <div className="mockup-icon blue">
-                  💼
-                </div>
-                <div className="mockup-title">
-                  Desarrollo Web
-                </div>
-                <div className="mockup-subtitle blue">
-                  a Medida
-                </div>
-                
-                {/* Decorative dots */}
-                <div style={{
-                  position: 'absolute',
-                  bottom: '1rem',
-                  right: '1rem',
-                  display: 'flex',
-                  gap: '0.5rem'
-                }}>
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} style={{
-                      width: '8px',
-                      height: '8px',
-                      borderRadius: '50%',
-                      background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
-                      opacity: 0.6
-                    }} />
-                  ))}
-                </div>
-              </div>
-
-              {/* Mobile mockup */}
-              <div className="mockup-card mobile blue">
-                <div className="mockup-icon-small blue">
-                  🌐
-                </div>
-                <div className="mockup-text">
-                  Responsive y moderno
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -436,18 +457,23 @@ function Home() {
             </div>
 
             <h2 
-              className="section-title"
-              style={{
-                opacity: visibleSections.testimonials ? 1 : 0,
-                transform: visibleSections.testimonials ? 'translateY(0)' : 'translateY(30px)',
-                transition: 'all 0.8s ease-out 0.1s'
-              }}
-            >
-              Nuestros clientes{' '}
-              <span className="section-title-accent blue">
-                lo dicen
-              </span>
-            </h2>
+  className="section-title"
+  style={{
+    opacity: visibleSections.testimonials ? 1 : 0,
+    transform: visibleSections.testimonials ? 'translateY(0)' : 'translateY(30px)',
+    transition: 'all 0.8s ease-out 0.1s',
+    color: 'white'
+  }}
+>
+  Nuestros clientes{' '}
+  <span style={{ 
+    fontStyle: 'italic',
+    background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text'
+  }}>lo dicen</span>
+</h2>
           </div>
 
           <div 
@@ -458,7 +484,6 @@ function Home() {
               transition: 'all 0.8s ease-out 0.3s'
             }}
           >
-            {/* Rating Box */}
             <div className="rating-box">
               <div className="rating-title">
                 EXCELENTE
@@ -474,7 +499,6 @@ function Home() {
               </div>
             </div>
 
-            {/* Testimonials Carousel */}
             <div className="carousel-container">
               <button
                 onClick={() => setCurrentTestimonial(prev => (prev - 1 + testimonials.length) % testimonials.length)}
@@ -529,7 +553,6 @@ function Home() {
           </div>
         </div>
       </div>
-
       {/* CTA Section */}
       <div id="contacto" ref={sectionRefs.cta} className="cta-section">
         <div 
@@ -556,7 +579,7 @@ function Home() {
         </div>
       </div>
 
-      {/* Footer */}
+      {/* Footer con iconos SVG */}
       <footer className="home-footer">
         <div className="footer-container">
           <div>
@@ -572,8 +595,91 @@ function Home() {
             Tus Ideas
           </h3>
 
+          {/* Iconos de redes sociales con SVG */}
+          <div style={{
+            display: 'flex',
+            gap: '2rem',
+            justifyContent: 'center',
+            marginTop: '2rem',
+            marginBottom: '2rem'
+          }}>
+            <a 
+              href="https://www.instagram.com/gabrieldisena25/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              title="Instagram"
+            >
+              <img 
+                src="/instagram.svg" 
+                alt="Instagram" 
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  transition: 'all 0.3s ease',
+                  filter: 'brightness(0.7)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.2) translateY(-5px)';
+                  e.currentTarget.style.filter = 'brightness(1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                  e.currentTarget.style.filter = 'brightness(0.7)';
+                }}
+              />
+            </a>
+            <a 
+              href="https://wa.me/51957949278" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              title="WhatsApp"
+            >
+              <img 
+                src="/whatsapp.svg" 
+                alt="WhatsApp" 
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  transition: 'all 0.3s ease',
+                  filter: 'brightness(0.7)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.2) translateY(-5px)';
+                  e.currentTarget.style.filter = 'brightness(1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                  e.currentTarget.style.filter = 'brightness(0.7)';
+                }}
+              />
+            </a>
+            <a 
+              href="mailto:contacto@gabrieldisena.com"
+              title="Email"
+            >
+              <img 
+                src="/correo.svg" 
+                alt="Email" 
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  transition: 'all 0.3s ease',
+                  filter: 'brightness(0.7)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.2) translateY(-5px)';
+                  e.currentTarget.style.filter = 'brightness(1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                  e.currentTarget.style.filter = 'brightness(0.7)';
+                }}
+              />
+            </a>
+          </div>
+
           <div className="footer-bottom">
-            <p className="footer-copyright">©2022 – Todos los Derechos Reservados</p>
+            <p className="footer-copyright">©2024 – Todos los Derechos Reservados</p>
             <p className="footer-brand">
               Gabriel Diseña - Diseño Gráfico & Desarrollo Web
             </p>
@@ -581,7 +687,7 @@ function Home() {
         </div>
       </footer>
 
-      {/* Animations - Mantener por compatibilidad */}
+      {/* Animations */}
       <style>{`
         @keyframes pulse {
           0%, 100% { opacity: 1; transform: scale(1); }

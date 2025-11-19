@@ -24,7 +24,7 @@ const auth = async (req, res, next) => {
 };
 
 // 🆕 MIDDLEWARE PARA VERIFICAR SI ES SUPERADMIN
-export const isSuperAdmin = async (req, res, next) => {
+export const isSuperAdmin = [auth, async (req, res, next) => {
   try {
     if (req.user.role !== 'superadmin') {
       return res.status(403).json({ 
@@ -36,10 +36,10 @@ export const isSuperAdmin = async (req, res, next) => {
     console.error('❌ Error verificando rol:', error);
     res.status(500).json({ message: 'Error verificando permisos' });
   }
-};
+}];
 
 // 🆕 MIDDLEWARE PARA VERIFICAR SI ES ADMIN O SUPERADMIN
-export const isAdminOrSuperAdmin = async (req, res, next) => {
+export const isAdminOrSuperAdmin = [auth, async (req, res, next) => {
   try {
     if (req.user.role !== 'admin' && req.user.role !== 'superadmin') {
       return res.status(403).json({ 
@@ -51,6 +51,6 @@ export const isAdminOrSuperAdmin = async (req, res, next) => {
     console.error('❌ Error verificando rol:', error);
     res.status(500).json({ message: 'Error verificando permisos' });
   }
-};
+}];
 
 export default auth;

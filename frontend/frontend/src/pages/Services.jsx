@@ -165,13 +165,20 @@ function Services() {
 
   const currentCountry = countries.find(c => c.code === selectedCountry);
 
+  // Función para contactar por WhatsApp
+  const handleContact = (planName) => {
+    const message = `Hola! Estoy interesado en el ${planName}. ¿Podrías darme más información?`;
+    const whatsappUrl = `https://wa.me/51957949278?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   return (
     <div style={{
       minHeight: '100vh',
       background: '#020617',
       color: 'white'
     }}>
-      {/* Navigation */}
+      {/* Navigation con LOGO */}
       <nav style={{
         position: 'sticky',
         top: 0,
@@ -186,40 +193,52 @@ function Services() {
           margin: '0 auto',
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '1rem'
         }}>
-          <Link to="/" style={{
-            fontSize: '1.5rem',
-            fontWeight: 'bold',
-            background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            textDecoration: 'none'
-          }}>
-            Gabriel<span style={{ color: '#3b82f6' }}>.diseña</span>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
+            <img 
+              src="/logo GD.svg" 
+              alt="Gabriel Diseña" 
+              style={{
+                height: '50px',
+                width: 'auto',
+                filter: 'drop-shadow(0 0 10px rgba(59, 130, 246, 0.3))',
+                transition: 'all 0.3s ease'
+              }}
+            />
           </Link>
-          <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-            <Link to="/" style={{ color: '#94a3b8', textDecoration: 'none' }}>Inicio</Link>
-            <Link to="/services" style={{ color: '#3b82f6', fontWeight: 'bold', textDecoration: 'none' }}>Servicios</Link>
-            <a href="#contacto" className="btn-primary" style={{ 
+          <div style={{ 
+            display: 'flex', 
+            gap: '1.5rem', 
+            alignItems: 'center',
+            flexWrap: 'wrap'
+          }}>
+            <Link to="/" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: 'clamp(0.85rem, 2vw, 1rem)' }}>Inicio</Link>
+            <Link to="/services" style={{ color: '#3b82f6', fontWeight: 'bold', textDecoration: 'none', fontSize: 'clamp(0.85rem, 2vw, 1rem)' }}>Servicios</Link>
+            <a href="#contacto" style={{ 
               textDecoration: 'none', 
-              padding: '0.75rem 1.5rem', 
-              fontSize: '0.9rem'
+              padding: '0.75rem 1.5rem',
+              background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+              borderRadius: '0.75rem',
+              color: 'white',
+              fontWeight: 'bold',
+              fontSize: 'clamp(0.8rem, 2vw, 0.9rem)'
             }}>Contactar</a>
           </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
+      {/* Hero Section - RESPONSIVE */}
       <div style={{
         maxWidth: '1400px',
         margin: '0 auto',
-        padding: '3rem 2rem 2rem',
+        padding: 'clamp(2rem, 5vw, 3rem) clamp(1rem, 3vw, 2rem) clamp(1rem, 3vw, 2rem)',
         textAlign: 'center'
       }}>
         <h1 style={{
-          fontSize: 'clamp(2.5rem, 8vw, 5rem)',
+          fontSize: 'clamp(2rem, 8vw, 5rem)',
           fontWeight: 'bold',
           marginBottom: '1rem',
           lineHeight: '1.1',
@@ -247,7 +266,7 @@ function Services() {
         </h1>
 
         <p style={{
-          fontSize: '1.25rem',
+          fontSize: 'clamp(1rem, 3vw, 1.25rem)',
           color: '#94a3b8',
           marginBottom: '2rem',
           opacity: mounted ? 1 : 0,
@@ -256,19 +275,21 @@ function Services() {
           Diseño gráfico profesional y desarrollo web a tu medida
         </p>
 
-        {/* Country Selector */}
+        {/* Country Selector - RESPONSIVE */}
         <div style={{
           display: 'inline-block',
           background: 'rgba(255, 255, 255, 0.05)',
           borderRadius: '1rem',
-          padding: '1rem',
+          padding: 'clamp(0.75rem, 2vw, 1rem)',
           marginBottom: '3rem',
           border: '1px solid rgba(255, 255, 255, 0.1)',
           opacity: mounted ? 1 : 0,
-          animation: mounted ? 'slideUpFade 1s ease-out 0.4s forwards' : 'none'
+          animation: mounted ? 'slideUpFade 1s ease-out 0.4s forwards' : 'none',
+          maxWidth: '95%',
+          width: '100%'
         }}>
           <div style={{
-            fontSize: '0.875rem',
+            fontSize: 'clamp(0.75rem, 2vw, 0.875rem)',
             color: '#94a3b8',
             marginBottom: '0.75rem',
             fontWeight: '600'
@@ -277,7 +298,7 @@ function Services() {
           </div>
           <div style={{
             display: 'flex',
-            gap: '0.5rem',
+            gap: 'clamp(0.35rem, 1vw, 0.5rem)',
             flexWrap: 'wrap',
             justifyContent: 'center'
           }}>
@@ -286,7 +307,7 @@ function Services() {
                 key={country.code}
                 onClick={() => setSelectedCountry(country.code)}
                 style={{
-                  padding: '0.75rem 1.5rem',
+                  padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1.5rem)',
                   borderRadius: '0.75rem',
                   border: selectedCountry === country.code 
                     ? '2px solid #3b82f6' 
@@ -295,7 +316,7 @@ function Services() {
                     ? 'rgba(59, 130, 246, 0.2)' 
                     : 'rgba(255, 255, 255, 0.03)',
                   color: 'white',
-                  fontSize: '1rem',
+                  fontSize: 'clamp(0.75rem, 2vw, 1rem)',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
                   fontWeight: selectedCountry === country.code ? 'bold' : 'normal',
@@ -316,19 +337,18 @@ function Services() {
                   }
                 }}
               >
-                <span style={{ fontSize: '1.5rem' }}>{country.flag}</span>
-                {country.name}
+                <span style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)' }}>{country.flag}</span>
+                <span style={{ display: window.innerWidth < 400 ? 'none' : 'inline' }}>{country.name}</span>
               </button>
             ))}
           </div>
         </div>
       </div>
-
       {/* LOGOS Section */}
       <div style={{
         maxWidth: '1400px',
         margin: '0 auto',
-        padding: '3rem 2rem'
+        padding: 'clamp(2rem, 4vw, 3rem) clamp(1rem, 3vw, 2rem)'
       }}>
         <div style={{
           textAlign: 'center',
@@ -340,7 +360,7 @@ function Services() {
             background: 'rgba(236, 72, 153, 0.1)',
             border: '1px solid rgba(236, 72, 153, 0.3)',
             borderRadius: '2rem',
-            fontSize: '0.875rem',
+            fontSize: 'clamp(0.75rem, 2vw, 0.875rem)',
             color: '#ec4899',
             fontWeight: '600',
             marginBottom: '1rem'
@@ -348,7 +368,7 @@ function Services() {
             🎨 DISEÑO GRÁFICO
           </div>
           <h2 style={{
-            fontSize: 'clamp(2rem, 5vw, 3rem)',
+            fontSize: 'clamp(1.75rem, 5vw, 3rem)',
             fontWeight: 'bold',
             marginBottom: '0.5rem'
           }}>
@@ -363,15 +383,15 @@ function Services() {
               Logos
             </span>
           </h2>
-          <p style={{ color: '#94a3b8', fontSize: '1.125rem' }}>
+          <p style={{ color: '#94a3b8', fontSize: 'clamp(0.95rem, 2.5vw, 1.125rem)' }}>
             Identidad visual profesional para tu marca
           </p>
         </div>
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '2rem',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+          gap: 'clamp(1.5rem, 3vw, 2rem)',
           marginBottom: '5rem'
         }}>
           {logosPlans.map((plan, index) => (
@@ -383,7 +403,7 @@ function Services() {
                 position: 'relative',
                 background: plan.gradient,
                 borderRadius: '1.5rem',
-                padding: '2.5rem',
+                padding: 'clamp(1.5rem, 3vw, 2.5rem)',
                 color: 'white',
                 overflow: 'hidden',
                 transform: hoveredPlan === `logo-${index}` ? 'translateY(-10px) scale(1.02)' : 'translateY(0)',
@@ -403,7 +423,7 @@ function Services() {
                   background: 'rgba(255, 255, 255, 0.25)',
                   padding: '0.5rem 1rem',
                   borderRadius: '2rem',
-                  fontSize: '0.75rem',
+                  fontSize: 'clamp(0.65rem, 1.5vw, 0.75rem)',
                   fontWeight: 'bold',
                   border: '2px solid rgba(255, 255, 255, 0.5)'
                 }}>
@@ -412,7 +432,7 @@ function Services() {
               )}
 
               <div style={{
-                fontSize: '3.5rem',
+                fontSize: 'clamp(2.5rem, 6vw, 3.5rem)',
                 marginBottom: '1rem',
                 transition: 'transform 0.4s ease',
                 transform: hoveredPlan === `logo-${index}` ? 'rotate(10deg) scale(1.2)' : 'rotate(0) scale(1)'
@@ -421,7 +441,7 @@ function Services() {
               </div>
 
               <div style={{
-                fontSize: '0.75rem',
+                fontSize: 'clamp(0.65rem, 1.5vw, 0.75rem)',
                 fontWeight: '600',
                 letterSpacing: '0.1em',
                 marginBottom: '0.5rem',
@@ -431,7 +451,7 @@ function Services() {
               </div>
 
               <h3 style={{
-                fontSize: '2rem',
+                fontSize: 'clamp(1.5rem, 3vw, 2rem)',
                 fontWeight: 'bold',
                 marginBottom: '1.5rem'
               }}>
@@ -439,25 +459,25 @@ function Services() {
               </h3>
 
               <div style={{
-                fontSize: '3rem',
+                fontSize: 'clamp(2rem, 5vw, 3rem)',
                 fontWeight: 'bold',
                 marginBottom: '2rem',
                 display: 'flex',
                 alignItems: 'baseline',
                 gap: '0.5rem'
               }}>
-                <span style={{ fontSize: '1.5rem' }}>{currentCountry.currency}</span>
+                <span style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)' }}>{currentCountry.currency}</span>
                 {plan.prices[selectedCountry]}
               </div>
 
               <div style={{
                 background: 'rgba(0, 0, 0, 0.2)',
                 borderRadius: '1rem',
-                padding: '1.5rem',
+                padding: 'clamp(1rem, 2vw, 1.5rem)',
                 marginBottom: '1.5rem'
               }}>
                 <h4 style={{
-                  fontSize: '1rem',
+                  fontSize: 'clamp(0.9rem, 2vw, 1rem)',
                   fontWeight: 'bold',
                   marginBottom: '1rem',
                   textAlign: 'center'
@@ -476,7 +496,7 @@ function Services() {
                       display: 'flex',
                       alignItems: 'flex-start',
                       gap: '0.75rem',
-                      fontSize: '0.9rem'
+                      fontSize: 'clamp(0.8rem, 2vw, 0.9rem)'
                     }}>
                       <span style={{
                         display: 'inline-flex',
@@ -498,21 +518,28 @@ function Services() {
                 </ul>
               </div>
 
-              <button style={{
-                width: '100%',
-                padding: '1.125rem',
-                background: 'rgba(0, 0, 0, 0.3)',
-                border: 'none',
-                borderRadius: '0.75rem',
-                fontSize: '1rem',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                color: 'white',
-                textDecoration: 'underline'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              <button 
+                onClick={() => handleContact(plan.name)}
+                style={{
+                  width: '100%',
+                  padding: 'clamp(0.875rem, 2vw, 1.125rem)',
+                  background: 'rgba(0, 0, 0, 0.3)',
+                  border: 'none',
+                  borderRadius: '0.75rem',
+                  fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  color: 'white'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.background = 'rgba(0, 0, 0, 0.5)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.background = 'rgba(0, 0, 0, 0.3)';
+                }}
               >
                 Solicitar Cotización
               </button>
@@ -543,7 +570,7 @@ function Services() {
             background: 'rgba(59, 130, 246, 0.1)',
             border: '1px solid rgba(59, 130, 246, 0.3)',
             borderRadius: '2rem',
-            fontSize: '0.875rem',
+            fontSize: 'clamp(0.75rem, 2vw, 0.875rem)',
             color: '#3b82f6',
             fontWeight: '600',
             marginBottom: '1rem'
@@ -551,7 +578,7 @@ function Services() {
             💻 DESARROLLO WEB
           </div>
           <h2 style={{
-            fontSize: 'clamp(2rem, 5vw, 3rem)',
+            fontSize: 'clamp(1.75rem, 5vw, 3rem)',
             fontWeight: 'bold',
             marginBottom: '0.5rem'
           }}>
@@ -566,15 +593,15 @@ function Services() {
               Web
             </span>
           </h2>
-          <p style={{ color: '#94a3b8', fontSize: '1.125rem' }}>
+          <p style={{ color: '#94a3b8', fontSize: 'clamp(0.95rem, 2.5vw, 1.125rem)' }}>
             Sitios web profesionales y tiendas online
           </p>
         </div>
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '2rem'
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+          gap: 'clamp(1.5rem, 3vw, 2rem)'
         }}>
           {webPlans.map((plan, index) => (
             <div
@@ -585,7 +612,7 @@ function Services() {
                 position: 'relative',
                 background: plan.gradient,
                 borderRadius: '1.5rem',
-                padding: '2.5rem',
+                padding: 'clamp(1.5rem, 3vw, 2.5rem)',
                 color: 'white',
                 overflow: 'hidden',
                 transform: hoveredPlan === `web-${index}` ? 'translateY(-10px) scale(1.02)' : 'translateY(0)',
@@ -605,7 +632,7 @@ function Services() {
                   background: 'rgba(255, 255, 255, 0.25)',
                   padding: '0.5rem 1rem',
                   borderRadius: '2rem',
-                  fontSize: '0.75rem',
+                  fontSize: 'clamp(0.65rem, 1.5vw, 0.75rem)',
                   fontWeight: 'bold',
                   border: '2px solid rgba(255, 255, 255, 0.5)'
                 }}>
@@ -614,7 +641,7 @@ function Services() {
               )}
 
               <div style={{
-                fontSize: '3.5rem',
+                fontSize: 'clamp(2.5rem, 6vw, 3.5rem)',
                 marginBottom: '1rem',
                 transition: 'transform 0.4s ease',
                 transform: hoveredPlan === `web-${index}` ? 'rotate(10deg) scale(1.2)' : 'rotate(0) scale(1)'
@@ -623,7 +650,7 @@ function Services() {
               </div>
 
               <div style={{
-                fontSize: '0.75rem',
+                fontSize: 'clamp(0.65rem, 1.5vw, 0.75rem)',
                 fontWeight: '600',
                 letterSpacing: '0.1em',
                 marginBottom: '0.5rem',
@@ -633,7 +660,7 @@ function Services() {
               </div>
 
               <h3 style={{
-                fontSize: '2rem',
+                fontSize: 'clamp(1.5rem, 3vw, 2rem)',
                 fontWeight: 'bold',
                 marginBottom: '1.5rem'
               }}>
@@ -641,25 +668,25 @@ function Services() {
               </h3>
 
               <div style={{
-                fontSize: '3rem',
+                fontSize: 'clamp(2rem, 5vw, 3rem)',
                 fontWeight: 'bold',
                 marginBottom: '2rem',
                 display: 'flex',
                 alignItems: 'baseline',
                 gap: '0.5rem'
               }}>
-                <span style={{ fontSize: '1.5rem' }}>{currentCountry.currency}</span>
+                <span style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)' }}>{currentCountry.currency}</span>
                 {plan.prices[selectedCountry]}
               </div>
 
               <div style={{
                 background: 'rgba(0, 0, 0, 0.2)',
                 borderRadius: '1rem',
-                padding: '1.5rem',
+                padding: 'clamp(1rem, 2vw, 1.5rem)',
                 marginBottom: '1.5rem'
               }}>
                 <h4 style={{
-                  fontSize: '1rem',
+                  fontSize: 'clamp(0.9rem, 2vw, 1rem)',
                   fontWeight: 'bold',
                   marginBottom: '1rem',
                   textAlign: 'center'
@@ -678,7 +705,7 @@ function Services() {
                       display: 'flex',
                       alignItems: 'flex-start',
                       gap: '0.75rem',
-                      fontSize: '0.9rem'
+                      fontSize: 'clamp(0.8rem, 2vw, 0.9rem)'
                     }}>
                       <span style={{
                         display: 'inline-flex',
@@ -700,21 +727,28 @@ function Services() {
                 </ul>
               </div>
 
-              <button style={{
-                width: '100%',
-                padding: '1.125rem',
-                background: 'rgba(0, 0, 0, 0.3)',
-                border: 'none',
-                borderRadius: '0.75rem',
-                fontSize: '1rem',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                color: 'white',
-                textDecoration: 'underline'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              <button 
+                onClick={() => handleContact(plan.name)}
+                style={{
+                  width: '100%',
+                  padding: 'clamp(0.875rem, 2vw, 1.125rem)',
+                  background: 'rgba(0, 0, 0, 0.3)',
+                  border: 'none',
+                  borderRadius: '0.75rem',
+                  fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  color: 'white'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.background = 'rgba(0, 0, 0, 0.5)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.background = 'rgba(0, 0, 0, 0.3)';
+                }}
               >
                 Solicitar Cotización
               </button>
@@ -733,22 +767,21 @@ function Services() {
           ))}
         </div>
       </div>
-
       {/* CTA Section */}
       <div id="contacto" style={{
         maxWidth: '1400px',
-        margin: '5rem auto',
-        padding: '0 2rem'
+        margin: 'clamp(3rem, 6vw, 5rem) auto',
+        padding: '0 clamp(1rem, 3vw, 2rem)'
       }}>
         <div style={{
-          padding: '4rem 2rem',
+          padding: 'clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 3vw, 2rem)',
           borderRadius: '2rem',
           background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%)',
           border: '1px solid rgba(59, 130, 246, 0.3)',
           textAlign: 'center'
         }}>
           <h2 style={{
-            fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+            fontSize: 'clamp(1.75rem, 5vw, 3.5rem)',
             fontWeight: 'bold',
             marginBottom: '1rem'
           }}>
@@ -757,37 +790,174 @@ function Services() {
           <p style={{
             color: '#94a3b8',
             marginBottom: '2rem',
-            fontSize: '1.25rem'
+            fontSize: 'clamp(1rem, 2.5vw, 1.25rem)'
           }}>
             ¿Listo para llevar tu proyecto al siguiente nivel?
           </p>
-          <button className="btn-primary" style={{
-            fontSize: '1.125rem',
-            padding: '1.25rem 3rem'
-          }}>
+          <button 
+            onClick={() => {
+              const message = 'Hola! Estoy interesado en solicitar un presupuesto. ¿Podrías ayudarme?';
+              const whatsappUrl = `https://wa.me/51957949278?text=${encodeURIComponent(message)}`;
+              window.open(whatsappUrl, '_blank');
+            }}
+            style={{
+              fontSize: 'clamp(1rem, 2.5vw, 1.125rem)',
+              padding: 'clamp(1rem, 2vw, 1.25rem) clamp(2rem, 4vw, 3rem)',
+              background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+              border: 'none',
+              borderRadius: '0.75rem',
+              color: 'white',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.05)';
+              e.currentTarget.style.boxShadow = '0 10px 30px rgba(59, 130, 246, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
             Solicita tu Presupuesto
           </button>
         </div>
       </div>
 
-      {/* Footer */}
+      {/* Footer con ICONOS SVG */}
       <footer style={{
         borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-        padding: '2rem',
+        padding: 'clamp(2rem, 4vw, 3rem) clamp(1rem, 3vw, 2rem)',
         textAlign: 'center',
         color: '#64748b'
       }}>
-        <p>© 2024 Gabriel Diseña. Todos los derechos reservados.</p>
         <div style={{
-          marginTop: '1rem',
-          display: 'flex',
-          gap: '1rem',
-          justifyContent: 'center',
-          fontSize: '1.5rem'
+          maxWidth: '1400px',
+          margin: '0 auto'
         }}>
-          <a href="#" style={{ color: '#94a3b8' }}>📷</a>
-          <a href="#" style={{ color: '#94a3b8' }}>💬</a>
-          <a href="#" style={{ color: '#94a3b8' }}>📧</a>
+          <div style={{
+            fontSize: 'clamp(2rem, 4vw, 3rem)',
+            marginBottom: '1rem'
+          }}>
+            ✨
+          </div>
+          <h3 style={{
+            fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+            fontWeight: 'bold',
+            marginBottom: '0.5rem',
+            color: 'white'
+          }}>
+            Gabriel Diseña
+          </h3>
+          <p style={{
+            color: '#64748b',
+            marginBottom: '2rem',
+            fontSize: 'clamp(0.9rem, 2vw, 1rem)'
+          }}>
+            Diseño & Desarrollo Web Profesional
+          </p>
+
+          {/* Iconos de redes sociales con SVG */}
+          <div style={{
+            display: 'flex',
+            gap: 'clamp(1.5rem, 3vw, 2rem)',
+            justifyContent: 'center',
+            marginBottom: '2rem'
+          }}>
+            <a 
+              href="https://www.instagram.com/gabrieldisena25/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              title="Instagram"
+            >
+              <img 
+                src="/instagram.svg" 
+                alt="Instagram" 
+                style={{
+                  width: 'clamp(35px, 6vw, 45px)',
+                  height: 'clamp(35px, 6vw, 45px)',
+                  transition: 'all 0.3s ease',
+                  filter: 'brightness(0.7)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.2) translateY(-5px)';
+                  e.currentTarget.style.filter = 'brightness(1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                  e.currentTarget.style.filter = 'brightness(0.7)';
+                }}
+              />
+            </a>
+            <a 
+              href="https://wa.me/51957949278" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              title="WhatsApp"
+            >
+              <img 
+                src="/whatsapp.svg" 
+                alt="WhatsApp" 
+                style={{
+                  width: 'clamp(35px, 6vw, 45px)',
+                  height: 'clamp(35px, 6vw, 45px)',
+                  transition: 'all 0.3s ease',
+                  filter: 'brightness(0.7)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.2) translateY(-5px)';
+                  e.currentTarget.style.filter = 'brightness(1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                  e.currentTarget.style.filter = 'brightness(0.7)';
+                }}
+              />
+            </a>
+            <a 
+              href="mailto:contacto@gabrieldisena.com"
+              title="Email"
+            >
+              <img 
+                src="/correo.svg" 
+                alt="Email" 
+                style={{
+                  width: 'clamp(35px, 6vw, 45px)',
+                  height: 'clamp(35px, 6vw, 45px)',
+                  transition: 'all 0.3s ease',
+                  filter: 'brightness(0.7)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.2) translateY(-5px)';
+                  e.currentTarget.style.filter = 'brightness(1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                  e.currentTarget.style.filter = 'brightness(0.7)';
+                }}
+              />
+            </a>
+          </div>
+
+          <div style={{
+            display: 'flex',
+            gap: 'clamp(1rem, 3vw, 2rem)',
+            justifyContent: 'center',
+            marginBottom: '1.5rem',
+            flexWrap: 'wrap'
+          }}>
+            <Link to="/" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: 'clamp(0.85rem, 2vw, 1rem)' }}>Inicio</Link>
+            <Link to="/services" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: 'clamp(0.85rem, 2vw, 1rem)' }}>Servicios</Link>
+            <a href="#contacto" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: 'clamp(0.85rem, 2vw, 1rem)' }}>Contacto</a>
+          </div>
+
+          <p style={{ 
+            color: '#64748b', 
+            fontSize: 'clamp(0.75rem, 1.5vw, 0.875rem)' 
+          }}>
+            © 2024 Gabriel Diseña - Todos los derechos reservados
+          </p>
         </div>
       </footer>
 
@@ -800,6 +970,23 @@ function Services() {
           to {
             opacity: 1;
             transform: translateY(0);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .btn-primary {
+            width: 100%;
+          }
+        }
+
+        @media (max-width: 480px) {
+          nav > div {
+            justify-content: center !important;
+          }
+          
+          nav > div > div {
+            justify-content: center !important;
+            width: 100%;
           }
         }
       `}</style>

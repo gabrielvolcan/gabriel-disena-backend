@@ -181,7 +181,7 @@ router.post('/users', isAdminOrSuperAdmin, async (req, res) => {
       phone: phone || '',
       country: country || 'peru',
       role: 'client',
-      createdBy: req.user.id
+      ccreatedBy: req.user.userId
     });
 
     await user.save();
@@ -256,7 +256,7 @@ router.post('/administrators', isSuperAdmin, async (req, res) => {
       password,
       phone: phone || '',
       role: 'admin',
-      createdBy: req.user.id
+      createdBy: req.user.userId
     });
 
     await admin.save();
