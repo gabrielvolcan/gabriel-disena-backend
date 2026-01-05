@@ -7,70 +7,86 @@ function PortfolioWeb() {
   const webProjects = [
     {
       id: 1,
-      name: 'Yerba Mate Oñoiru',
+      name: 'ZURO DENTAL',
       category: 'Sitio Corporativo',
-      location: 'Paraguay',
-      description: 'Sitio web corporativo para empresa productora de yerba mate con sistema de catálogo de productos y zona de distribuidores.',
-      image: '/projects/yerba-mate.jpg',
-      link: 'https://yerbamateonoiru.com',
+      location: 'Argentina',
+      description: 'Sitio web corporativo para clínica odontológica especializada, con sistema de reserva de turnos, presentación de especialidades, casos clínicos destacados y sección informativa para pacientes. Diseño moderno orientado a transmitir confianza, credibilidad y la experiencia profesional del equipo.',
+      image: '/uploads/ZURODENTAL.jpg',
+      link: 'https://www.zurodental.com.ar/',
       tags: ['E-commerce', 'Corporativo', 'Responsive'],
       technologies: ['React', 'Node.js', 'MongoDB']
     },
     {
       id: 2,
-      name: 'Tiny Colors Corp',
-      category: 'Tienda Online',
-      location: 'Miami, Florida, USA',
-      description: 'Plataforma de e-commerce completa para venta de pinturas y productos de decoración con sistema de pagos integrado.',
+      name: 'Participayganaaya',
+      category: 'Web Rifas',
+      location: 'caracas - venezuela',
+      description: 'Sitio web de rifas online con catálogo de sorteos activos, sistema de participación rápida y sección de pagos, diseñado para brindar una experiencia simple, segura y dinámica a los usuarios.',
       image: '/projects/tiny-colors.jpg',
-      link: 'https://tinycolorscorp.com',
-      tags: ['E-commerce', 'Pagos Online', 'Multi-idioma'],
-      technologies: ['React', 'Stripe', 'PostgreSQL']
+      link: 'https://participaayganaya.com/',
+      tags: ['Web-rifas', 'Pagos Online', ],
+      technologies: ['React', 'Express', 'MySQL'] 
     },
     {
       id: 3,
-      name: 'ProClean Support Services',
-      category: 'Sitio Corporativo',
-      location: 'London, England',
-      description: 'Página corporativa para empresa de limpieza comercial con sistema de cotizaciones y reservas online.',
-      image: '/projects/proclean.jpg',
-      link: 'https://procleansupport.com',
-      tags: ['Servicios', 'Reservas', 'Multi-idioma'],
+      name: 'Rifas only cars',
+      category: 'Web Rifas',
+      location: 'caracas - venezuela',
+      description: 'Sitio web de rifas automotrices con catálogo de sorteos exclusivos, sistema de participación rápida y diseño premium inspirado en el mundo motor. Enfocado en brindar una experiencia segura, clara y atractiva para los usuarios.',
+      image: '/uploads/onlycars.jpg',
+      link: 'https://www.rifasonlycars.com/',
+      tags: ['Web-rifas', 'Pagos Online', ],
       technologies: ['React', 'Express', 'MySQL']
     },
     {
       id: 4,
-      name: 'Proyecto Web 4',
-      category: 'Landing Page',
+      name: 'Afroditasspa',
+      category: 'plataforma web',
       location: 'Chile',
-      description: 'Landing page moderna y optimizada para conversión con diseño minimalista y animaciones interactivas.',
-      image: '/projects/proyecto4.jpg',
-      link: 'https://proyecto4.com',
-      tags: ['Landing', 'Conversión', 'Animaciones'],
-      technologies: ['React', 'Tailwind', 'Framer Motion']
+      description: 'Sitio web para centro de masajes y spa, con sistema de reserva online, catálogo de servicios y presentación de masajistas. Diseñado para transmitir relajación, lujo y una experiencia de bienestar integral.',
+      image: '/uploads/afroditaspa.jpg',
+      link: 'https://afroditasspa.com/',
+      tags: ['Landing', 'Conversión'],
+      technologies: ['React', 'Express', 'MySQL']
     },
-    {
+
+   {
       id: 5,
-      name: 'Proyecto Web 5',
-      category: 'Plataforma Web',
+      name: 'gooscell Store',
+      category: 'plataforma web',
       location: 'Argentina',
-      description: 'Plataforma web interactiva con sistema de gestión de contenidos y panel administrativo completo.',
-      image: '/projects/proyecto5.jpg',
-      link: 'https://proyecto5.com',
-      tags: ['CMS', 'Dashboard', 'API Rest'],
-      technologies: ['React', 'Node.js', 'MongoDB']
+      description: 'sitio web de ventas de accesorios para celulaeres y mas',
+      image: '/uploads/afroditaspa.jpg',
+      link: 'https://www.gooscell.com.ar/',
+      tags: ['Landing', 'Conversión'],
+      technologies: ['React', 'Express', 'MySQL']
     },
+
     {
-      id: 6,
-      name: 'Proyecto Web 6',
-      category: 'Sitio Institucional',
-      location: 'Uruguay',
-      description: 'Sitio web institucional con blog integrado, área de noticias y sistema de contacto avanzado.',
-      image: '/projects/proyecto6.jpg',
-      link: 'https://proyecto6.com',
-      tags: ['Blog', 'Noticias', 'SEO'],
-      technologies: ['React', 'WordPress API', 'GraphQL']
-    }
+    
+    id: 5,
+      name: 'pcell Store',
+      category: 'plataforma web',
+      location: 'Peru',
+      description: 'sitio web de ventas de repuestos para celulares',
+      image: '/uploads/afroditaspa.jpg',
+      link: 'https://pcell.pe/',
+      tags: ['Landing', 'Conversión'],
+      technologies: ['React', 'Express', 'MySQL']
+    },
+
+    {
+
+    id: 6,
+      name: 'detodoencursos',
+      category: 'plataforma web',
+      location: 'argenrtina',
+      description: 'sitio web de venta de cursos y estudios',
+      image: '/uploads/afroditaspa.jpg',
+      link: 'https://frontend-gamma-wheat-60.vercel.app/',
+      tags: ['E-commerce', 'Corporativo', 'Responsive'],
+      technologies: ['React', 'Express', 'MySQL']
+    },
   ];
 
   return (
@@ -147,7 +163,7 @@ function PortfolioWeb() {
           marginBottom: '1.5rem',
           lineHeight: '1.1'
         }}>
-          Todos Nuestros
+          Algunos de Nuestros
           <br />
           <span style={{
             fontStyle: 'italic',
