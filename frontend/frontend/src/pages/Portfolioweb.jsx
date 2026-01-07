@@ -50,17 +50,7 @@ function PortfolioWeb() {
       technologies: ['React', 'Express', 'MySQL']
     },
 
-   {
-      id: 5,
-      name: 'gooscell Store',
-      category: 'plataforma web',
-      location: 'Argentina',
-      description: 'sitio web de ventas de accesorios para celulaeres y mas',
-      image: '/uploads/afroditaspa.jpg',
-      link: 'https://www.gooscell.com.ar/',
-      tags: ['Landing', 'Conversión'],
-      technologies: ['React', 'Express', 'MySQL']
-    },
+  
 
     {
     

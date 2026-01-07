@@ -1,0 +1,1114 @@
+/* ========================================
+   WEB AI FACTORY - SALES PAGE STYLES
+   ======================================== */
+
+/* Contenedor principal */
+.waif-container {
+  min-height: 100vh;
+  background: #020617;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Fondo animado */
+.waif-animated-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.4;
+  transition: background 0.3s ease;
+  z-index: 0;
+}
+
+/* ========================================
+   SELECTOR DE PAÍS
+   ======================================== */
+.country-selector-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(2, 6, 23, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.country-selector-modal {
+  max-width: 900px;
+  width: 100%;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2rem;
+  padding: 3rem;
+  text-align: center;
+  animation: slideUp 0.5s ease-out;
+}
+
+.country-selector-header {
+  margin-bottom: 3rem;
+}
+
+.country-selector-header h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.country-selector-header p {
+  color: #94a3b8;
+  font-size: 1.125rem;
+}
+
+.country-selector-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ec4899;
+  margin-bottom: 2rem;
+}
+
+.country-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.country-button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(59, 130, 246, 0.2);
+  border-radius: 1rem;
+  padding: 2rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+}
+
+.country-button:hover {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.5);
+  transform: translateY(-5px);
+}
+
+.country-flag {
+  font-size: 3rem;
+  display: block;
+}
+
+.country-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+/* ========================================
+   NAVIGATION
+   ======================================== */
+.waif-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 1.5rem 2rem;
+  backdrop-filter: blur(10px);
+  background: rgba(2, 6, 23, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.waif-nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.waif-nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.waif-nav-link {
+  color: #94a3b8;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.waif-nav-link:hover {
+  color: #3b82f6;
+}
+
+.waif-nav-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+}
+
+/* ========================================
+   HERO SECTION
+   ======================================== */
+.waif-hero-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 2rem;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.waif-hero-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.waif-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  background: rgba(236, 72, 153, 0.1);
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  border-radius: 2rem;
+  margin-bottom: 2rem;
+  font-size: 0.875rem;
+  color: #ec4899;
+}
+
+.waif-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ec4899;
+  animation: pulse 2s infinite;
+}
+
+.waif-hero-title {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.waif-hero-title-main {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.waif-hero-title-accent {
+  font-style: italic;
+  background: linear-gradient(135deg, #ec4899 0%, #3b82f6 50%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+  animation: gradientShift 3s ease infinite;
+  background-size: 200% 200%;
+}
+
+.waif-hero-description {
+  font-size: clamp(1.125rem, 3vw, 1.5rem);
+  color: #94a3b8;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+.waif-hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.waif-cta-main {
+  font-size: 1.25rem;
+  padding: 1.25rem 3rem;
+}
+
+.waif-hero-trust {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.waif-hero-trust span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ========================================
+   SECTIONS GENERALES
+   ======================================== */
+.waif-section {
+  padding: 5rem 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.waif-container-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.waif-section-content {
+  text-align: center;
+}
+
+.waif-section-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ec4899;
+  margin-bottom: 1rem;
+}
+
+.waif-section-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+  color: white;
+}
+
+.waif-gradient-text {
+  font-style: italic;
+  background: linear-gradient(135deg, #ec4899 0%, #3b82f6 50%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.waif-section-description {
+  font-size: 1.125rem;
+  color: #cbd5e1;
+  margin-bottom: 3rem;
+  line-height: 1.7;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ========================================
+   PROBLEM SECTION
+   ======================================== */
+.waif-problem-section {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-top: 1px solid rgba(236, 72, 153, 0.2);
+}
+
+.waif-problem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.waif-problem-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.waif-problem-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-5px);
+}
+
+.waif-problem-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.waif-problem-result {
+  font-size: 1.125rem;
+  color: #f87171;
+  font-weight: 600;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 1rem;
+}
+
+/* ========================================
+   SOLUTION SECTION
+   ======================================== */
+.waif-solution-section {
+  background: #020617;
+}
+
+.waif-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.waif-feature-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 1rem;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.waif-feature-card:hover {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.4);
+  transform: translateY(-5px);
+}
+
+.waif-feature-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  display: block;
+  color: #3b82f6;
+}
+
+.waif-feature-card h3 {
+  font-size: 1.125rem;
+  color: white;
+  line-height: 1.4;
+}
+
+.waif-solution-footer {
+  font-size: 1.125rem;
+  color: #94a3b8;
+  font-weight: 600;
+  max-width: 700px;
+  margin: 0 auto;
+  padding-top: 2rem;
+}
+
+/* ========================================
+   BENEFITS SECTION
+   ======================================== */
+.waif-benefits-section {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-top: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.waif-benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.waif-benefit-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.waif-benefit-card:hover {
+  background: rgba(236, 72, 153, 0.05);
+  border-color: rgba(236, 72, 153, 0.3);
+  transform: translateY(-10px);
+}
+
+.waif-benefit-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.waif-benefit-card h3 {
+  font-size: 1.5rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.waif-benefit-card p {
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+/* ========================================
+   BEFORE/AFTER SECTION
+   ======================================== */
+.waif-before-after-section {
+  background: #020617;
+}
+
+.waif-comparison-table {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.waif-comparison-column {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.waif-comparison-column h3 {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.waif-comparison-column ul {
+  list-style: none;
+  padding: 0;
+}
+
+.waif-comparison-column li {
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+}
+
+.waif-comparison-column li:last-child {
+  border-bottom: none;
+}
+
+.waif-before {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.waif-before h3 {
+  color: #f87171;
+}
+
+.waif-after {
+  border-color: rgba(34, 197, 94, 0.3);
+  background: rgba(34, 197, 94, 0.05);
+}
+
+.waif-after h3 {
+  color: #22c55e;
+}
+
+/* ========================================
+   HOW IT WORKS SECTION
+   ======================================== */
+.waif-how-it-works-section {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-top: 1px solid rgba(236, 72, 153, 0.2);
+}
+
+.waif-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.waif-step-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.waif-step-card:hover {
+  background: rgba(59, 130, 246, 0.1);
+  transform: scale(1.05);
+}
+
+.waif-step-number {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ec4899 0%, #3b82f6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0 auto 1.5rem;
+}
+
+.waif-step-card h3 {
+  font-size: 1.5rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.waif-step-card p {
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+/* ========================================
+   FOR WHO SECTION
+   ======================================== */
+.waif-for-who-section {
+  background: #020617;
+}
+
+.waif-for-who-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.waif-for-who-yes,
+.waif-for-who-no {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: left;
+}
+
+.waif-for-who-yes {
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.waif-for-who-no {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.waif-for-who-yes h3,
+.waif-for-who-no h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.waif-for-who-yes h3 {
+  color: #22c55e;
+}
+
+.waif-for-who-no h3 {
+  color: #f87171;
+}
+
+.waif-for-who-yes ul,
+.waif-for-who-no ul {
+  list-style: none;
+  padding: 0;
+}
+
+.waif-for-who-yes li,
+.waif-for-who-no li {
+  padding: 0.75rem 0;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+/* ========================================
+   PRICING SECTION
+   ======================================== */
+.waif-pricing-section {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-top: 1px solid rgba(236, 72, 153, 0.2);
+}
+
+.waif-pricing-card {
+  max-width: 700px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(236, 72, 153, 0.3);
+  border-radius: 2rem;
+  padding: 3rem;
+  backdrop-filter: blur(10px);
+}
+
+.waif-pricing-header {
+  margin-bottom: 2rem;
+}
+
+.waif-pricing-regular {
+  font-size: 1.25rem;
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+}
+
+.waif-pricing-subtitle {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.waif-pricing-main {
+  margin-bottom: 2rem;
+}
+
+.waif-price-tag {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.waif-currency {
+  font-size: 2rem;
+  color: #ec4899;
+  font-weight: bold;
+}
+
+.waif-amount {
+  font-size: 6rem;
+  font-weight: bold;
+  line-height: 1;
+  background: linear-gradient(135deg, #ec4899 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.waif-pricing-note {
+  font-size: 0.875rem;
+  color: #94a3b8;
+}
+
+.waif-pricing-features {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.waif-pricing-features li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  font-size: 1.125rem;
+}
+
+.waif-pricing-features li:last-child {
+  border-bottom: none;
+}
+
+.waif-pricing-cta {
+  width: 100%;
+  font-size: 1.25rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.waif-pricing-urgency {
+  padding: 1.5rem;
+  background: rgba(236, 72, 153, 0.1);
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+}
+
+.waif-pricing-urgency p {
+  color: #ec4899;
+  font-size: 0.875rem;
+  margin: 0.25rem 0;
+}
+
+.waif-guarantee-badge {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 1rem;
+  text-align: left;
+}
+
+.waif-guarantee-icon {
+  font-size: 3rem;
+}
+
+.waif-guarantee-text strong {
+  display: block;
+  color: #22c55e;
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.waif-guarantee-text p {
+  color: #94a3b8;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* ========================================
+   FAQ SECTION
+   ======================================== */
+.waif-faq-section {
+  background: #020617;
+}
+
+.waif-faq-list {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.waif-faq-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.waif-faq-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.waif-faq-question {
+  width: 100%;
+  padding: 1.5rem;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.waif-faq-question:hover {
+  color: #3b82f6;
+}
+
+.waif-faq-icon {
+  font-size: 1.5rem;
+  color: #3b82f6;
+  font-weight: bold;
+}
+
+.waif-faq-answer {
+  padding: 0 1.5rem 1.5rem;
+  color: #94a3b8;
+  line-height: 1.7;
+  animation: slideDown 0.3s ease-out;
+}
+
+/* ========================================
+   FINAL CTA SECTION
+   ======================================== */
+.waif-final-cta-section {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+  border-top: 1px solid rgba(236, 72, 153, 0.2);
+  padding: 6rem 2rem;
+}
+
+.waif-final-cta-card {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.waif-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+.waif-option-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  text-align: left;
+}
+
+.waif-option-bad {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.waif-option-bad h3 {
+  color: #f87171;
+  margin-bottom: 1rem;
+}
+
+.waif-option-good {
+  border-color: rgba(34, 197, 94, 0.3);
+  background: rgba(34, 197, 94, 0.05);
+}
+
+.waif-option-good h3 {
+  color: #22c55e;
+  margin-bottom: 1rem;
+}
+
+.waif-option-card p {
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.waif-final-message {
+  font-size: 1.25rem;
+  color: #cbd5e1;
+  margin: 2rem 0;
+}
+
+.waif-final-cta-button {
+  font-size: 1.5rem;
+  padding: 1.5rem 3rem;
+  margin: 2rem 0;
+}
+
+.waif-ps {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  font-style: italic;
+  max-width: 700px;
+  margin: 2rem auto 0;
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+.waif-footer {
+  background: #020617;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3rem 2rem;
+}
+
+.waif-footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.waif-footer-content {
+  text-align: center;
+}
+
+.waif-footer-text {
+  color: #94a3b8;
+  margin-bottom: 1.5rem;
+}
+
+.waif-footer-links {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.waif-footer-links a {
+  color: #94a3b8;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.waif-footer-links a:hover {
+  color: #3b82f6;
+}
+
+.waif-footer-copyright {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+@keyframes pulse {
+  0%, 100% { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+  50% { 
+    opacity: 0.7; 
+    transform: scale(0.95); 
+  }
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE
+   ======================================== */
+@media (max-width: 768px) {
+  .country-selector-modal {
+    padding: 2rem 1.5rem;
+  }
+
+  .country-selector-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .country-button {
+    padding: 1.5rem 1rem;
+  }
+
+  .country-flag {
+    font-size: 2.5rem;
+  }
+
+  .country-name {
+    font-size: 1rem;
+  }
+
+  .waif-nav {
+    padding: 1rem;
+  }
+
+  .waif-nav-links {
+    gap: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .waif-nav-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .waif-hero-section {
+    padding: 3rem 1.5rem;
+  }
+
+  .waif-hero-title {
+    font-size: 2rem;
+  }
+
+  .waif-hero-description {
+    font-size: 1rem;
+  }
+
+  .waif-hero-buttons {
+    flex-direction: column;
+  }
+
+  .waif-cta-main {
+    width: 100%;
+    font-size: 1rem;
+    padding: 1rem 2rem;
+  }
+
+  .waif-hero-trust {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .waif-section {
+    padding: 3rem 1.5rem;
+  }
+
+  .waif-section-title {
+    font-size: 2rem;
+  }
+
+  .waif-problem-grid,
+  .waif-features-grid,
+  .waif-benefits-grid,
+  .waif-comparison-table,
+  .waif-steps-grid,
+  .waif-for-who-columns,
+  .waif-options-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .waif-pricing-card {
+    padding: 2rem;
+  }
+
+  .waif-amount {
+    font-size: 4rem;
+  }
+
+  .waif-pricing-cta {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+
+  .waif-guarantee-badge {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .waif-final-cta-button {
+    width: 100%;
+    font-size: 1.125rem;
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .country-selector-grid {
+    grid-template-columns: 1fr;
+  }
+}
