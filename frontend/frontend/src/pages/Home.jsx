@@ -128,6 +128,9 @@ function Home() {
           <div className="nav-links">
             <Link to="/services" className="nav-link">Servicios</Link>
             <a href="#portfolio" className="nav-link">Portfolio</a>
+            <Link to="/web-ai-factory" className="nav-link" style={{ color: '#ec4899', fontWeight: 'bold' }}>
+              🚀 WEB AI FACTORY
+            </Link>
             <a href="#contacto" className="btn-primary nav-button">Contactar</a>
           </div>
         </div>
@@ -191,7 +194,12 @@ function Home() {
               opacity: 0
             }}
           >
-            <Link to="/services" className="btn-primary">
+            <Link to="/web-ai-factory" className="btn-primary" style={{ 
+              background: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)'
+            }}>
+              🚀 WEB AI FACTORY™
+            </Link>
+            <Link to="/services" className="btn-secondary">
               Ver Servicios
             </Link>
             <a href="#portfolio" className="btn-secondary">
@@ -287,6 +295,7 @@ function Home() {
           </div>
         </div>
       </div>
+
       {/* Logos Portfolio Section */}
       <div ref={sectionRefs.portfolio} className="portfolio-section" id="portfolio">
         <div className="portfolio-container">
@@ -441,6 +450,59 @@ function Home() {
         </div>
       </div>
 
+      {/* WEB AI FACTORY CTA Section - NUEVA SECCIÓN */}
+      <div className="portfolio-section" style={{ 
+        background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%)',
+        borderTop: '1px solid rgba(236, 72, 153, 0.3)'
+      }}>
+        <div className="portfolio-container">
+          <div 
+            className="portfolio-content"
+            style={{
+              opacity: visibleSections.portfolio ? 1 : 0,
+              transform: visibleSections.portfolio ? 'translateX(0)' : 'translateX(-50px)',
+              maxWidth: '100%',
+              margin: '0 auto',
+              textAlign: 'center'
+            }}
+          >
+            <div className="section-label" style={{ color: '#ec4899' }}>
+              🚀 NUEVO PRODUCTO DIGITAL
+            </div>
+
+            <h2 className="section-title" style={{ color: 'white' }}>
+              WEB AI <span style={{ 
+                fontStyle: 'italic',
+                background: 'linear-gradient(135deg, #ec4899 0%, #3b82f6 50%, #8b5cf6 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>FACTORY™</span>
+            </h2>
+
+            <p className="section-description" style={{ fontSize: '1.25rem' }}>
+              El sistema completo para crear y vender páginas web profesionales con IA. 
+              <br />
+              <strong style={{ color: '#ec4899' }}>Sin programar. En minutos. Por solo $7 USD.</strong>
+            </p>
+
+            <Link 
+              to="/web-ai-factory" 
+              className="btn-primary" 
+              style={{
+                background: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)',
+                fontSize: '1.25rem',
+                padding: '1.25rem 3rem',
+                display: 'inline-block',
+                marginTop: '1rem'
+              }}
+            >
+              Ver WEB AI FACTORY™
+            </Link>
+          </div>
+        </div>
+      </div>
+
       {/* Testimonials Section */}
       <div id="testimonials" ref={sectionRefs.testimonials} className="testimonials-section">
         <div className="testimonials-container">
@@ -457,23 +519,23 @@ function Home() {
             </div>
 
             <h2 
-  className="section-title"
-  style={{
-    opacity: visibleSections.testimonials ? 1 : 0,
-    transform: visibleSections.testimonials ? 'translateY(0)' : 'translateY(30px)',
-    transition: 'all 0.8s ease-out 0.1s',
-    color: 'white'
-  }}
->
-  Nuestros clientes{' '}
-  <span style={{ 
-    fontStyle: 'italic',
-    background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    backgroundClip: 'text'
-  }}>lo dicen</span>
-</h2>
+              className="section-title"
+              style={{
+                opacity: visibleSections.testimonials ? 1 : 0,
+                transform: visibleSections.testimonials ? 'translateY(0)' : 'translateY(30px)',
+                transition: 'all 0.8s ease-out 0.1s',
+                color: 'white'
+              }}
+            >
+              Nuestros clientes{' '}
+              <span style={{ 
+                fontStyle: 'italic',
+                background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>lo dicen</span>
+            </h2>
           </div>
 
           <div 
@@ -553,6 +615,7 @@ function Home() {
           </div>
         </div>
       </div>
+
       {/* CTA Section */}
       <div id="contacto" ref={sectionRefs.cta} className="cta-section">
         <div 
