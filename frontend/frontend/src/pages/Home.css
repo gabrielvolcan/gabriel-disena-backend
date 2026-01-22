@@ -19,7 +19,6 @@
   right: 0;
   bottom: 0;
   opacity: 0.4;
-  transition: background 0.3s ease;
   z-index: 0;
 }
 
@@ -112,7 +111,6 @@
   height: 8px;
   border-radius: 50%;
   background: #22c55e;
-  animation: pulse 2s infinite;
 }
 
 .hero-title {
@@ -139,8 +137,6 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   display: inline-block;
-  animation: gradientShift 3s ease infinite;
-  background-size: 200% 200%;
 }
 
 .hero-description {
@@ -298,6 +294,7 @@
 .portfolio-cta:hover {
   transform: scale(1.05);
 }
+
 /* ========================================
    TESTIMONIALS SECTION
    ======================================== */
@@ -540,7 +537,6 @@
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  animation: float 3s ease-in-out infinite;
 }
 
 .footer-title {
@@ -576,57 +572,6 @@
 .footer-brand {
   margin-top: 0.5rem;
   font-size: 0.875rem;
-}
-
-/* ========================================
-   ANIMATIONS
-   ======================================== */
-@keyframes pulse {
-  0%, 100% { 
-    opacity: 1; 
-    transform: scale(1); 
-  }
-  50% { 
-    opacity: 0.7; 
-    transform: scale(0.95); 
-  }
-}
-
-@keyframes pulseGlow {
-  0%, 100% { 
-    transform: scale(1); 
-    opacity: 0.15; 
-  }
-  50% { 
-    transform: scale(1.1); 
-    opacity: 0.25; 
-  }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideUpFade {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
 }
 
 /* ========================================
@@ -726,6 +671,7 @@
     padding: 4rem 1.5rem 2rem;
   }
 }
+
 /* Móviles */
 @media (max-width: 480px) {
   .home-nav {

@@ -70,10 +70,10 @@ function PortfolioWeb() {
     id: 6,
       name: 'detodoencursos',
       category: 'plataforma web',
-      location: 'argenrtina',
+      location: 'argentina',
       description: 'sitio web de venta de cursos y estudios',
       image: '/uploads/afroditaspa.jpg',
-      link: 'https://frontend-gamma-wheat-60.vercel.app/',
+      link: 'https://detodoencursos.com',
       tags: ['E-commerce', 'Corporativo', 'Responsive'],
       technologies: ['React', 'Express', 'MySQL']
     },
