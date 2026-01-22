@@ -27,7 +27,8 @@ const Admin = () => {
     paymentType: '',
     paymentMethod: 'bank_transfer',
     currency: 'USD',
-    transactionId: '',
+    transactionId: '', 
+
     notes: ''
   });
 

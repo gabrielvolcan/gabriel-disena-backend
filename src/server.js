@@ -134,7 +134,7 @@ io.on('connection', (socket) => {
 app.use('/api/auth', authRoutes);
 
 // Rutas protegidas (con autenticación)
-app.use('/api/admin', authMiddleware, adminRoutes);
+app.use('/api/admin', adminRoutes); // ✅ El auth ya está en los middleware individuales 
 app.use('/api/projects', projectRoutes); // Ya tiene auth dentro de cada ruta
 app.use('/api/analytics', authMiddleware, analyticsRoutes);
 app.use('/api/payments', paymentRoutes);

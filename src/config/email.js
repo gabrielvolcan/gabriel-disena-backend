@@ -26,7 +26,7 @@ transporter.verify((error, success) => {
 // ✉️ EMAIL 1: BIENVENIDA + CONTRASEÑA
 export const sendWelcomeEmail = async (userEmail, userName, password) => {
   const mailOptions = {
-    from: process.env.EMAIL_FROM,
+    from: 'Gabriel Diseña <gabrieldisena1@gmail.com>',
     to: userEmail,
     subject: '🎉 Bienvenido a Gabriel Diseña - Tus Credenciales de Acceso',
     html: `
@@ -79,7 +79,7 @@ export const sendWelcomeEmail = async (userEmail, userName, password) => {
                4️⃣ Mantente en contacto directo conmigo</p>
             
             <div style="text-align: center;">
-              <a href="${process.env.DASHBOARD_URL || 'http://localhost:5173/dashboard'}" class="button">🚀 Acceder al Dashboard</a>
+              <a href="https://gabrieldisena.com/dashboard" class="button">🚀 Acceder al Dashboard</a>
             </div>
             
             <p>Si tienes alguna pregunta, no dudes en contactarme. ¡Estoy aquí para ayudarte!</p>
@@ -90,7 +90,7 @@ export const sendWelcomeEmail = async (userEmail, userName, password) => {
           </div>
           <div class="footer">
             <p><strong>Gabriel Diseña</strong> - Creamos Tus Ideas</p>
-            <p>📧 ${process.env.EMAIL_USER} | 💬 WhatsApp | 📸 Instagram</p>
+            <p>📧 gabrieldisena1@gmail.com | 💬 WhatsApp | 📸 Instagram</p>
             <p style="font-size: 12px; color: #94a3b8; margin-top: 15px;">
               Este es un correo automático, por favor no respondas a este mensaje.
             </p>
@@ -114,7 +114,7 @@ export const sendWelcomeEmail = async (userEmail, userName, password) => {
 // ✉️ EMAIL 2: NUEVO PROYECTO ASIGNADO
 export const sendProjectAssignedEmail = async (userEmail, userName, project) => {
   const mailOptions = {
-    from: process.env.EMAIL_FROM,
+    from: 'Gabriel Diseña <gabrieldisena1@gmail.com>',
     to: userEmail,
     subject: `🎉 Nuevo Proyecto Asignado: ${project.title}`,
     html: `
@@ -180,7 +180,7 @@ export const sendProjectAssignedEmail = async (userEmail, userName, project) => 
             <p>Podrás ver el progreso de tu proyecto en <strong>tiempo real</strong>, minuto a minuto, desde tu dashboard personal. ¡No más esperas sin saber qué está pasando!</p>
             
             <div style="text-align: center;">
-              <a href="${process.env.DASHBOARD_URL || 'http://localhost:5173/dashboard'}" class="button">👀 Ver Mi Proyecto</a>
+              <a href="https://gabrieldisena.com/dashboard" class="button">👀 Ver Mi Proyecto</a>
             </div>
             
             <p>Mantente atento a las actualizaciones. Te notificaremos cada vez que haya avances importantes.</p>
@@ -192,7 +192,7 @@ export const sendProjectAssignedEmail = async (userEmail, userName, project) => 
           </div>
           <div class="footer">
             <p><strong>Gabriel Diseña</strong> - Creamos Tus Ideas</p>
-            <p>📧 ${process.env.EMAIL_USER}</p>
+            <p>📧 gabrieldisena1@gmail.com</p>
           </div>
         </div>
       </body>
@@ -213,7 +213,7 @@ export const sendProjectAssignedEmail = async (userEmail, userName, project) => 
 // ✉️ EMAIL 3: NUEVO ARCHIVO SUBIDO
 export const sendFileUploadedEmail = async (userEmail, userName, project, fileName) => {
   const mailOptions = {
-    from: process.env.EMAIL_FROM,
+    from: 'Gabriel Diseña <gabrieldisena1@gmail.com>',
     to: userEmail,
     subject: `📎 Nuevo Archivo Disponible - ${project.title}`,
     html: `
@@ -266,7 +266,7 @@ export const sendFileUploadedEmail = async (userEmail, userName, project, fileNa
             <p>🔓 <strong>Importante:</strong> Podrás ver una vista previa del archivo en tu dashboard. La descarga completa estará disponible una vez que el proyecto esté completado y el pago confirmado.</p>
             
             <div style="text-align: center;">
-              <a href="${process.env.DASHBOARD_URL || 'http://localhost:5173/dashboard'}" class="button">👀 Ver Archivo</a>
+              <a href="https://gabrieldisena.com/dashboard" class="button">👀 Ver Archivo</a>
             </div>
             
             <p>Seguimos trabajando para que tu proyecto quede perfecto!</p>
@@ -276,7 +276,7 @@ export const sendFileUploadedEmail = async (userEmail, userName, project, fileNa
           </div>
           <div class="footer">
             <p><strong>Gabriel Diseña</strong> - Creamos Tus Ideas</p>
-            <p>📧 ${process.env.EMAIL_USER}</p>
+            <p>📧 gabrieldisena1@gmail.com</p>
           </div>
         </div>
       </body>
@@ -297,7 +297,7 @@ export const sendFileUploadedEmail = async (userEmail, userName, project, fileNa
 // ✉️ EMAIL 4: PROYECTO COMPLETADO
 export const sendProjectCompletedEmail = async (userEmail, userName, project) => {
   const mailOptions = {
-    from: process.env.EMAIL_FROM,
+    from: 'Gabriel Diseña <gabrieldisena1@gmail.com>',
     to: userEmail,
     subject: `✅ Proyecto Completado - ${project.title}`,
     html: `
@@ -341,7 +341,7 @@ export const sendProjectCompletedEmail = async (userEmail, userName, project) =>
                4️⃣ <strong>Soporte continuo:</strong> Si necesitas algún ajuste, estoy aquí para ayudarte</p>
             
             <div style="text-align: center;">
-              <a href="${process.env.DASHBOARD_URL || 'http://localhost:5173/dashboard'}" class="button">🎁 Ver Proyecto Completado</a>
+              <a href="https://gabrieldisena.com/dashboard" class="button">🎁 Ver Proyecto Completado</a>
             </div>
             
             <p><strong>💡 Información de entrega:</strong></p>
@@ -362,7 +362,7 @@ export const sendProjectCompletedEmail = async (userEmail, userName, project) =>
           </div>
           <div class="footer">
             <p><strong>Gabriel Diseña</strong> - Creamos Tus Ideas</p>
-            <p>📧 ${process.env.EMAIL_USER} | 💬 WhatsApp | 📸 Instagram</p>
+            <p>📧 gabrieldisena1@gmail.com | 💬 WhatsApp | 📸 Instagram</p>
             <p style="margin-top: 20px; font-size: 13px; color: #64748b;">
               ¿Necesitas otro proyecto? ¡Contáctame en cualquier momento!
             </p>
@@ -390,7 +390,7 @@ export const sendPaymentConfirmationEmail = async (userEmail, userName, project,
   const paymentTypeText = isDeposit ? 'ANTICIPO (50%)' : 'PAGO FINAL (50%)';
 
   const mailOptions = {
-    from: process.env.EMAIL_FROM,
+    from: 'Gabriel Diseña <gabrieldisena1@gmail.com>',
     to: userEmail,
     subject: `✅ Pago Recibido - Factura ${invoiceNumber}`,
     html: `
@@ -462,7 +462,7 @@ export const sendPaymentConfirmationEmail = async (userEmail, userName, project,
             </div>
             
             <div style="text-align: center;">
-              <a href="${process.env.DASHBOARD_URL || 'http://localhost:5173/dashboard'}" class="button">👀 Ver Mi Dashboard</a>
+              <a href="https://gabrieldisena.com/dashboard" class="button">👀 Ver Mi Dashboard</a>
             </div>
             
             <p><strong>💡 ¿Necesitas la factura?</strong></p>
@@ -476,7 +476,7 @@ export const sendPaymentConfirmationEmail = async (userEmail, userName, project,
           </div>
           <div class="footer">
             <p><strong>Gabriel Diseña</strong> - Creamos Tus Ideas</p>
-            <p>📧 ${process.env.EMAIL_USER} | 💬 WhatsApp | 📸 Instagram</p>
+            <p>📧 gabrieldisena1@gmail.com | 💬 WhatsApp | 📸 Instagram</p>
             <p style="margin-top: 20px; font-size: 12px; color: #94a3b8;">
               Factura: ${invoiceNumber} | Fecha: ${new Date().toLocaleDateString('es-ES')}
             </p>

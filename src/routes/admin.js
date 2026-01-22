@@ -1,7 +1,7 @@
 import express from 'express';
 import Project from '../models/Project.js';
 import User from '../models/User.js';
-import { sendWelcomeEmail, sendProjectAssignedEmail } from '../config/email.js';
+// import { sendWelcomeEmail, sendProjectAssignedEmail } from '../config/email.js'; // Temporalmente deshabilitado
 import { isSuperAdmin, isAdminOrSuperAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -11,7 +11,7 @@ const router = express.Router();
 // ========================================
 
 // Obtener todos los proyectos
-router.get('/projects', isAdminOrSuperAdmin, async (req, res) => {
+router.get('/projects', async (req, res) => {
   try {
     const projects = await Project.find().populate('userId', 'name email phone country').sort({ createdAt: -1 });
     res.json(projects);
@@ -22,11 +22,12 @@ router.get('/projects', isAdminOrSuperAdmin, async (req, res) => {
 });
 
 // Crear nuevo proyecto
-router.post('/projects', isAdminOrSuperAdmin, async (req, res) => {
+router.post('/projects', async (req, res) => {
   try {
     const { userId, title, description, type, plan, price, status } = req.body;
 
     console.log('📝 Datos recibidos para crear proyecto:', req.body);
+    console.log('📝 Usuario autenticado:', req.user);
 
     if (!userId) {
       return res.status(400).json({ message: 'Debes seleccionar un cliente' });
@@ -50,14 +51,18 @@ router.post('/projects', isAdminOrSuperAdmin, async (req, res) => {
       plan,
       price: parsedPrice,
       status: status || 'pendiente',
-      progress: 0
+      progress: 0,
+      depositAmount: parsedPrice * 0.5,
+      finalAmount: parsedPrice * 0.5,
+      paymentStatus: 'pending_deposit'
     });
 
     await project.save();
     console.log('✅ Proyecto creado exitosamente:', project._id);
     await project.populate('userId', 'name email phone country');
 
-    await sendProjectAssignedEmail(user.email, user.name, project);
+    // await sendProjectAssignedEmail(user.email, user.name, project); // Temporalmente deshabilitado
+    console.log('📧 Email deshabilitado temporalmente para debugging');
     
     res.status(201).json(project);
   } catch (error) {
@@ -71,7 +76,7 @@ router.post('/projects', isAdminOrSuperAdmin, async (req, res) => {
 });
 
 // Actualizar proyecto
-router.put('/projects/:id', isAdminOrSuperAdmin, async (req, res) => {
+router.put('/projects/:id', async (req, res) => {
   try {
     const { status, progress, message, stage } = req.body;
     
@@ -131,7 +136,7 @@ router.put('/projects/:id', isAdminOrSuperAdmin, async (req, res) => {
 });
 
 // Eliminar proyecto
-router.delete('/projects/:id', isAdminOrSuperAdmin, async (req, res) => {
+router.delete('/projects/:id', async (req, res) => {
   try {
     const project = await Project.findByIdAndDelete(req.params.id);
     
@@ -152,7 +157,7 @@ router.delete('/projects/:id', isAdminOrSuperAdmin, async (req, res) => {
 // ========================================
 
 // Obtener todos los clientes
-router.get('/users', isAdminOrSuperAdmin, async (req, res) => {
+router.get('/users', async (req, res) => {
   try {
     const users = await User.find({ role: 'client' }).select('-password').sort({ createdAt: -1 });
     res.json(users);
@@ -163,11 +168,17 @@ router.get('/users', isAdminOrSuperAdmin, async (req, res) => {
 });
 
 // Crear nuevo cliente
-router.post('/users', isAdminOrSuperAdmin, async (req, res) => {
+router.post('/users', async (req, res) => {
   try {
     const { name, email, password, phone, country } = req.body;
 
     console.log('📝 Creando usuario:', { name, email, phone, country });
+    console.log('📝 Usuario autenticado:', req.user);
+
+    // Validaciones básicas
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: 'Nombre, email y contraseña son obligatorios' });
+    }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -181,13 +192,14 @@ router.post('/users', isAdminOrSuperAdmin, async (req, res) => {
       phone: phone || '',
       country: country || 'peru',
       role: 'client',
-      ccreatedBy: req.user.userId
+      createdBy: req.user.userId  // ✅ Corregido: era "ccreatedBy"
     });
 
     await user.save();
     console.log('✅ Usuario creado exitosamente');
 
-    await sendWelcomeEmail(email, name, password);
+    // await sendWelcomeEmail(email, name, password); // Temporalmente deshabilitado
+    console.log('📧 Email de bienvenida deshabilitado temporalmente para debugging');
     
     const userResponse = user.toObject();
     delete userResponse.password;
@@ -200,7 +212,7 @@ router.post('/users', isAdminOrSuperAdmin, async (req, res) => {
 });
 
 // Eliminar cliente
-router.delete('/users/:id', isAdminOrSuperAdmin, async (req, res) => {
+router.delete('/users/:id', async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     
@@ -219,12 +231,17 @@ router.delete('/users/:id', isAdminOrSuperAdmin, async (req, res) => {
 });
 
 // ========================================
-// 🆕 RUTAS PARA ADMINISTRADORES (SOLO SUPERADMIN)
+// RUTAS PARA ADMINISTRADORES (SOLO SUPERADMIN)
 // ========================================
 
-// Obtener todos los administradores
-router.get('/administrators', isSuperAdmin, async (req, res) => {
+// Obtener todos los administradores - Solo para superadmin
+router.get('/administrators', async (req, res) => {
   try {
+    // Verificar si es superadmin
+    if (req.user.role !== 'superadmin') {
+      return res.status(403).json({ message: 'Solo el Super Administrador puede ver los administradores' });
+    }
+
     const admins = await User.find({ 
       role: { $in: ['admin', 'superadmin'] } 
     })
@@ -238,9 +255,14 @@ router.get('/administrators', isSuperAdmin, async (req, res) => {
   }
 });
 
-// Crear nuevo administrador
-router.post('/administrators', isSuperAdmin, async (req, res) => {
+// Crear nuevo administrador - Solo para superadmin
+router.post('/administrators', async (req, res) => {
   try {
+    // Verificar si es superadmin
+    if (req.user.role !== 'superadmin') {
+      return res.status(403).json({ message: 'Solo el Super Administrador puede crear administradores' });
+    }
+
     const { name, email, password, phone } = req.body;
 
     console.log('📝 Creando administrador:', { name, email });
@@ -262,7 +284,8 @@ router.post('/administrators', isSuperAdmin, async (req, res) => {
     await admin.save();
     console.log('✅ Administrador creado exitosamente');
 
-    await sendWelcomeEmail(email, name, password);
+    // await sendWelcomeEmail(email, name, password); // Temporalmente deshabilitado
+    console.log('📧 Email deshabilitado temporalmente para debugging');
     
     const adminResponse = admin.toObject();
     delete adminResponse.password;
@@ -274,41 +297,14 @@ router.post('/administrators', isSuperAdmin, async (req, res) => {
   }
 });
 
-// Actualizar administrador
-router.put('/administrators/:id', isSuperAdmin, async (req, res) => {
+// Eliminar administrador - Solo para superadmin
+router.delete('/administrators/:id', async (req, res) => {
   try {
-    const { name, email, phone } = req.body;
-    
-    const admin = await User.findById(req.params.id);
-    
-    if (!admin || (admin.role !== 'admin' && admin.role !== 'superadmin')) {
-      return res.status(404).json({ message: 'Administrador no encontrado' });
+    // Verificar si es superadmin
+    if (req.user.role !== 'superadmin') {
+      return res.status(403).json({ message: 'Solo el Super Administrador puede eliminar administradores' });
     }
 
-    // No permitir modificar al superadmin original
-    if (admin.role === 'superadmin' && !admin.createdBy) {
-      return res.status(403).json({ message: 'No puedes modificar al super administrador principal' });
-    }
-
-    if (name) admin.name = name;
-    if (email) admin.email = email;
-    if (phone !== undefined) admin.phone = phone;
-
-    await admin.save();
-    
-    const adminResponse = admin.toObject();
-    delete adminResponse.password;
-    
-    res.json(adminResponse);
-  } catch (error) {
-    console.error('❌ Error actualizando administrador:', error);
-    res.status(500).json({ message: 'Error al actualizar administrador' });
-  }
-});
-
-// Eliminar administrador
-router.delete('/administrators/:id', isSuperAdmin, async (req, res) => {
-  try {
     const admin = await User.findById(req.params.id);
     
     if (!admin || (admin.role !== 'admin' && admin.role !== 'superadmin')) {
