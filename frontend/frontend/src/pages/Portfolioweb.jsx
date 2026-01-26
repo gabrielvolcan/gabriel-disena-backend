@@ -77,7 +77,24 @@ function PortfolioWeb() {
       tags: ['E-commerce', 'Corporativo', 'Responsive'],
       technologies: ['React', 'Express', 'MySQL']
     },
+
+     {
+
+    id: 7,
+      name: 'Thomasbarberworld',
+      category: 'plataforma web',
+      location: 'Chile',
+      description: 'sitio web de venta de productos y herramientas de bateria',
+      image: '/uploads/afroditaspa.jpg',
+      link: 'https://thomasbarberworld.cl',
+      tags: ['E-commerce', 'Corporativo', 'Responsive'],
+      technologies: [ 'php', 'Express', 'MySQL']
+    },
   ];
+
+  
+
+  
 
   return (
     <div style={{ minHeight: '100vh', background: '#020617', color: 'white' }}>
