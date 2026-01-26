@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 
@@ -106,11 +106,8 @@ function Home() {
             />
           </Link>
           <div className="nav-links">
-            <Link to="/services" className="nav-link">Servicios</Link>
+            <Link to="/services" className="nav-link" style={{ color: '#3b82f6', fontWeight: 'bold' }}>Servicios</Link>
             <a href="#portfolio" className="nav-link">Portfolio</a>
-            <Link to="/web-ai-factory" className="nav-link" style={{ color: '#ec4899', fontWeight: 'bold' }}>
-              🚀 WEB AI FACTORY
-            </Link>
             <a href="#contacto" className="btn-primary nav-button">Contactar</a>
           </div>
         </div>
@@ -142,19 +139,50 @@ function Home() {
             </span>
           </p>
 
+          {/* OPCIÓN 1: DOS BOTONES SEPARADOS (RECOMENDADO) */}
           <div className="hero-buttons">
-            <Link to="/web-ai-factory" className="btn-primary" style={{ 
-              background: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)'
-            }}>
-              🚀 WEB AI FACTORY™
+            <Link 
+              to="/services/logos" 
+              className="btn-primary" 
+              style={{ 
+                background: 'linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)'
+              }}
+            >
+              🎨 Diseño de Logos
             </Link>
-            <Link to="/services" className="btn-secondary">
+            <Link 
+              to="/services/web" 
+              className="btn-primary"
+              style={{ 
+                background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)'
+              }}
+            >
+              💻 Páginas Web
+            </Link>
+            <a href="#portfolio" className="btn-secondary">
+              Ver Portfolio
+            </a>
+          </div>
+
+          {/* OPCIÓN 2: UN SOLO BOTÓN DE SERVICIOS */}
+          {/* 
+          <div className="hero-buttons">
+            <Link 
+              to="/services" 
+              className="btn-primary" 
+              style={{ 
+                background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                fontSize: '1.25rem',
+                padding: '1.25rem 3rem'
+              }}
+            >
               Ver Servicios
             </Link>
             <a href="#portfolio" className="btn-secondary">
               Ver Portfolio
             </a>
           </div>
+          */}
 
           {/* Contact Icons usando SVG */}
           <div style={{
@@ -363,50 +391,6 @@ function Home() {
         </div>
       </div>
 
-      {/* WEB AI FACTORY CTA Section */}
-      <div className="portfolio-section" style={{ 
-        background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%)',
-        borderTop: '1px solid rgba(236, 72, 153, 0.3)'
-      }}>
-        <div className="portfolio-container">
-          <div className="portfolio-content" style={{ textAlign: 'center' }}>
-            <div className="section-label" style={{ color: '#ec4899' }}>
-              🚀 NUEVO PRODUCTO DIGITAL
-            </div>
-
-            <h2 className="section-title" style={{ color: 'white' }}>
-              WEB AI <span style={{ 
-                fontStyle: 'italic',
-                background: 'linear-gradient(135deg, #ec4899 0%, #3b82f6 50%, #8b5cf6 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}>FACTORY™</span>
-            </h2>
-
-            <p className="section-description" style={{ fontSize: '1.25rem' }}>
-              El sistema completo para crear y vender páginas web profesionales con IA. 
-              <br />
-              <strong style={{ color: '#ec4899' }}>Sin programar. En minutos. Por solo $7 USD.</strong>
-            </p>
-
-            <Link 
-              to="/web-ai-factory" 
-              className="btn-primary" 
-              style={{
-                background: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)',
-                fontSize: '1.25rem',
-                padding: '1.25rem 3rem',
-                display: 'inline-block',
-                marginTop: '1rem'
-              }}
-            >
-              Ver WEB AI FACTORY™
-            </Link>
-          </div>
-        </div>
-      </div>
-
       {/* Testimonials Section */}
       <div id="testimonials" className="testimonials-section">
         <div className="testimonials-container">
@@ -512,9 +496,14 @@ function Home() {
             ¡Estamos a solo un mensaje o llamada de distancia!
           </p>
 
-          <button className="btn-primary cta-button">
+          <a 
+            href="https://wa.me/51957949278?text=Hola!%20Estoy%20interesado%20en%20tus%20servicios" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="btn-primary cta-button"
+          >
             Contactar Ahora
-          </button>
+          </a>
         </div>
       </div>
 
