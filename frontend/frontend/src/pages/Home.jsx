@@ -81,6 +81,7 @@ function Home() {
           background: `radial-gradient(circle at ${50 + scrollY * 0.1}% ${50 + scrollY * 0.05}%, rgba(59, 130, 246, 0.1) 0%, transparent 50%)`
         }}
       />
+      
 
       {/* Navigation with LOGO */}
       <nav className="home-nav">
