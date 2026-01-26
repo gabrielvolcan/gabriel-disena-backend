@@ -27,8 +27,8 @@ function Services() {
       tagline: 'PERFECTO PARA EMPEZAR',
       prices: {
         PE: '130.00',
-        CL: '28.000',
-        AR: '42.000',
+        CL: '50.000',
+        AR: '50.000',
         UY: '3.000',
         US: '35'
       },
@@ -49,8 +49,8 @@ function Services() {
       popular: true,
       prices: {
         PE: '250.00',
-        CL: '65.000',
-        AR: '80.000',
+        CL: '70.000',
+        AR: '70.000',
         UY: '6.000',
         US: '70'
       },
@@ -73,8 +73,8 @@ function Services() {
       tagline: 'IDENTIDAD COMPLETA',
       prices: {
         PE: '500.00',
-        CL: '200.000',
-        AR: '200.000',
+        CL: '250.000',
+        AR: '250.000',
         UY: '6.000',
         US: '150'
       },

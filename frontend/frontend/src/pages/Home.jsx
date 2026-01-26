@@ -3,32 +3,12 @@ import { Link } from 'react-router-dom';
 import './Home.css';
 
 function Home() {
-  const [mounted, setMounted] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
-  const [visibleSections, setVisibleSections] = useState({});
-
-  const sectionRefs = {
-    hero: useRef(null),
-    portfolio: useRef(null),
-    testimonials: useRef(null),
-    cta: useRef(null)
-  };
 
   useEffect(() => {
-    setMounted(true);
-    
     const handleScroll = () => {
       setScrollY(window.scrollY);
-      
-      Object.keys(sectionRefs).forEach(key => {
-        const element = sectionRefs[key].current;
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          const isVisible = rect.top < window.innerHeight * 0.75 && rect.bottom > 0;
-          setVisibleSections(prev => ({ ...prev, [key]: isVisible }));
-        }
-      });
     };
     
     handleScroll();
@@ -137,33 +117,14 @@ function Home() {
       </nav>
 
       {/* Hero Section */}
-      <div ref={sectionRefs.hero} className="hero-section">
-        <div 
-          className="hero-content"
-          style={{
-            opacity: visibleSections.hero ? 1 : 0,
-            transform: visibleSections.hero ? 'translateY(0)' : 'translateY(50px)',
-            transition: 'all 1s cubic-bezier(0.16, 1, 0.3, 1)'
-          }}
-        >
-          <div 
-            className="hero-badge"
-            style={{
-              animation: mounted ? 'fadeIn 1s ease-out 0.3s forwards' : 'none',
-              opacity: 0
-            }}
-          >
+      <div className="hero-section">
+        <div className="hero-content">
+          <div className="hero-badge">
             <span className="badge-dot" />
             Disponible para proyectos
           </div>
 
-          <h1 
-            className="hero-title"
-            style={{
-              animation: mounted ? 'slideUpFade 1s ease-out 0.5s forwards' : 'none',
-              opacity: 0
-            }}
-          >
+          <h1 className="hero-title">
             <span className="hero-title-main">
               Diseño & Desarrollo
             </span>
@@ -172,13 +133,7 @@ function Home() {
             </span>
           </h1>
 
-          <p 
-            className="hero-description"
-            style={{
-              animation: mounted ? 'slideUpFade 1s ease-out 0.7s forwards' : 'none',
-              opacity: 0
-            }}
-          >
+          <p className="hero-description">
             Especializado en <strong style={{ color: '#ec4899' }}>diseño gráfico profesional</strong>, 
             desarrollo web moderno y aplicaciones personalizadas. 
             <br />
@@ -187,13 +142,7 @@ function Home() {
             </span>
           </p>
 
-          <div 
-            className="hero-buttons"
-            style={{
-              animation: mounted ? 'slideUpFade 1s ease-out 0.9s forwards' : 'none',
-              opacity: 0
-            }}
-          >
+          <div className="hero-buttons">
             <Link to="/web-ai-factory" className="btn-primary" style={{ 
               background: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)'
             }}>
@@ -208,17 +157,13 @@ function Home() {
           </div>
 
           {/* Contact Icons usando SVG */}
-          <div 
-            style={{
-              display: 'flex',
-              gap: '1.5rem',
-              marginTop: '2rem',
-              justifyContent: 'center',
-              alignItems: 'center',
-              animation: mounted ? 'fadeIn 1s ease-out 1.1s forwards' : 'none',
-              opacity: 0
-            }}
-          >
+          <div style={{
+            display: 'flex',
+            gap: '1.5rem',
+            marginTop: '2rem',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
             <a 
               href="https://www.instagram.com/gabrieldisena25/" 
               target="_blank" 
@@ -297,17 +242,9 @@ function Home() {
       </div>
 
       {/* Logos Portfolio Section */}
-      <div ref={sectionRefs.portfolio} className="portfolio-section" id="portfolio">
+      <div className="portfolio-section" id="portfolio">
         <div className="portfolio-container">
-          <div 
-            className="portfolio-content"
-            style={{
-              opacity: visibleSections.portfolio ? 1 : 0,
-              transform: visibleSections.portfolio ? 'translateX(0)' : 'translateX(-50px)',
-              maxWidth: '100%',
-              margin: '0 auto'
-            }}
-          >
+          <div className="portfolio-content">
             <div className="section-label pink">
               CASOS DE ÉXITO
             </div>
@@ -350,15 +287,7 @@ function Home() {
                   text: 'Tu logo funcionará perfecto en cualquier formato: redes, impresos, web y más.'
                 }
               ].map((item, index) => (
-                <li 
-                  key={index} 
-                  className="feature-item"
-                  style={{
-                    opacity: visibleSections.portfolio ? 1 : 0,
-                    transform: visibleSections.portfolio ? 'translateX(0)' : 'translateX(-30px)',
-                    transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.1}s`
-                  }}
-                >
+                <li key={index} className="feature-item">
                   <div className="feature-dot pink" />
                   <strong className="feature-title">
                     {item.title}
@@ -385,15 +314,7 @@ function Home() {
       {/* Web Development Portfolio Section */}
       <div className="portfolio-section web-portfolio">
         <div className="portfolio-container">
-          <div 
-            className="portfolio-content"
-            style={{
-              opacity: visibleSections.portfolio ? 1 : 0,
-              transform: visibleSections.portfolio ? 'translateX(0)' : 'translateX(-50px)',
-              maxWidth: '100%',
-              margin: '0 auto'
-            }}
-          >
+          <div className="portfolio-content">
             <div className="section-label blue">
               CASOS DE ÉXITO
             </div>
@@ -423,15 +344,7 @@ function Home() {
 
             <ul className="features-list">
               {whyChooseMe.map((item, index) => (
-                <li 
-                  key={index} 
-                  className="feature-item"
-                  style={{
-                    opacity: visibleSections.portfolio ? 1 : 0,
-                    transform: visibleSections.portfolio ? 'translateX(0)' : 'translateX(-30px)',
-                    transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.1}s`
-                  }}
-                >
+                <li key={index} className="feature-item">
                   <div className="feature-dot blue" />
                   <strong className="feature-title">
                     {item.title}
@@ -450,22 +363,13 @@ function Home() {
         </div>
       </div>
 
-      {/* WEB AI FACTORY CTA Section - NUEVA SECCIÓN */}
+      {/* WEB AI FACTORY CTA Section */}
       <div className="portfolio-section" style={{ 
         background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%)',
         borderTop: '1px solid rgba(236, 72, 153, 0.3)'
       }}>
         <div className="portfolio-container">
-          <div 
-            className="portfolio-content"
-            style={{
-              opacity: visibleSections.portfolio ? 1 : 0,
-              transform: visibleSections.portfolio ? 'translateX(0)' : 'translateX(-50px)',
-              maxWidth: '100%',
-              margin: '0 auto',
-              textAlign: 'center'
-            }}
-          >
+          <div className="portfolio-content" style={{ textAlign: 'center' }}>
             <div className="section-label" style={{ color: '#ec4899' }}>
               🚀 NUEVO PRODUCTO DIGITAL
             </div>
@@ -504,29 +408,14 @@ function Home() {
       </div>
 
       {/* Testimonials Section */}
-      <div id="testimonials" ref={sectionRefs.testimonials} className="testimonials-section">
+      <div id="testimonials" className="testimonials-section">
         <div className="testimonials-container">
           <div className="testimonials-header">
-            <div 
-              className="section-label"
-              style={{
-                opacity: visibleSections.testimonials ? 1 : 0,
-                transform: visibleSections.testimonials ? 'translateY(0)' : 'translateY(30px)',
-                transition: 'all 0.8s ease-out'
-              }}
-            >
+            <div className="section-label">
               ESTAMOS EN CADA DETALLE
             </div>
 
-            <h2 
-              className="section-title"
-              style={{
-                opacity: visibleSections.testimonials ? 1 : 0,
-                transform: visibleSections.testimonials ? 'translateY(0)' : 'translateY(30px)',
-                transition: 'all 0.8s ease-out 0.1s',
-                color: 'white'
-              }}
-            >
+            <h2 className="section-title" style={{ color: 'white' }}>
               Nuestros clientes{' '}
               <span style={{ 
                 fontStyle: 'italic',
@@ -538,14 +427,7 @@ function Home() {
             </h2>
           </div>
 
-          <div 
-            className="testimonials-content"
-            style={{
-              opacity: visibleSections.testimonials ? 1 : 0,
-              transform: visibleSections.testimonials ? 'scale(1)' : 'scale(0.9)',
-              transition: 'all 0.8s ease-out 0.3s'
-            }}
-          >
+          <div className="testimonials-content">
             <div className="rating-box">
               <div className="rating-title">
                 EXCELENTE
@@ -617,14 +499,8 @@ function Home() {
       </div>
 
       {/* CTA Section */}
-      <div id="contacto" ref={sectionRefs.cta} className="cta-section">
-        <div 
-          className="cta-container"
-          style={{
-            opacity: visibleSections.cta ? 1 : 0,
-            transform: visibleSections.cta ? 'translateY(0)' : 'translateY(50px)'
-          }}
-        >
+      <div id="contacto" className="cta-section">
+        <div className="cta-container">
           <div className="section-label">
             CONTACTO
           </div>
