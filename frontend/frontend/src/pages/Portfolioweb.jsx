@@ -50,7 +50,6 @@ function PortfolioWeb() {
       technologies: ['React', 'Express', 'MySQL']
     },
 
-  
 
     {
     
@@ -90,13 +89,37 @@ function PortfolioWeb() {
       tags: ['E-commerce', 'Corporativo', 'Responsive'],
       technologies: [ 'php', 'Express', 'MySQL']
     },
+
+{
+
+    id: 8,
+      name: 'Ganaconjohander',
+      category: 'talonario digital',
+      location: 'caracas - venezuela',
+      description: 'Sitio web de rifas',
+      image: '/uploads/afroditaspa.jpg',
+      link: 'https://ganaconjohander.com/',
+      tags: ['Corporativo', 'Responsive'],
+      technologies: [ 'php', 'Express', 'MySQL']
+    },
+    
+{
+
+    id: 9,
+      name: 'FundacionSolidariaMB',
+      category: 'Evento de sostenimiento',
+      location: 'ibague, colombia',
+      description: 'Sitio web de eventos',
+      image: '/uploads/afroditaspa.jpg',
+      link: 'hhttps://fundacionmbsolidaria.com/',
+      tags: ['Corporativo', 'Responsive'],
+      technologies: [ 'php', 'Express', 'MySQL']
+    },
+    
   ];
 
   
-
-  
-
-  return (
+ return (
     <div style={{ minHeight: '100vh', background: '#020617', color: 'white' }}>
       {/* Navigation con LOGO */}
       <nav style={{
