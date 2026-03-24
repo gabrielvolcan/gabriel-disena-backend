@@ -385,9 +385,9 @@ function Home() {
               ))}
             </ul>
 
-            <Link to="/portfolio-web" className="portfolio-cta blue">
+            <a href="https://www.gabrieldisena.com/portfolio" target="_blank" rel="noopener noreferrer" className="portfolio-cta blue">
               Ver Portfolio Web
-            </Link>
+            </a>
           </div>
         </div>
       </div>
