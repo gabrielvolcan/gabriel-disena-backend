@@ -2241,8 +2241,10 @@ return (
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   title="WhatsApp"
-                                  style={{ color: '#25d366', fontSize: '16px', textDecoration: 'none' }}
-                                >💬</a>
+                                  style={{ display: 'inline-flex', alignItems: 'center' }}
+                                >
+                                  <img src="/whatsapp.svg" alt="WhatsApp" style={{ width: '22px', height: '22px' }} />
+                                </a>
                               )}
                               <button
                                 onClick={() => { setSelectedLead(lead); setEditingLead(true); }}
