@@ -51,7 +51,7 @@
 .orb-2 {
   width: 400px;
   height: 400px;
-  background: linear-gradient(135deg, #4c7af7, #ff6b9d);
+  background: linear-gradient(135deg, #4c7af7, #00d68f);
   bottom: -150px;
   right: -150px;
   animation-delay: 5s;
@@ -120,7 +120,7 @@
 .error-message {
   background: #3d1a22;
   border: 1px solid rgba(239, 68, 68, 0.4);
-  color: #ffb3ca;
+  color: #6ee7b7;
   padding: 12px 16px;
   border-radius: 12px;
   margin-bottom: 24px;

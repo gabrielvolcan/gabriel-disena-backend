@@ -147,7 +147,7 @@
 .hero-title-accent {
   font-style: italic;
   background-color: #00b377;
-  background-image: linear-gradient(135deg, #00d68f 0%, #4c7af7 60%, #ff6b9d 100%);
+  background-image: linear-gradient(135deg, #00d68f 0%, #4c7af7 60%, #00d68f 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -258,7 +258,7 @@
 }
 
 .section-label.pink {
-  color: #ff6b9d;
+  color: #00d68f;
 }
 
 .section-label.blue {
@@ -281,8 +281,8 @@
 }
 
 .section-title-accent.pink {
-  background-color: #f43f5e;
-  background-image: linear-gradient(135deg, #ff6b9d 0%, #f43f5e 100%);
+  background-color: #00b377;
+  background-image: linear-gradient(135deg, #00d68f 0%, #00b377 100%);
 }
 
 .section-title-accent.blue {
@@ -320,7 +320,7 @@
 }
 
 .feature-dot.pink {
-  background: linear-gradient(135deg, #ff6b9d 0%, #f43f5e 100%);
+  background: linear-gradient(135deg, #00d68f 0%, #00b377 100%);
   box-shadow: 0 0 8px rgba(255, 107, 157, 0.5);
 }
 
@@ -351,8 +351,8 @@
 }
 
 .portfolio-cta.pink {
-  background-color: #f43f5e;
-  background-image: linear-gradient(135deg, #ff6b9d 0%, #f43f5e 100%);
+  background-color: #00b377;
+  background-image: linear-gradient(135deg, #00d68f 0%, #00b377 100%);
   box-shadow: 0 4px 15px rgba(255, 107, 157, 0.2);
 }
 

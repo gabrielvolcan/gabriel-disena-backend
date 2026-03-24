@@ -615,8 +615,8 @@ const Admin = () => {
   const getPaymentStatusColor = (status) => {
     const colors = {
       'pending_deposit': '#f59e0b',
-      'deposit_paid': '#3b82f6',
-      'pending_final': '#8b5cf6',
+      'deposit_paid': '#4c7af7',
+      'pending_final': '#00d68f',
       'fully_paid': '#10b981'
     };
     return colors[status] || '#94a3b8';
@@ -991,9 +991,9 @@ const Admin = () => {
   };
 
   const getLeadStatusColor = (status) => ({
-    frio: '#64748b', interesado: '#f59e0b', potencial: '#3b82f6',
+    frio: '#64748b', interesado: '#f59e0b', potencial: '#4c7af7',
     cliente: '#10b981', cerrado: '#ef4444',
-    enviado: '#8b5cf6', no_contactado: '#e11d48'
+    enviado: '#00d68f', no_contactado: '#e11d48'
   }[status] || '#64748b');
 
   const getLeadStatusLabel = (status) => ({
@@ -1024,8 +1024,8 @@ const Admin = () => {
   const getStatusColor = (status) => {
     const colors = {
       pendiente: '#f59e0b',
-      'en-progreso': '#3b82f6',
-      revision: '#8b5cf6',
+      'en-progreso': '#4c7af7',
+      revision: '#00d68f',
       completado: '#10b981',
       entregado: '#10b981',
       cancelado: '#ef4444'
@@ -1067,7 +1067,7 @@ return (
           <div className="admin-header-actions">
             <Link to="/analytics" style={{
               padding: '10px 24px',
-              background: 'linear-gradient(135deg, #10b981, #3b82f6)',
+              background: 'linear-gradient(135deg, #00d68f, #059669)',
               color: 'white',
               borderRadius: '8px',
               textDecoration: 'none',
@@ -1089,7 +1089,7 @@ return (
 
       <div className="admin-stats">
         <div className="stat-card">
-          <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)' }}>
+          <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #00d68f, #00b377)' }}>
             📊
           </div>
           <div className="stat-info">
@@ -1098,7 +1098,7 @@ return (
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #f59e0b, #ec4899)' }}>
+          <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #4c7af7, #00b8a9)' }}>
             ⏳
           </div>
           <div className="stat-info">
@@ -1107,7 +1107,7 @@ return (
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #10b981, #3b82f6)' }}>
+          <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #00d68f, #059669)' }}>
             ✅
           </div>
           <div className="stat-info">
@@ -1116,7 +1116,7 @@ return (
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #8b5cf6, #ec4899)' }}>
+          <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #4c7af7, #00d68f)' }}>
             👥
           </div>
           <div className="stat-info">
@@ -1172,10 +1172,10 @@ return (
             {/* Stats cards */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '16px', marginBottom: '32px' }}>
               {[
-                { label: 'Total Leads', value: leadStats.total, icon: '🎯', gradient: 'linear-gradient(135deg,#3b82f6,#8b5cf6)' },
-                { label: 'Leads esta semana', value: leads.filter(l => new Date(l.createdAt) >= new Date(Date.now() - 7*24*60*60*1000)).length, icon: '📅', gradient: 'linear-gradient(135deg,#f59e0b,#ec4899)' },
-                { label: 'Proyectos activos', value: projects.filter(p => p.status === 'en-progreso').length, icon: '⚡', gradient: 'linear-gradient(135deg,#10b981,#3b82f6)' },
-                { label: 'Clientes totales', value: users.length, icon: '👥', gradient: 'linear-gradient(135deg,#8b5cf6,#ec4899)' },
+                { label: 'Total Leads', value: leadStats.total, icon: '🎯', gradient: 'linear-gradient(135deg,#00d68f,#00b377)' },
+                { label: 'Leads esta semana', value: leads.filter(l => new Date(l.createdAt) >= new Date(Date.now() - 7*24*60*60*1000)).length, icon: '📅', gradient: 'linear-gradient(135deg,#4c7af7,#00b8a9)' },
+                { label: 'Proyectos activos', value: projects.filter(p => p.status === 'en-progreso').length, icon: '⚡', gradient: 'linear-gradient(135deg,#00d68f,#059669)' },
+                { label: 'Clientes totales', value: users.length, icon: '👥', gradient: 'linear-gradient(135deg,#4c7af7,#00d68f)' },
                 { label: 'Ingresos totales', value: `$${projects.reduce((sum, p) => sum + (p.totalPaid || 0), 0).toFixed(0)}`, icon: '💰', gradient: 'linear-gradient(135deg,#10b981,#059669)' },
               ].map(card => (
                 <div key={card.label} style={{ background: '#161b27', borderRadius: '12px', padding: '20px', border: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: '14px' }}>
@@ -1224,7 +1224,7 @@ return (
                         </div>
                         <div style={{ color: '#64748b', fontSize: '11px', marginBottom: '6px' }}>{project.userId?.name || 'Sin cliente'}</div>
                         <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '4px', height: '4px', overflow: 'hidden' }}>
-                          <div style={{ background: 'linear-gradient(90deg,#3b82f6,#8b5cf6)', height: '100%', width: `${project.progress || 0}%`, transition: 'width 0.3s' }} />
+                          <div style={{ background: 'linear-gradient(90deg,#00d68f,#00b377)', height: '100%', width: `${project.progress || 0}%`, transition: 'width 0.3s' }} />
                         </div>
                       </div>
                     ))}
@@ -1239,19 +1239,19 @@ return (
               <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                 <button
                   onClick={() => { setActiveTab('crm'); setShowCreateLead(true); }}
-                  style={{ background: 'linear-gradient(135deg,#3b82f6,#8b5cf6)', border: 'none', color: 'white', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem' }}
+                  style={{ background: 'linear-gradient(135deg,#00d68f,#00b377)', border: 'none', color: 'white', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem' }}
                 >
                   + Nuevo Lead
                 </button>
                 <button
                   onClick={() => { setActiveTab('crm'); setShowMarketing(true); }}
-                  style={{ background: 'linear-gradient(135deg,#f59e0b,#ec4899)', border: 'none', color: 'white', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem' }}
+                  style={{ background: 'linear-gradient(135deg,#4c7af7,#00b8a9)', border: 'none', color: 'white', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem' }}
                 >
                   📧 Email Marketing
                 </button>
                 <button
                   onClick={() => { setActiveTab('crm'); setShowImport(true); }}
-                  style={{ background: 'linear-gradient(135deg,#10b981,#3b82f6)', border: 'none', color: 'white', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem' }}
+                  style={{ background: 'linear-gradient(135deg,#00d68f,#059669)', border: 'none', color: 'white', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem' }}
                 >
                   📥 Importar BD
                 </button>
@@ -1410,7 +1410,7 @@ return (
                       className="progress-fill"
                       style={{ 
                         width: `${project.progress}%`,
-                        background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)'
+                        background: 'linear-gradient(90deg, #00d68f, #00b377)'
                       }}
                     />
                   </div>
@@ -1660,8 +1660,8 @@ return (
                   <div className="user-header">
                     <div className="user-avatar" style={{
                       background: admin.role === 'superadmin' 
-                        ? 'linear-gradient(135deg, #f59e0b, #ec4899)' 
-                        : 'linear-gradient(135deg, #3b82f6, #8b5cf6)'
+                        ? 'linear-gradient(135deg, #4c7af7, #00b8a9)' 
+                        : 'linear-gradient(135deg, #00d68f, #00b377)'
                     }}>
                       {admin.name.charAt(0).toUpperCase()}
                     </div>
@@ -1672,7 +1672,7 @@ return (
                           <span style={{ 
                             marginLeft: '8px', 
                             fontSize: '12px', 
-                            background: 'linear-gradient(135deg, #f59e0b, #ec4899)',
+                            background: 'linear-gradient(135deg, #4c7af7, #00b8a9)',
                             padding: '2px 8px',
                             borderRadius: '4px',
                             color: 'white'
@@ -2019,9 +2019,9 @@ return (
                 { label: 'Total', value: leadStats.total, color: '#64748b' },
                 { label: '🧊 Fríos', value: leadStats.frio, color: '#64748b' },
                 { label: '🔥 Interesados', value: leadStats.interesado, color: '#f59e0b' },
-                { label: '⭐ Potenciales', value: leadStats.potencial, color: '#3b82f6' },
+                { label: '⭐ Potenciales', value: leadStats.potencial, color: '#4c7af7' },
                 { label: '✅ Clientes', value: leadStats.cliente, color: '#10b981' },
-                { label: '📧 Enviados', value: leadStats.enviado, color: '#8b5cf6' },
+                { label: '📧 Enviados', value: leadStats.enviado, color: '#00d68f' },
                 { label: '🚫 No Contactados', value: leadStats.no_contactado, color: '#e11d48' },
               ].map(s => (
                 <div key={s.label} className="crm-stat-card" style={{ borderColor: s.color }}>
@@ -2113,7 +2113,7 @@ return (
               <div className="form-card" style={{ marginBottom: '24px' }}>
                 <h3>📧 Enviar Campaña de Email Marketing</h3>
                 {checkedLeads.size > 0 && (
-                  <div style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: '8px', padding: '10px 14px', marginBottom: '16px', color: '#3b82f6', fontSize: '14px' }}>
+                  <div style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: '8px', padding: '10px 14px', marginBottom: '16px', color: '#4c7af7', fontSize: '14px' }}>
                     ✅ Se enviará solo a <strong>{checkedLeads.size} lead{checkedLeads.size !== 1 ? 's' : ''} seleccionado{checkedLeads.size !== 1 ? 's' : ''}</strong> — los filtros de estado/servicio se ignorarán.
                   </div>
                 )}
@@ -2261,13 +2261,13 @@ return (
                     type="checkbox"
                     checked={leads.length > 0 && checkedLeads.size === leads.length}
                     onChange={toggleCheckAll}
-                    style={{ width: '16px', height: '16px', accentColor: '#3b82f6' }}
+                    style={{ width: '16px', height: '16px', accentColor: '#4c7af7' }}
                   />
                   <span style={{ color: '#94a3b8', fontSize: '13px' }}>Seleccionar todos</span>
                 </label>
                 {checkedLeads.size > 0 && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <span style={{ color: '#3b82f6', fontSize: '13px', fontWeight: '600' }}>
+                    <span style={{ color: '#4c7af7', fontSize: '13px', fontWeight: '600' }}>
                       {checkedLeads.size} seleccionado{checkedLeads.size !== 1 ? 's' : ''}
                     </span>
                     <button
@@ -2278,7 +2278,7 @@ return (
                     </button>
                     <button
                       onClick={() => setShowMarketing(true)}
-                      style={{ background: 'linear-gradient(135deg,#3b82f6,#8b5cf6)', border: 'none', color: 'white', borderRadius: '6px', padding: '5px 14px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' }}
+                      style={{ background: 'linear-gradient(135deg,#00d68f,#00b377)', border: 'none', color: 'white', borderRadius: '6px', padding: '5px 14px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' }}
                     >
                       📧 Email a seleccionados
                     </button>
@@ -2317,7 +2317,7 @@ return (
                               type="checkbox"
                               checked={checkedLeads.has(lead._id)}
                               onChange={e => toggleCheckLead(e, lead._id)}
-                              style={{ width: '15px', height: '15px', accentColor: '#3b82f6', cursor: 'pointer' }}
+                              style={{ width: '15px', height: '15px', accentColor: '#4c7af7', cursor: 'pointer' }}
                             />
                           </td>
                           <td>
@@ -2377,7 +2377,7 @@ return (
                               <button
                                 onClick={() => { setSelectedLead(lead); setEditingLead(true); }}
                                 title="Editar"
-                                style={{ background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', color: '#3b82f6', borderRadius: '5px', padding: '3px 8px', cursor: 'pointer', fontSize: '12px' }}
+                                style={{ background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', color: '#4c7af7', borderRadius: '5px', padding: '3px 8px', cursor: 'pointer', fontSize: '12px' }}
                               >✏️</button>
                               <button
                                 onClick={() => handleDeleteLead(lead._id)}
@@ -2400,7 +2400,7 @@ return (
                 <button
                   onClick={() => setCrmPage(p => Math.max(1, p - 1))}
                   disabled={crmPage === 1}
-                  style={{ background: crmPage === 1 ? 'rgba(100,116,139,0.2)' : 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', color: crmPage === 1 ? '#64748b' : '#3b82f6', padding: '8px 16px', borderRadius: '8px', cursor: crmPage === 1 ? 'default' : 'pointer', fontWeight: '600', fontSize: '0.85rem' }}
+                  style={{ background: crmPage === 1 ? 'rgba(100,116,139,0.2)' : 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', color: crmPage === 1 ? '#64748b' : '#4c7af7', padding: '8px 16px', borderRadius: '8px', cursor: crmPage === 1 ? 'default' : 'pointer', fontWeight: '600', fontSize: '0.85rem' }}
                 >
                   ← Anterior
                 </button>
@@ -2410,7 +2410,7 @@ return (
                 <button
                   onClick={() => setCrmPage(p => Math.min(Math.ceil(leads.length / 50), p + 1))}
                   disabled={crmPage >= Math.ceil(leads.length / 50)}
-                  style={{ background: crmPage >= Math.ceil(leads.length / 50) ? 'rgba(100,116,139,0.2)' : 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', color: crmPage >= Math.ceil(leads.length / 50) ? '#64748b' : '#3b82f6', padding: '8px 16px', borderRadius: '8px', cursor: crmPage >= Math.ceil(leads.length / 50) ? 'default' : 'pointer', fontWeight: '600', fontSize: '0.85rem' }}
+                  style={{ background: crmPage >= Math.ceil(leads.length / 50) ? 'rgba(100,116,139,0.2)' : 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', color: crmPage >= Math.ceil(leads.length / 50) ? '#64748b' : '#4c7af7', padding: '8px 16px', borderRadius: '8px', cursor: crmPage >= Math.ceil(leads.length / 50) ? 'default' : 'pointer', fontWeight: '600', fontSize: '0.85rem' }}
                 >
                   Siguiente →
                 </button>
