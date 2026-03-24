@@ -1,26 +1,28 @@
-import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
-
 dotenv.config();
 
-// Configurar transporter de Nodemailer
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false, // true solo si usas el puerto 465
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
-
-// Verificar conexión solo en desarrollo
-if (process.env.NODE_ENV !== 'production') {
-  transporter.verify((error) => {
-    if (error) console.error('❌ Error configurando email:', error);
-    else console.log('✅ Servidor de email listo');
+// ── Envío via Resend (funciona en Vercel serverless) ─────────────────────────
+const sendEmail = async ({ to, subject, html }) => {
+  const from = process.env.EMAIL_FROM || 'Gabriel Diseña <onboarding@resend.dev>';
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ from, to, subject, html })
   });
-}
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || 'Error Resend');
+  return data;
+};
+
+// Compatibilidad: transporter.sendMail({ to, subject, html })
+const transporter = {
+  sendMail: async ({ to, subject, html }) => sendEmail({ to, subject, html })
+};
+
+console.log('📧 Email configurado via Resend');
 
 // ✉️ EMAIL 1: BIENVENIDA + CONTRASEÑA
 export const sendWelcomeEmail = async (userEmail, userName, password) => {
