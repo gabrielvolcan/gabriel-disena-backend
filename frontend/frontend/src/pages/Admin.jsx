@@ -11,7 +11,7 @@ const Admin = () => {
   const [projects, setProjects] = useState([]);
   const [users, setUsers] = useState([]);
   const [administrators, setAdministrators] = useState([]);
-  const [activeTab, setActiveTab] = useState('projects');
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [loading, setLoading] = useState(true);
   const [showCreateProject, setShowCreateProject] = useState(false);
   const [showCreateUser, setShowCreateUser] = useState(false);
@@ -83,6 +83,7 @@ const Admin = () => {
   const [importResult, setImportResult] = useState(null);
   const [importing, setImporting] = useState(false);
   const [checkedLeads, setCheckedLeads] = useState(new Set());
+  const [crmPage, setCrmPage] = useState(1);
 
   const toggleCheckLead = (e, leadId) => {
     e.stopPropagation();
@@ -793,7 +794,8 @@ const Admin = () => {
         const updated = await response.json();
         setLeads(prev => prev.map(l => l._id === leadId ? updated : l));
         if (selectedLead?._id === leadId) setSelectedLead(updated);
-        showNotification('Estado actualizado', 'success');
+        showNotification(updated.status === 'cliente' ? '✅ Lead convertido a cliente' : 'Estado actualizado', 'success');
+        fetchLeadStats();
       }
     } catch { showNotification('Error al actualizar', 'error'); }
   };
@@ -981,6 +983,13 @@ const Admin = () => {
       });
   };
 
+  const handleExportCSV = () => {
+    const token = localStorage.getItem('token');
+    const params = new URLSearchParams();
+    if (leadFilter.status) params.append('status', leadFilter.status);
+    window.open(`${API_URL}/api/crm/export/csv?${params}&token=${token}`, '_blank');
+  };
+
   const getLeadStatusColor = (status) => ({
     frio: '#64748b', interesado: '#f59e0b', potencial: '#3b82f6',
     cliente: '#10b981', cerrado: '#ef4444',
@@ -1118,7 +1127,13 @@ return (
       </div>
 
       <div className="admin-tabs">
-        <button 
+        <button
+          className={`tab ${activeTab === 'dashboard' ? 'active' : ''}`}
+          onClick={() => setActiveTab('dashboard')}
+        >
+          🏠 Dashboard
+        </button>
+        <button
           className={`tab ${activeTab === 'projects' ? 'active' : ''}`}
           onClick={() => setActiveTab('projects')}
         >
@@ -1147,6 +1162,104 @@ return (
       </div>
 
       <div className="admin-content">
+        {/* TAB DASHBOARD */}
+        {activeTab === 'dashboard' && (
+          <div className="tab-content">
+            <div className="content-header">
+              <h2>🏠 Dashboard</h2>
+            </div>
+
+            {/* Stats cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '16px', marginBottom: '32px' }}>
+              {[
+                { label: 'Total Leads', value: leadStats.total, icon: '🎯', gradient: 'linear-gradient(135deg,#3b82f6,#8b5cf6)' },
+                { label: 'Leads esta semana', value: leads.filter(l => new Date(l.createdAt) >= new Date(Date.now() - 7*24*60*60*1000)).length, icon: '📅', gradient: 'linear-gradient(135deg,#f59e0b,#ec4899)' },
+                { label: 'Proyectos activos', value: projects.filter(p => p.status === 'en-progreso').length, icon: '⚡', gradient: 'linear-gradient(135deg,#10b981,#3b82f6)' },
+                { label: 'Clientes totales', value: users.length, icon: '👥', gradient: 'linear-gradient(135deg,#8b5cf6,#ec4899)' },
+                { label: 'Ingresos totales', value: `$${projects.reduce((sum, p) => sum + (p.totalPaid || 0), 0).toFixed(0)}`, icon: '💰', gradient: 'linear-gradient(135deg,#10b981,#059669)' },
+              ].map(card => (
+                <div key={card.label} style={{ background: '#161b27', borderRadius: '12px', padding: '20px', border: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ width: '46px', height: '46px', borderRadius: '10px', background: card.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', flexShrink: 0 }}>
+                    {card.icon}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#e2e8f0', lineHeight: 1 }}>{card.value}</div>
+                    <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>{card.label}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '32px' }}>
+              {/* Recent Leads */}
+              <div style={{ background: '#161b27', borderRadius: '12px', padding: '20px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <h3 style={{ margin: '0 0 16px', color: '#e2e8f0', fontSize: '1rem', fontWeight: '600' }}>🎯 Últimos Leads</h3>
+                {leads.slice(0, 5).length === 0 ? (
+                  <p style={{ color: '#64748b', fontSize: '13px' }}>No hay leads aún.</p>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {leads.slice(0, 5).map(lead => (
+                      <div key={lead._id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', background: '#0d1117', borderRadius: '8px' }}>
+                        <span style={{ color: '#e2e8f0', fontWeight: '600', fontSize: '13px', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{lead.name}</span>
+                        <span style={{ background: getLeadStatusColor(lead.status), color: 'white', padding: '2px 8px', borderRadius: '20px', fontSize: '10px', fontWeight: '600', marginLeft: '8px', flexShrink: 0 }}>{getLeadStatusLabel(lead.status)}</span>
+                        <span style={{ color: '#64748b', fontSize: '11px', marginLeft: '8px', flexShrink: 0 }}>{new Date(lead.createdAt).toLocaleDateString('es-ES')}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Recent Projects */}
+              <div style={{ background: '#161b27', borderRadius: '12px', padding: '20px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <h3 style={{ margin: '0 0 16px', color: '#e2e8f0', fontSize: '1rem', fontWeight: '600' }}>📁 Últimos Proyectos</h3>
+                {projects.slice(0, 5).length === 0 ? (
+                  <p style={{ color: '#64748b', fontSize: '13px' }}>No hay proyectos aún.</p>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {projects.slice(0, 5).map(project => (
+                      <div key={project._id} style={{ padding: '8px 12px', background: '#0d1117', borderRadius: '8px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                          <span style={{ color: '#e2e8f0', fontWeight: '600', fontSize: '13px', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{project.title}</span>
+                          <span style={{ background: getStatusColor(project.status), color: 'white', padding: '2px 8px', borderRadius: '20px', fontSize: '10px', fontWeight: '600', marginLeft: '8px', flexShrink: 0 }}>{getStatusText(project.status)}</span>
+                        </div>
+                        <div style={{ color: '#64748b', fontSize: '11px', marginBottom: '6px' }}>{project.userId?.name || 'Sin cliente'}</div>
+                        <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '4px', height: '4px', overflow: 'hidden' }}>
+                          <div style={{ background: 'linear-gradient(90deg,#3b82f6,#8b5cf6)', height: '100%', width: `${project.progress || 0}%`, transition: 'width 0.3s' }} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div style={{ background: '#161b27', borderRadius: '12px', padding: '20px', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <h3 style={{ margin: '0 0 16px', color: '#e2e8f0', fontSize: '1rem', fontWeight: '600' }}>⚡ Acciones Rápidas</h3>
+              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                <button
+                  onClick={() => { setActiveTab('crm'); setShowCreateLead(true); }}
+                  style={{ background: 'linear-gradient(135deg,#3b82f6,#8b5cf6)', border: 'none', color: 'white', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem' }}
+                >
+                  + Nuevo Lead
+                </button>
+                <button
+                  onClick={() => { setActiveTab('crm'); setShowMarketing(true); }}
+                  style={{ background: 'linear-gradient(135deg,#f59e0b,#ec4899)', border: 'none', color: 'white', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem' }}
+                >
+                  📧 Email Marketing
+                </button>
+                <button
+                  onClick={() => { setActiveTab('crm'); setShowImport(true); }}
+                  style={{ background: 'linear-gradient(135deg,#10b981,#3b82f6)', border: 'none', color: 'white', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem' }}
+                >
+                  📥 Importar BD
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* TAB PROYECTOS */}
         {activeTab === 'projects' && (
           <div className="tab-content">
@@ -1880,6 +1993,9 @@ return (
                 <button className="btn-secondary" onClick={() => { setShowImport(!showImport); setImportResult(null); }}>
                   📥 Importar BD
                 </button>
+                <button className="btn-secondary" onClick={handleExportCSV}>
+                  📤 Exportar CSV
+                </button>
                 <button className="btn-primary" onClick={() => setShowMarketing(!showMarketing)}>
                   📧 Email Marketing
                 </button>
@@ -2118,12 +2234,12 @@ return (
                 className="crm-search"
                 placeholder="🔍 Buscar por nombre, email o teléfono..."
                 value={leadFilter.search}
-                onChange={e => { const f = { ...leadFilter, search: e.target.value }; setLeadFilter(f); fetchLeads(f); }}
+                onChange={e => { const f = { ...leadFilter, search: e.target.value }; setLeadFilter(f); fetchLeads(f); setCrmPage(1); }}
               />
               <select
                 className="crm-filter-select"
                 value={leadFilter.status}
-                onChange={e => { const f = { ...leadFilter, status: e.target.value }; setLeadFilter(f); fetchLeads(f); }}
+                onChange={e => { const f = { ...leadFilter, status: e.target.value }; setLeadFilter(f); fetchLeads(f); setCrmPage(1); }}
               >
                 <option value="">Todos los estados</option>
                 <option value="frio">🧊 Frío</option>
@@ -2190,7 +2306,7 @@ return (
                       </tr>
                     </thead>
                     <tbody>
-                      {leads.map(lead => (
+                      {leads.slice((crmPage-1)*50, crmPage*50).map(lead => (
                         <tr
                           key={lead._id}
                           className={`crm-table-row ${selectedLead?._id === lead._id ? 'active' : ''}`}
@@ -2215,18 +2331,30 @@ return (
                           <td style={{ color: '#94a3b8', fontSize: '12px', whiteSpace: 'nowrap' }}>
                             {lead.phone || '—'}
                           </td>
-                          <td>
-                            <span style={{
-                              background: getLeadStatusColor(lead.status),
-                              color: 'white',
-                              padding: '3px 10px',
-                              borderRadius: '20px',
-                              fontSize: '11px',
-                              fontWeight: '600',
-                              whiteSpace: 'nowrap'
-                            }}>
-                              {getLeadStatusLabel(lead.status)}
-                            </span>
+                          <td onClick={e => e.stopPropagation()}>
+                            <select
+                              value={lead.status}
+                              onChange={e => handleUpdateLeadStatus(lead._id, e.target.value)}
+                              style={{
+                                background: getLeadStatusColor(lead.status),
+                                color: 'white',
+                                border: 'none',
+                                padding: '3px 6px',
+                                borderRadius: '20px',
+                                fontSize: '11px',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                outline: 'none'
+                              }}
+                            >
+                              <option value="frio">🧊 Frío</option>
+                              <option value="interesado">🔥 Interesado</option>
+                              <option value="potencial">⭐ Potencial</option>
+                              <option value="cliente">✅ Cliente</option>
+                              <option value="enviado">📧 Enviado</option>
+                              <option value="no_contactado">🚫 No Contactado</option>
+                              <option value="cerrado">❌ Cerrado</option>
+                            </select>
                           </td>
                           <td style={{ color: '#94a3b8', fontSize: '12px' }}>{lead.service}</td>
                           <td style={{ color: '#94a3b8', fontSize: '12px' }}>{lead.source}</td>
@@ -2266,6 +2394,29 @@ return (
               )}
             </div>
 
+            {/* Paginación CRM */}
+            {leads.length > 50 && (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '16px 0', marginTop: '8px' }}>
+                <button
+                  onClick={() => setCrmPage(p => Math.max(1, p - 1))}
+                  disabled={crmPage === 1}
+                  style={{ background: crmPage === 1 ? 'rgba(100,116,139,0.2)' : 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', color: crmPage === 1 ? '#64748b' : '#3b82f6', padding: '8px 16px', borderRadius: '8px', cursor: crmPage === 1 ? 'default' : 'pointer', fontWeight: '600', fontSize: '0.85rem' }}
+                >
+                  ← Anterior
+                </button>
+                <span style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
+                  Página {crmPage} de {Math.ceil(leads.length / 50)}
+                </span>
+                <button
+                  onClick={() => setCrmPage(p => Math.min(Math.ceil(leads.length / 50), p + 1))}
+                  disabled={crmPage >= Math.ceil(leads.length / 50)}
+                  style={{ background: crmPage >= Math.ceil(leads.length / 50) ? 'rgba(100,116,139,0.2)' : 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', color: crmPage >= Math.ceil(leads.length / 50) ? '#64748b' : '#3b82f6', padding: '8px 16px', borderRadius: '8px', cursor: crmPage >= Math.ceil(leads.length / 50) ? 'default' : 'pointer', fontWeight: '600', fontSize: '0.85rem' }}
+                >
+                  Siguiente →
+                </button>
+              </div>
+            )}
+
             {/* Panel detalle del lead */}
             <div className="crm-layout">
               <div></div>
@@ -2280,11 +2431,19 @@ return (
                         {getLeadStatusLabel(selectedLead.status)}
                       </span>
                     </div>
-                    <div style={{ display: 'flex', gap: '8px' }}>
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                       {buildWhatsAppLink(selectedLead) && (
                         <a href={buildWhatsAppLink(selectedLead)} target="_blank" rel="noopener noreferrer" className="btn-whatsapp">
                           💬 WhatsApp
                         </a>
+                      )}
+                      {selectedLead.status !== 'cliente' && (
+                        <button
+                          onClick={() => handleUpdateLeadStatus(selectedLead._id, 'cliente')}
+                          style={{ background: 'linear-gradient(135deg,#10b981,#059669)', border: 'none', color: 'white', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.85rem' }}
+                        >
+                          ✅ Convertir a Cliente
+                        </button>
                       )}
                       <button className="btn-secondary" onClick={() => setEditingLead(!editingLead)}>
                         ✏️ Editar

@@ -145,6 +145,38 @@ router.get('/', isAdminOrSuperAdmin, async (req, res) => {
   }
 });
 
+// GET export leads as CSV (must be before /:id to avoid route conflict)
+router.get('/export/csv', async (req, res) => {
+  // Auth via header OR query param token
+  const token = req.headers.authorization?.replace('Bearer ', '') || req.query.token;
+  if (!token) return res.status(401).json({ message: 'No autorizado' });
+  try {
+    const jwt = (await import('jsonwebtoken')).default;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (!['admin','superadmin'].includes(decoded.role)) return res.status(403).json({ message: 'No autorizado' });
+  } catch { return res.status(401).json({ message: 'Token inválido' }); }
+
+  try {
+    const { status, service } = req.query;
+    const filter = {};
+    if (status) filter.status = status;
+    if (service) filter.service = service;
+    const leads = await Lead.find(filter).sort({ createdAt: -1 });
+
+    const header = 'nombre,email,telefono,pais,servicio,fuente,estado,presupuesto,notas,fecha\n';
+    const rows = leads.map(l => {
+      const esc = v => `"${(v||'').replace(/"/g,'""')}"`;
+      return [esc(l.name),esc(l.email),esc(l.phone),esc(l.country),esc(l.service),esc(l.source),esc(l.status),esc(l.budget),esc(l.notes),esc(new Date(l.createdAt).toLocaleDateString('es-ES'))].join(',');
+    }).join('\n');
+
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="leads-export-${Date.now()}.csv"`);
+    res.send('\uFEFF' + header + rows);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al exportar' });
+  }
+});
+
 // GET un lead por id
 router.get('/:id', isAdminOrSuperAdmin, async (req, res) => {
   try {
