@@ -822,20 +822,42 @@ const Admin = () => {
     if (checkedLeads.size === 0) return;
     if (!window.confirm(`¿Eliminar ${checkedLeads.size} lead${checkedLeads.size !== 1 ? 's' : ''}? Esta acción no se puede deshacer.`)) return;
     const token = localStorage.getItem('token');
-    let deleted = 0;
-    for (const leadId of checkedLeads) {
-      try {
-        const res = await fetch(`${API_URL}/api/crm/${leadId}`, {
-          method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (res.ok) deleted++;
-      } catch { /* continuar */ }
+    const ids = Array.from(checkedLeads);
+    const res = await fetch(`${API_URL}/api/crm/bulk/selected`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ ids })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      setLeads(prev => prev.filter(l => !checkedLeads.has(l._id)));
+      if (selectedLead && checkedLeads.has(selectedLead._id)) setSelectedLead(null);
+      setCheckedLeads(new Set());
+      showNotification(`✅ ${data.deleted} lead${data.deleted !== 1 ? 's' : ''} eliminado${data.deleted !== 1 ? 's' : ''}`, 'success');
+      fetchLeadStats();
+    } else {
+      showNotification(data.message || 'Error al eliminar', 'error');
     }
-    setLeads(prev => prev.filter(l => !checkedLeads.has(l._id)));
-    if (selectedLead && checkedLeads.has(selectedLead._id)) setSelectedLead(null);
-    setCheckedLeads(new Set());
-    showNotification(`✅ ${deleted} lead${deleted !== 1 ? 's' : ''} eliminado${deleted !== 1 ? 's' : ''}`, 'success');
-    fetchLeadStats();
+  };
+
+  const handleDeleteAll = async () => {
+    if (!window.confirm(`⚠️ ¿Eliminar TODA la base de datos de leads? Esta acción borrará todos los registros y NO se puede deshacer.`)) return;
+    if (!window.confirm(`¿Estás seguro? Se eliminarán ${leadStats.total} leads permanentemente.`)) return;
+    const token = localStorage.getItem('token');
+    const res = await fetch(`${API_URL}/api/crm/bulk/all`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const data = await res.json();
+    if (res.ok) {
+      setLeads([]);
+      setSelectedLead(null);
+      setCheckedLeads(new Set());
+      showNotification(`✅ ${data.deleted} leads eliminados`, 'success');
+      fetchLeadStats();
+    } else {
+      showNotification(data.message || 'Error al eliminar', 'error');
+    }
   };
 
   const handleDeleteLead = async (leadId) => {
@@ -1860,6 +1882,14 @@ return (
                 <button className="btn-primary" onClick={() => setShowCreateLead(!showCreateLead)}>
                   + Nuevo Lead
                 </button>
+                {leadStats.total > 0 && (
+                  <button
+                    onClick={handleDeleteAll}
+                    style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.4)', color: '#ef4444', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.85rem' }}
+                  >
+                    🗑️ Borrar todo
+                  </button>
+                )}
               </div>
             </div>
 

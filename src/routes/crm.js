@@ -207,6 +207,31 @@ router.delete('/:id', isAdminOrSuperAdmin, async (req, res) => {
   }
 });
 
+// DELETE eliminar TODOS los leads
+router.delete('/bulk/all', isAdminOrSuperAdmin, async (req, res) => {
+  try {
+    const result = await Lead.deleteMany({});
+    res.json({ message: `${result.deletedCount} leads eliminados`, deleted: result.deletedCount });
+  } catch (error) {
+    console.error('Error borrando todos los leads:', error);
+    res.status(500).json({ message: 'Error al eliminar leads' });
+  }
+});
+
+// DELETE eliminar leads seleccionados (por array de IDs)
+router.delete('/bulk/selected', isAdminOrSuperAdmin, async (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ message: 'Se requiere un array de IDs' });
+    }
+    const result = await Lead.deleteMany({ _id: { $in: ids } });
+    res.json({ message: `${result.deletedCount} leads eliminados`, deleted: result.deletedCount });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al eliminar leads' });
+  }
+});
+
 // POST agregar seguimiento a un lead
 router.post('/:id/followup', isAdminOrSuperAdmin, async (req, res) => {
   try {
