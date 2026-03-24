@@ -352,7 +352,7 @@ router.post('/import/csv', isAdminOrSuperAdmin, csvUpload.single('file'), async 
       return res.status(400).json({ message: 'El archivo está vacío o no tiene el formato correcto' });
     }
 
-    const validStatuses  = ['frio', 'interesado', 'potencial', 'cliente', 'cerrado'];
+    const validStatuses  = ['frio', 'interesado', 'potencial', 'cliente', 'cerrado', 'enviado', 'no_contactado'];
     const validServices  = ['logo', 'web', 'ambos', 'otro'];
     const validSources   = ['portfolio', 'whatsapp', 'instagram', 'referido', 'directo', 'otro'];
 

@@ -81,6 +81,25 @@ const Admin = () => {
   const [importFile, setImportFile] = useState(null);
   const [importResult, setImportResult] = useState(null);
   const [importing, setImporting] = useState(false);
+  const [checkedLeads, setCheckedLeads] = useState(new Set());
+
+  const toggleCheckLead = (e, leadId) => {
+    e.stopPropagation();
+    setCheckedLeads(prev => {
+      const next = new Set(prev);
+      next.has(leadId) ? next.delete(leadId) : next.add(leadId);
+      return next;
+    });
+  };
+
+  const toggleCheckAll = () => {
+    const withEmail = leads.filter(l => l.email).map(l => l._id);
+    if (checkedLeads.size === withEmail.length) {
+      setCheckedLeads(new Set());
+    } else {
+      setCheckedLeads(new Set(withEmail));
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -826,10 +845,13 @@ const Admin = () => {
     setSendingMarketing(true);
     try {
       const token = localStorage.getItem('token');
+      const customEmails = checkedLeads.size > 0
+        ? leads.filter(l => checkedLeads.has(l._id) && l.email).map(l => ({ email: l.email, name: l.name }))
+        : [];
       const response = await fetch(`${API_URL}/api/crm/marketing/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify(marketing)
+        body: JSON.stringify({ ...marketing, customEmails })
       });
       const data = await response.json();
       if (response.ok) {
@@ -885,12 +907,14 @@ const Admin = () => {
 
   const getLeadStatusColor = (status) => ({
     frio: '#64748b', interesado: '#f59e0b', potencial: '#3b82f6',
-    cliente: '#10b981', cerrado: '#ef4444'
+    cliente: '#10b981', cerrado: '#ef4444',
+    enviado: '#8b5cf6', no_contactado: '#e11d48'
   }[status] || '#64748b');
 
   const getLeadStatusLabel = (status) => ({
     frio: '🧊 Frío', interesado: '🔥 Interesado', potencial: '⭐ Potencial',
-    cliente: '✅ Cliente', cerrado: '❌ Cerrado'
+    cliente: '✅ Cliente', cerrado: '❌ Cerrado',
+    enviado: '📧 Enviado', no_contactado: '🚫 No Contactado'
   }[status] || status);
 
   const buildWhatsAppLink = (lead) => {
@@ -1797,6 +1821,8 @@ return (
                 { label: '🔥 Interesados', value: leads.filter(l => l.status === 'interesado').length, color: '#f59e0b' },
                 { label: '⭐ Potenciales', value: leads.filter(l => l.status === 'potencial').length, color: '#3b82f6' },
                 { label: '✅ Clientes', value: leads.filter(l => l.status === 'cliente').length, color: '#10b981' },
+                { label: '📧 Enviados', value: leads.filter(l => l.status === 'enviado').length, color: '#8b5cf6' },
+                { label: '🚫 No Contactados', value: leads.filter(l => l.status === 'no_contactado').length, color: '#e11d48' },
               ].map(s => (
                 <div key={s.label} className="crm-stat-card" style={{ borderColor: s.color }}>
                   <div className="crm-stat-num" style={{ color: s.color }}>{s.value}</div>
@@ -1886,16 +1912,23 @@ return (
             {showMarketing && (
               <div className="form-card" style={{ marginBottom: '24px' }}>
                 <h3>📧 Enviar Campaña de Email Marketing</h3>
+                {checkedLeads.size > 0 && (
+                  <div style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: '8px', padding: '10px 14px', marginBottom: '16px', color: '#3b82f6', fontSize: '14px' }}>
+                    ✅ Se enviará solo a <strong>{checkedLeads.size} lead{checkedLeads.size !== 1 ? 's' : ''} seleccionado{checkedLeads.size !== 1 ? 's' : ''}</strong> — los filtros de estado/servicio se ignorarán.
+                  </div>
+                )}
                 <form onSubmit={handleSendMarketing}>
                   <div className="form-grid">
                     <div className="form-group">
-                      <label>Filtrar por Estado</label>
+                      <label>Filtrar por Estado {checkedLeads.size > 0 && <span style={{color:'#64748b',fontWeight:'normal'}}>(ignorado — hay selección)</span>}</label>
                       <select value={marketing.targetStatus} onChange={e => setMarketing({ ...marketing, targetStatus: e.target.value })}>
                         <option value="">Todos los leads con email</option>
                         <option value="frio">Frío</option>
                         <option value="interesado">Interesado</option>
                         <option value="potencial">Potencial</option>
                         <option value="cliente">Cliente</option>
+                        <option value="enviado">Enviado</option>
+                        <option value="no_contactado">No Contactado</option>
                       </select>
                     </div>
                     <div className="form-group">
@@ -1974,6 +2007,8 @@ return (
                       <select value={newLead.status} onChange={e => setNewLead({ ...newLead, status: e.target.value })}>
                         <option value="frio">🧊 Frío</option><option value="interesado">🔥 Interesado</option>
                         <option value="potencial">⭐ Potencial</option><option value="cliente">✅ Cliente</option>
+                        <option value="enviado">📧 Enviado</option><option value="no_contactado">🚫 No Contactado</option>
+                        <option value="cerrado">❌ Cerrado</option>
                       </select>
                     </div>
                     <div className="form-group">
@@ -2011,6 +2046,8 @@ return (
                 <option value="interesado">🔥 Interesado</option>
                 <option value="potencial">⭐ Potencial</option>
                 <option value="cliente">✅ Cliente</option>
+                <option value="enviado">📧 Enviado</option>
+                <option value="no_contactado">🚫 No Contactado</option>
                 <option value="cerrado">❌ Cerrado</option>
               </select>
             </div>
@@ -2018,6 +2055,21 @@ return (
             {/* Layout: lista + detalle */}
             <div className="crm-layout">
               {/* Lista de leads */}
+              {leads.length > 0 && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 4px', marginBottom: '4px' }}>
+                  <button
+                    onClick={toggleCheckAll}
+                    style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: '#94a3b8', borderRadius: '6px', padding: '5px 12px', cursor: 'pointer', fontSize: '12px' }}
+                  >
+                    {checkedLeads.size === leads.filter(l => l.email).length && checkedLeads.size > 0 ? '☑ Deseleccionar todos' : '☐ Seleccionar todos'}
+                  </button>
+                  {checkedLeads.size > 0 && (
+                    <span style={{ color: '#3b82f6', fontSize: '13px', fontWeight: '600' }}>
+                      {checkedLeads.size} seleccionado{checkedLeads.size !== 1 ? 's' : ''}
+                    </span>
+                  )}
+                </div>
+              )}
               <div className="crm-list">
                 {leads.length === 0 ? (
                   <div className="crm-empty">No hay leads todavía.<br />¡Los del portfolio aparecerán aquí!</div>
@@ -2028,7 +2080,18 @@ return (
                     onClick={() => { setSelectedLead(lead); setEditingLead(false); }}
                   >
                     <div className="crm-lead-top">
-                      <span className="crm-lead-name">{lead.name}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
+                        {lead.email && (
+                          <input
+                            type="checkbox"
+                            checked={checkedLeads.has(lead._id)}
+                            onClick={e => toggleCheckLead(e, lead._id)}
+                            onChange={() => {}}
+                            style={{ width: '16px', height: '16px', cursor: 'pointer', accentColor: '#3b82f6', flexShrink: 0 }}
+                          />
+                        )}
+                        <span className="crm-lead-name">{lead.name}</span>
+                      </div>
                       <span className="crm-lead-status" style={{ background: getLeadStatusColor(lead.status) }}>
                         {getLeadStatusLabel(lead.status)}
                       </span>
@@ -2091,6 +2154,7 @@ return (
                           <select value={selectedLead.status} onChange={e => setSelectedLead({ ...selectedLead, status: e.target.value })}>
                             <option value="frio">🧊 Frío</option><option value="interesado">🔥 Interesado</option>
                             <option value="potencial">⭐ Potencial</option><option value="cliente">✅ Cliente</option>
+                            <option value="enviado">📧 Enviado</option><option value="no_contactado">🚫 No Contactado</option>
                             <option value="cerrado">❌ Cerrado</option>
                           </select>
                         </div>
