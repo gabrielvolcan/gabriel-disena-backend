@@ -312,13 +312,15 @@ router.post('/marketing/send', isAdminOrSuperAdmin, async (req, res) => {
 // GET estadísticas del CRM
 router.get('/stats/overview', isAdminOrSuperAdmin, async (req, res) => {
   try {
-    const [total, frio, interesado, potencial, cliente, cerrado] = await Promise.all([
+    const [total, frio, interesado, potencial, cliente, cerrado, enviado, no_contactado] = await Promise.all([
       Lead.countDocuments(),
       Lead.countDocuments({ status: 'frio' }),
       Lead.countDocuments({ status: 'interesado' }),
       Lead.countDocuments({ status: 'potencial' }),
       Lead.countDocuments({ status: 'cliente' }),
-      Lead.countDocuments({ status: 'cerrado' })
+      Lead.countDocuments({ status: 'cerrado' }),
+      Lead.countDocuments({ status: 'enviado' }),
+      Lead.countDocuments({ status: 'no_contactado' })
     ]);
 
     const bySource = await Lead.aggregate([
@@ -332,7 +334,7 @@ router.get('/stats/overview', isAdminOrSuperAdmin, async (req, res) => {
     const recent = await Lead.find().sort({ createdAt: -1 }).limit(5).select('name status source createdAt');
 
     res.json({
-      total, frio, interesado, potencial, cliente, cerrado,
+      total, frio, interesado, potencial, cliente, cerrado, enviado, no_contactado,
       bySource, byService, recent
     });
   } catch (error) {

@@ -68,6 +68,7 @@ const Admin = () => {
 
   // ── CRM STATE ──────────────────────────────────────────────────
   const [leads, setLeads] = useState([]);
+  const [leadStats, setLeadStats] = useState({ total: 0, frio: 0, interesado: 0, potencial: 0, cliente: 0, enviado: 0, no_contactado: 0, cerrado: 0 });
   const [selectedLead, setSelectedLead] = useState(null);
   const [showCreateLead, setShowCreateLead] = useState(false);
   const [leadFilter, setLeadFilter] = useState({ status: '', search: '' });
@@ -93,11 +94,11 @@ const Admin = () => {
   };
 
   const toggleCheckAll = () => {
-    const withEmail = leads.filter(l => l.email).map(l => l._id);
-    if (checkedLeads.size === withEmail.length) {
+    const allIds = leads.map(l => l._id);
+    if (checkedLeads.size === leads.length) {
       setCheckedLeads(new Set());
     } else {
-      setCheckedLeads(new Set(withEmail));
+      setCheckedLeads(new Set(allIds));
     }
   };
 
@@ -120,6 +121,7 @@ const Admin = () => {
     fetchProjects();
     fetchUsers();
     fetchLeads();
+    fetchLeadStats();
     
     if (userRole === 'superadmin') {
       fetchAdministrators();
@@ -732,6 +734,30 @@ const Admin = () => {
     }
   };
 
+  const fetchLeadStats = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${API_URL}/api/crm/stats/overview`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setLeadStats({
+          total: data.total || 0,
+          frio: data.frio || 0,
+          interesado: data.interesado || 0,
+          potencial: data.potencial || 0,
+          cliente: data.cliente || 0,
+          cerrado: data.cerrado || 0,
+          enviado: data.enviado || 0,
+          no_contactado: data.no_contactado || 0
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching lead stats:', error);
+    }
+  };
+
   const handleCreateLead = async (e) => {
     e.preventDefault();
     if (!newLead.name.trim()) { showNotification('El nombre es obligatorio', 'error'); return; }
@@ -747,6 +773,7 @@ const Admin = () => {
         setNewLead({ name: '', email: '', phone: '', country: 'otro', service: 'otro', source: 'directo', status: 'frio', notes: '', budget: '', message: '' });
         setShowCreateLead(false);
         fetchLeads(leadFilter);
+        fetchLeadStats();
       } else {
         const data = await response.json();
         showNotification(data.message || 'Error al crear lead', 'error');
@@ -786,8 +813,29 @@ const Admin = () => {
         setSelectedLead(updated);
         setEditingLead(false);
         showNotification('✅ Lead actualizado', 'success');
+        fetchLeadStats();
       }
     } catch { showNotification('Error al actualizar', 'error'); }
+  };
+
+  const handleDeleteSelected = async () => {
+    if (checkedLeads.size === 0) return;
+    if (!window.confirm(`¿Eliminar ${checkedLeads.size} lead${checkedLeads.size !== 1 ? 's' : ''}? Esta acción no se puede deshacer.`)) return;
+    const token = localStorage.getItem('token');
+    let deleted = 0;
+    for (const leadId of checkedLeads) {
+      try {
+        const res = await fetch(`${API_URL}/api/crm/${leadId}`, {
+          method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) deleted++;
+      } catch { /* continuar */ }
+    }
+    setLeads(prev => prev.filter(l => !checkedLeads.has(l._id)));
+    if (selectedLead && checkedLeads.has(selectedLead._id)) setSelectedLead(null);
+    setCheckedLeads(new Set());
+    showNotification(`✅ ${deleted} lead${deleted !== 1 ? 's' : ''} eliminado${deleted !== 1 ? 's' : ''}`, 'success');
+    fetchLeadStats();
   };
 
   const handleDeleteLead = async (leadId) => {
@@ -800,6 +848,7 @@ const Admin = () => {
       setLeads(prev => prev.filter(l => l._id !== leadId));
       if (selectedLead?._id === leadId) setSelectedLead(null);
       showNotification('Lead eliminado', 'success');
+      fetchLeadStats();
     } catch { showNotification('Error al eliminar', 'error'); }
   };
 
@@ -883,6 +932,7 @@ const Admin = () => {
       if (response.ok) {
         setImportResult({ success: true, ...data });
         fetchLeads(leadFilter);
+        fetchLeadStats();
         setImportFile(null);
       } else {
         setImportResult({ success: false, message: data.message });
@@ -1816,13 +1866,13 @@ return (
             {/* Stats rápidas */}
             <div className="crm-stats">
               {[
-                { label: 'Total', value: leads.length, color: '#64748b' },
-                { label: '🧊 Fríos', value: leads.filter(l => l.status === 'frio').length, color: '#64748b' },
-                { label: '🔥 Interesados', value: leads.filter(l => l.status === 'interesado').length, color: '#f59e0b' },
-                { label: '⭐ Potenciales', value: leads.filter(l => l.status === 'potencial').length, color: '#3b82f6' },
-                { label: '✅ Clientes', value: leads.filter(l => l.status === 'cliente').length, color: '#10b981' },
-                { label: '📧 Enviados', value: leads.filter(l => l.status === 'enviado').length, color: '#8b5cf6' },
-                { label: '🚫 No Contactados', value: leads.filter(l => l.status === 'no_contactado').length, color: '#e11d48' },
+                { label: 'Total', value: leadStats.total, color: '#64748b' },
+                { label: '🧊 Fríos', value: leadStats.frio, color: '#64748b' },
+                { label: '🔥 Interesados', value: leadStats.interesado, color: '#f59e0b' },
+                { label: '⭐ Potenciales', value: leadStats.potencial, color: '#3b82f6' },
+                { label: '✅ Clientes', value: leadStats.cliente, color: '#10b981' },
+                { label: '📧 Enviados', value: leadStats.enviado, color: '#8b5cf6' },
+                { label: '🚫 No Contactados', value: leadStats.no_contactado, color: '#e11d48' },
               ].map(s => (
                 <div key={s.label} className="crm-stat-card" style={{ borderColor: s.color }}>
                   <div className="crm-stat-num" style={{ color: s.color }}>{s.value}</div>
@@ -2052,61 +2102,137 @@ return (
               </select>
             </div>
 
-            {/* Layout: lista + detalle */}
-            <div className="crm-layout">
-              {/* Lista de leads */}
-              {leads.length > 0 && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 4px', marginBottom: '4px' }}>
-                  <button
-                    onClick={toggleCheckAll}
-                    style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: '#94a3b8', borderRadius: '6px', padding: '5px 12px', cursor: 'pointer', fontSize: '12px' }}
-                  >
-                    {checkedLeads.size === leads.filter(l => l.email).length && checkedLeads.size > 0 ? '☑ Deseleccionar todos' : '☐ Seleccionar todos'}
-                  </button>
-                  {checkedLeads.size > 0 && (
+            {/* Tabla CRM */}
+            <div className="crm-table-wrapper">
+              {/* Barra de acciones masivas */}
+              <div className="crm-bulk-bar">
+                <label className="crm-check-all-label">
+                  <input
+                    type="checkbox"
+                    checked={leads.length > 0 && checkedLeads.size === leads.length}
+                    onChange={toggleCheckAll}
+                    style={{ width: '16px', height: '16px', accentColor: '#3b82f6' }}
+                  />
+                  <span style={{ color: '#94a3b8', fontSize: '13px' }}>Seleccionar todos</span>
+                </label>
+                {checkedLeads.size > 0 && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <span style={{ color: '#3b82f6', fontSize: '13px', fontWeight: '600' }}>
                       {checkedLeads.size} seleccionado{checkedLeads.size !== 1 ? 's' : ''}
                     </span>
-                  )}
+                    <button
+                      onClick={handleDeleteSelected}
+                      style={{ background: '#ef4444', border: 'none', color: 'white', borderRadius: '6px', padding: '5px 14px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' }}
+                    >
+                      🗑️ Eliminar seleccionados
+                    </button>
+                    <button
+                      onClick={() => setShowMarketing(true)}
+                      style={{ background: 'linear-gradient(135deg,#3b82f6,#8b5cf6)', border: 'none', color: 'white', borderRadius: '6px', padding: '5px 14px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' }}
+                    >
+                      📧 Email a seleccionados
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Tabla */}
+              {leads.length === 0 ? (
+                <div className="crm-empty">No hay leads con este filtro.<br />Probá con "Todos los estados".</div>
+              ) : (
+                <div style={{ overflowX: 'auto' }}>
+                  <table className="crm-table">
+                    <thead>
+                      <tr>
+                        <th style={{ width: '40px' }}></th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Estado</th>
+                        <th>Servicio</th>
+                        <th>Fuente</th>
+                        <th>Fecha</th>
+                        <th style={{ width: '120px' }}>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {leads.map(lead => (
+                        <tr
+                          key={lead._id}
+                          className={`crm-table-row ${selectedLead?._id === lead._id ? 'active' : ''}`}
+                          onClick={() => { setSelectedLead(lead); setEditingLead(false); }}
+                        >
+                          <td onClick={e => e.stopPropagation()}>
+                            <input
+                              type="checkbox"
+                              checked={checkedLeads.has(lead._id)}
+                              onChange={e => toggleCheckLead(e, lead._id)}
+                              style={{ width: '15px', height: '15px', accentColor: '#3b82f6', cursor: 'pointer' }}
+                            />
+                          </td>
+                          <td>
+                            <div style={{ fontWeight: '600', color: '#e2e8f0', maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {lead.name}
+                            </div>
+                          </td>
+                          <td style={{ color: '#94a3b8', fontSize: '12px', maxWidth: '180px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {lead.email || '—'}
+                          </td>
+                          <td style={{ color: '#94a3b8', fontSize: '12px', whiteSpace: 'nowrap' }}>
+                            {lead.phone || '—'}
+                          </td>
+                          <td>
+                            <span style={{
+                              background: getLeadStatusColor(lead.status),
+                              color: 'white',
+                              padding: '3px 10px',
+                              borderRadius: '20px',
+                              fontSize: '11px',
+                              fontWeight: '600',
+                              whiteSpace: 'nowrap'
+                            }}>
+                              {getLeadStatusLabel(lead.status)}
+                            </span>
+                          </td>
+                          <td style={{ color: '#94a3b8', fontSize: '12px' }}>{lead.service}</td>
+                          <td style={{ color: '#94a3b8', fontSize: '12px' }}>{lead.source}</td>
+                          <td style={{ color: '#64748b', fontSize: '12px', whiteSpace: 'nowrap' }}>
+                            {new Date(lead.createdAt).toLocaleDateString('es-ES')}
+                          </td>
+                          <td onClick={e => e.stopPropagation()}>
+                            <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                              {buildWhatsAppLink(lead) && (
+                                <a
+                                  href={buildWhatsAppLink(lead)}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  title="WhatsApp"
+                                  style={{ color: '#25d366', fontSize: '16px', textDecoration: 'none' }}
+                                >💬</a>
+                              )}
+                              <button
+                                onClick={() => { setSelectedLead(lead); setEditingLead(true); }}
+                                title="Editar"
+                                style={{ background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', color: '#3b82f6', borderRadius: '5px', padding: '3px 8px', cursor: 'pointer', fontSize: '12px' }}
+                              >✏️</button>
+                              <button
+                                onClick={() => handleDeleteLead(lead._id)}
+                                title="Eliminar"
+                                style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.3)', color: '#ef4444', borderRadius: '5px', padding: '3px 8px', cursor: 'pointer', fontSize: '12px' }}
+                              >🗑️</button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               )}
-              <div className="crm-list">
-                {leads.length === 0 ? (
-                  <div className="crm-empty">No hay leads todavía.<br />¡Los del portfolio aparecerán aquí!</div>
-                ) : leads.map(lead => (
-                  <div
-                    key={lead._id}
-                    className={`crm-lead-card ${selectedLead?._id === lead._id ? 'active' : ''}`}
-                    onClick={() => { setSelectedLead(lead); setEditingLead(false); }}
-                  >
-                    <div className="crm-lead-top">
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
-                        {lead.email && (
-                          <input
-                            type="checkbox"
-                            checked={checkedLeads.has(lead._id)}
-                            onClick={e => toggleCheckLead(e, lead._id)}
-                            onChange={() => {}}
-                            style={{ width: '16px', height: '16px', cursor: 'pointer', accentColor: '#3b82f6', flexShrink: 0 }}
-                          />
-                        )}
-                        <span className="crm-lead-name">{lead.name}</span>
-                      </div>
-                      <span className="crm-lead-status" style={{ background: getLeadStatusColor(lead.status) }}>
-                        {getLeadStatusLabel(lead.status)}
-                      </span>
-                    </div>
-                    <div className="crm-lead-meta">
-                      {lead.email && <span>✉️ {lead.email}</span>}
-                      {lead.phone && <span>📱 {lead.phone}</span>}
-                      <span>📍 {lead.source}</span>
-                    </div>
-                    <div className="crm-lead-service">
-                      🎨 {lead.service} · {new Date(lead.createdAt).toLocaleDateString('es-ES')}
-                    </div>
-                  </div>
-                ))}
-              </div>
+            </div>
+
+            {/* Panel detalle del lead */}
+            <div className="crm-layout">
+              <div></div>
 
               {/* Detalle del lead */}
               {selectedLead && (
