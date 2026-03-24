@@ -80,15 +80,29 @@ app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 // Hacer io accesible en las rutas
 app.set('io', io);
 
-// Conectar a MongoDB
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
+// Conectar a MongoDB con caché para Vercel serverless
+let mongoConnected = false;
+const connectMongo = async () => {
+  if (mongoConnected || mongoose.connection.readyState === 1) return;
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    mongoConnected = true;
     console.log('✅ Conectado a MongoDB Atlas');
-  })
-  .catch((error) => {
+  } catch (error) {
     console.error('❌ Error conectando a MongoDB:', error);
-  });
+    throw error;
+  }
+};
+
+// Middleware que garantiza conexión antes de cada request
+app.use(async (req, res, next) => {
+  try {
+    await connectMongo();
+    next();
+  } catch {
+    res.status(503).json({ message: 'Base de datos no disponible' });
+  }
+});
 
 // Socket.IO - Manejo de conexiones
 io.on('connection', (socket) => {

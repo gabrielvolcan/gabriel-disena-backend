@@ -14,14 +14,13 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Verificar conexión
-transporter.verify((error, success) => {
-  if (error) {
-    console.error('❌ Error configurando email:', error);
-  } else {
-    console.log('✅ Servidor de email listo');
-  }
-});
+// Verificar conexión solo en desarrollo
+if (process.env.NODE_ENV !== 'production') {
+  transporter.verify((error) => {
+    if (error) console.error('❌ Error configurando email:', error);
+    else console.log('✅ Servidor de email listo');
+  });
+}
 
 // ✉️ EMAIL 1: BIENVENIDA + CONTRASEÑA
 export const sendWelcomeEmail = async (userEmail, userName, password) => {
