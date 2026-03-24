@@ -929,6 +929,10 @@ const Admin = () => {
         showNotification(`✅ ${data.message}`, 'success');
         setShowMarketing(false);
         setMarketing({ subject: '', html: '', targetStatus: '', targetService: '' });
+        setCheckedLeads(new Set());
+        // Recargar lista y stats para reflejar el nuevo estado "enviado"
+        fetchLeads(leadFilter);
+        fetchLeadStats();
       } else {
         showNotification(data.message || 'Error al enviar', 'error');
       }

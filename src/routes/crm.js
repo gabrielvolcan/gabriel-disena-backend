@@ -308,6 +308,7 @@ router.post('/marketing/send', isAdminOrSuperAdmin, async (req, res) => {
 
     let sent = 0;
     let failed = 0;
+    const sentEmails = [];
 
     for (const recipient of recipients) {
       const email = typeof recipient === 'string' ? recipient : recipient.email;
@@ -320,9 +321,18 @@ router.post('/marketing/send', isAdminOrSuperAdmin, async (req, res) => {
           html: html.replace(/\{\{nombre\}\}/g, name)
         });
         sent++;
+        sentEmails.push(email);
       } catch {
         failed++;
       }
+    }
+
+    // Actualizar estado a "enviado" para todos los que recibieron el email
+    if (sentEmails.length > 0) {
+      await Lead.updateMany(
+        { email: { $in: sentEmails } },
+        { $set: { status: 'enviado' } }
+      );
     }
 
     res.json({
