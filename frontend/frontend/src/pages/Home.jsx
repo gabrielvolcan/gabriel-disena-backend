@@ -132,7 +132,7 @@ function Home() {
           </h1>
 
           <p className="hero-description">
-            Especializado en <strong style={{ color: '#ec4899' }}>diseño gráfico profesional</strong>, 
+            Especializado en <strong style={{ color: '#00d68f' }}>diseño gráfico profesional</strong>, 
             desarrollo web moderno y aplicaciones personalizadas. 
             <br />
             <span style={{ color: '#60a5fa', fontWeight: '600' }}>
@@ -146,7 +146,7 @@ function Home() {
               to="/services/logos" 
               className="btn-primary" 
               style={{ 
-                background: 'linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)'
+                background: 'linear-gradient(135deg, #00d68f 0%, #00b377 100%)'
               }}
             >
               🎨 Diseño de Logos
@@ -281,7 +281,7 @@ function Home() {
             <h2 className="section-title" style={{ color: 'white' }}>
               Portfolio <span style={{ 
                 fontStyle: 'italic',
-                background: 'linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)',
+                background: 'linear-gradient(135deg, #00d68f 0%, #00b377 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text'
