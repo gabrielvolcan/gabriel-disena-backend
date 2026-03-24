@@ -3,7 +3,7 @@ dotenv.config();
 
 // ── Envío via Resend (funciona en Vercel serverless) ─────────────────────────
 const sendEmail = async ({ to, subject, html }) => {
-  const from = process.env.EMAIL_FROM || 'Gabriel Diseña <onboarding@resend.dev>';
+  const from = process.env.EMAIL_FROM || 'Gabriel Diseña <noreply@gabrieldisena.com>';
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
