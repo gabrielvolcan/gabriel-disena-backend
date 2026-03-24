@@ -1929,7 +1929,7 @@ return (
                     ))}
                   </div>
                   <p style={{ margin: '8px 0 0', fontSize: '12px', color: '#64748b' }}>
-                    * = obligatorio · estado: frio, interesado, potencial, cliente, cerrado · servicio: logo, web, ambos, otro
+                    * = obligatorio · email: también acepta "correo", "mail" · teléfono: también acepta "cel", "celular", "whatsapp", "movil" · nombre: también acepta "nombres", "cliente", "contacto"
                   </p>
                 </div>
 

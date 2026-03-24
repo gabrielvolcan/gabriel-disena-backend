@@ -42,7 +42,10 @@ function parseCSV(text) {
     return fields;
   };
 
-  const headers = parseRow(lines[0]).map(h => h.toLowerCase().replace(/\s+/g, '_'));
+  const normalizeHeader = h => h.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // quita acentos
+    .replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+  const headers = parseRow(lines[0]).map(normalizeHeader);
   const rows = [];
   for (let i = 1; i < lines.length; i++) {
     const values = parseRow(lines[i]);
@@ -386,25 +389,39 @@ router.post('/import/csv', isAdminOrSuperAdmin, csvUpload.single('file'), async 
     const leads = [];
     const errors = [];
 
-    rows.forEach((row, idx) => {
-      const name = row.nombre || row.name || '';
-      if (!name.trim()) { errors.push(`Fila ${idx + 2}: nombre vacío`); return; }
+    // Helper: busca el primer valor no vacío entre varias claves posibles
+    const pick = (row, keys) => {
+      for (const k of keys) { if (row[k] && row[k].trim()) return row[k].trim(); }
+      return '';
+    };
 
-      const status  = validStatuses.includes(row.estado || row.status) ? (row.estado || row.status) : 'frio';
-      const service = validServices.includes(row.servicio || row.service) ? (row.servicio || row.service) : 'otro';
-      const source  = validSources.includes(row.fuente || row.source) ? (row.fuente || row.source) : 'directo';
+    rows.forEach((row, idx) => {
+      const name = pick(row, ['nombre', 'name', 'nombres', 'nombre_completo', 'full_name', 'cliente', 'contacto']);
+      if (!name) { errors.push(`Fila ${idx + 2}: nombre vacío`); return; }
+
+      const emailVal = pick(row, ['email', 'correo', 'mail', 'e_mail', 'correo_electronico', 'email_address']);
+      const phoneVal = pick(row, ['telefono', 'phone', 'tel', 'celular', 'cel', 'movil', 'whatsapp', 'numero', 'numero_telefono', 'telefono_celular', 'phone_number']);
+      const countryVal = pick(row, ['pais', 'country', 'ciudad', 'city', 'ubicacion', 'location']) || 'otro';
+
+      const statusRaw  = pick(row, ['estado', 'status', 'etapa', 'stage']);
+      const serviceRaw = pick(row, ['servicio', 'service', 'producto', 'product', 'tipo', 'type']);
+      const sourceRaw  = pick(row, ['fuente', 'source', 'origen', 'origin', 'canal', 'channel']);
+
+      const status  = validStatuses.includes(statusRaw)  ? statusRaw  : 'frio';
+      const service = validServices.includes(serviceRaw) ? serviceRaw : 'otro';
+      const source  = validSources.includes(sourceRaw)   ? sourceRaw  : 'directo';
 
       leads.push({
-        name:    name.trim(),
-        email:   (row.email || '').trim().toLowerCase(),
-        phone:   (row.telefono || row.phone || '').trim(),
-        country: (row.pais || row.country || 'otro').trim().toLowerCase(),
+        name,
+        email:   emailVal.toLowerCase(),
+        phone:   phoneVal,
+        country: countryVal.toLowerCase(),
         service,
         source,
         status,
-        notes:   (row.notas || row.notes || '').trim(),
-        budget:  (row.presupuesto || row.budget || '').trim(),
-        message: (row.mensaje || row.message || '').trim()
+        notes:   pick(row, ['notas', 'notes', 'observaciones', 'comentarios', 'comments']),
+        budget:  pick(row, ['presupuesto', 'budget', 'precio', 'price', 'monto', 'amount']),
+        message: pick(row, ['mensaje', 'message', 'descripcion', 'description', 'detalle', 'detail'])
       });
     });
 
