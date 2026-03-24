@@ -64,6 +64,22 @@ const Admin = () => {
     file: null
   });
 
+  // ── CRM STATE ──────────────────────────────────────────────────
+  const [leads, setLeads] = useState([]);
+  const [selectedLead, setSelectedLead] = useState(null);
+  const [showCreateLead, setShowCreateLead] = useState(false);
+  const [leadFilter, setLeadFilter] = useState({ status: '', search: '' });
+  const [newLead, setNewLead] = useState({ name: '', email: '', phone: '', country: 'otro', service: 'otro', source: 'directo', status: 'frio', notes: '', budget: '', message: '' });
+  const [followUpData, setFollowUpData] = useState({ note: '', method: 'whatsapp', date: '' });
+  const [showMarketing, setShowMarketing] = useState(false);
+  const [marketing, setMarketing] = useState({ subject: '', html: '', targetStatus: '', targetService: '' });
+  const [sendingMarketing, setSendingMarketing] = useState(false);
+  const [editingLead, setEditingLead] = useState(false);
+  const [showImport, setShowImport] = useState(false);
+  const [importFile, setImportFile] = useState(null);
+  const [importResult, setImportResult] = useState(null);
+  const [importing, setImporting] = useState(false);
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
@@ -82,6 +98,7 @@ const Admin = () => {
     setSocket(newSocket);
     fetchProjects();
     fetchUsers();
+    fetchLeads();
     
     if (userRole === 'superadmin') {
       fetchAdministrators();
@@ -131,8 +148,13 @@ const Admin = () => {
       const response = await fetch('https://gabriel-disena-backend.onrender.com/api/admin/projects', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
+      if (!response.ok) {
+        if (response.status === 401) navigate('/login');
+        setLoading(false);
+        return;
+      }
       const data = await response.json();
-      setProjects(data);
+      setProjects(Array.isArray(data) ? data : []);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching projects:', error);
@@ -147,8 +169,9 @@ const Admin = () => {
       const response = await fetch('https://gabriel-disena-backend.onrender.com/api/admin/users', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
+      if (!response.ok) return;
       const data = await response.json();
-      setUsers(data);
+      setUsers(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error fetching users:', error);
     }
@@ -669,6 +692,212 @@ const Admin = () => {
     }
   };
 
+  // ── CRM FUNCTIONS ──────────────────────────────────────────────
+  const fetchLeads = async (filters = {}) => {
+    try {
+      const token = localStorage.getItem('token');
+      const params = new URLSearchParams();
+      if (filters.status) params.append('status', filters.status);
+      if (filters.search) params.append('search', filters.search);
+      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/crm?${params}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setLeads(data);
+      }
+    } catch (error) {
+      console.error('Error fetching leads:', error);
+    }
+  };
+
+  const handleCreateLead = async (e) => {
+    e.preventDefault();
+    if (!newLead.name.trim()) { showNotification('El nombre es obligatorio', 'error'); return; }
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/crm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(newLead)
+      });
+      if (response.ok) {
+        showNotification('✅ Lead creado exitosamente', 'success');
+        setNewLead({ name: '', email: '', phone: '', country: 'otro', service: 'otro', source: 'directo', status: 'frio', notes: '', budget: '', message: '' });
+        setShowCreateLead(false);
+        fetchLeads(leadFilter);
+      } else {
+        const data = await response.json();
+        showNotification(data.message || 'Error al crear lead', 'error');
+      }
+    } catch { showNotification('Error de conexión', 'error'); }
+  };
+
+  const handleUpdateLeadStatus = async (leadId, status) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/crm/${leadId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ status })
+      });
+      if (response.ok) {
+        const updated = await response.json();
+        setLeads(prev => prev.map(l => l._id === leadId ? updated : l));
+        if (selectedLead?._id === leadId) setSelectedLead(updated);
+        showNotification('Estado actualizado', 'success');
+      }
+    } catch { showNotification('Error al actualizar', 'error'); }
+  };
+
+  const handleSaveLeadEdit = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/crm/${selectedLead._id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(selectedLead)
+      });
+      if (response.ok) {
+        const updated = await response.json();
+        setLeads(prev => prev.map(l => l._id === updated._id ? updated : l));
+        setSelectedLead(updated);
+        setEditingLead(false);
+        showNotification('✅ Lead actualizado', 'success');
+      }
+    } catch { showNotification('Error al actualizar', 'error'); }
+  };
+
+  const handleDeleteLead = async (leadId) => {
+    if (!window.confirm('¿Eliminar este lead?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      await fetch(`https://gabriel-disena-backend.onrender.com/api/crm/${leadId}`, {
+        method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` }
+      });
+      setLeads(prev => prev.filter(l => l._id !== leadId));
+      if (selectedLead?._id === leadId) setSelectedLead(null);
+      showNotification('Lead eliminado', 'success');
+    } catch { showNotification('Error al eliminar', 'error'); }
+  };
+
+  const handleAddFollowUp = async (e) => {
+    e.preventDefault();
+    if (!followUpData.note.trim()) { showNotification('La nota es obligatoria', 'error'); return; }
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/crm/${selectedLead._id}/followup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(followUpData)
+      });
+      if (response.ok) {
+        const updated = await response.json();
+        setSelectedLead(updated);
+        setLeads(prev => prev.map(l => l._id === updated._id ? updated : l));
+        setFollowUpData({ note: '', method: 'whatsapp', date: '' });
+        showNotification('✅ Seguimiento agregado', 'success');
+      }
+    } catch { showNotification('Error al agregar seguimiento', 'error'); }
+  };
+
+  const handleDeleteFollowUp = async (followUpId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/crm/${selectedLead._id}/followup/${followUpId}`, {
+        method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (response.ok) {
+        const updated = await response.json();
+        setSelectedLead(updated);
+        setLeads(prev => prev.map(l => l._id === updated._id ? updated : l));
+      }
+    } catch { showNotification('Error al eliminar seguimiento', 'error'); }
+  };
+
+  const handleSendMarketing = async (e) => {
+    e.preventDefault();
+    if (!marketing.subject.trim() || !marketing.html.trim()) {
+      showNotification('Asunto y contenido son obligatorios', 'error'); return;
+    }
+    setSendingMarketing(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/crm/marketing/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(marketing)
+      });
+      const data = await response.json();
+      if (response.ok) {
+        showNotification(`✅ ${data.message}`, 'success');
+        setShowMarketing(false);
+        setMarketing({ subject: '', html: '', targetStatus: '', targetService: '' });
+      } else {
+        showNotification(data.message || 'Error al enviar', 'error');
+      }
+    } catch { showNotification('Error de conexión', 'error'); }
+    finally { setSendingMarketing(false); }
+  };
+
+  const handleImportCSV = async (e) => {
+    e.preventDefault();
+    if (!importFile) { showNotification('Selecciona un archivo CSV', 'error'); return; }
+    setImporting(true);
+    setImportResult(null);
+    try {
+      const token = localStorage.getItem('token');
+      const formData = new FormData();
+      formData.append('file', importFile);
+      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/crm/import/csv', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setImportResult({ success: true, ...data });
+        fetchLeads(leadFilter);
+        setImportFile(null);
+      } else {
+        setImportResult({ success: false, message: data.message });
+      }
+    } catch { setImportResult({ success: false, message: 'Error de conexión' }); }
+    finally { setImporting(false); }
+  };
+
+  const handleDownloadTemplate = () => {
+    const token = localStorage.getItem('token');
+    fetch('https://gabriel-disena-backend.onrender.com/api/crm/import/template', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+      .then(r => r.blob())
+      .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'plantilla-leads.csv'; a.click();
+        URL.revokeObjectURL(url);
+      });
+  };
+
+  const getLeadStatusColor = (status) => ({
+    frio: '#64748b', interesado: '#f59e0b', potencial: '#3b82f6',
+    cliente: '#10b981', cerrado: '#ef4444'
+  }[status] || '#64748b');
+
+  const getLeadStatusLabel = (status) => ({
+    frio: '🧊 Frío', interesado: '🔥 Interesado', potencial: '⭐ Potencial',
+    cliente: '✅ Cliente', cerrado: '❌ Cerrado'
+  }[status] || status);
+
+  const buildWhatsAppLink = (lead) => {
+    const phone = lead.phone?.replace(/\D/g, '');
+    if (!phone) return null;
+    const msg = encodeURIComponent(`Hola ${lead.name}! Te contacto de parte de Gabriel Diseña. 🎨`);
+    return `https://wa.me/${phone}?text=${msg}`;
+  };
+
   const showNotification = (message, type) => {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 3000);
@@ -799,8 +1028,14 @@ return (
         >
           Clientes
         </button>
+        <button
+          className={`tab ${activeTab === 'crm' ? 'active' : ''}`}
+          onClick={() => { setActiveTab('crm'); fetchLeads(leadFilter); }}
+        >
+          🎯 CRM / Leads
+        </button>
         {currentUserRole === 'superadmin' && (
-          <button 
+          <button
             className={`tab ${activeTab === 'administrators' ? 'active' : ''}`}
             onClick={() => setActiveTab('administrators')}
           >
@@ -1533,6 +1768,424 @@ return (
       )}
 
       {/* MODAL DE REGISTRO DE PAGO */}
+        {/* ── TAB CRM ────────────────────────────────────────────── */}
+        {activeTab === 'crm' && (
+          <div className="tab-content">
+            {/* Header */}
+            <div className="content-header">
+              <h2>🎯 CRM — Gestión de Leads</h2>
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                <button className="btn-secondary" onClick={() => { setShowImport(!showImport); setImportResult(null); }}>
+                  📥 Importar BD
+                </button>
+                <button className="btn-primary" onClick={() => setShowMarketing(!showMarketing)}>
+                  📧 Email Marketing
+                </button>
+                <button className="btn-primary" onClick={() => setShowCreateLead(!showCreateLead)}>
+                  + Nuevo Lead
+                </button>
+              </div>
+            </div>
+
+            {/* Stats rápidas */}
+            <div className="crm-stats">
+              {[
+                { label: 'Total', value: leads.length, color: '#64748b' },
+                { label: '🧊 Fríos', value: leads.filter(l => l.status === 'frio').length, color: '#64748b' },
+                { label: '🔥 Interesados', value: leads.filter(l => l.status === 'interesado').length, color: '#f59e0b' },
+                { label: '⭐ Potenciales', value: leads.filter(l => l.status === 'potencial').length, color: '#3b82f6' },
+                { label: '✅ Clientes', value: leads.filter(l => l.status === 'cliente').length, color: '#10b981' },
+              ].map(s => (
+                <div key={s.label} className="crm-stat-card" style={{ borderColor: s.color }}>
+                  <div className="crm-stat-num" style={{ color: s.color }}>{s.value}</div>
+                  <div className="crm-stat-label">{s.label}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Modal Importar CSV */}
+            {showImport && (
+              <div className="form-card" style={{ marginBottom: '24px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                  <h3 style={{ margin: 0 }}>📥 Importar Base de Datos (CSV)</h3>
+                  <button className="btn-secondary" style={{ padding: '6px 14px', fontSize: '13px' }} onClick={handleDownloadTemplate}>
+                    ⬇️ Descargar Plantilla
+                  </button>
+                </div>
+
+                <div className="import-columns-info">
+                  <p style={{ margin: '0 0 6px', fontSize: '13px', color: '#94a3b8' }}>Columnas aceptadas en el CSV:</p>
+                  <div className="import-columns-list">
+                    {['nombre *', 'email', 'telefono', 'pais', 'servicio', 'fuente', 'estado', 'presupuesto', 'notas', 'mensaje'].map(col => (
+                      <span key={col} className="import-col-tag">{col}</span>
+                    ))}
+                  </div>
+                  <p style={{ margin: '8px 0 0', fontSize: '12px', color: '#64748b' }}>
+                    * = obligatorio · estado: frio, interesado, potencial, cliente, cerrado · servicio: logo, web, ambos, otro
+                  </p>
+                </div>
+
+                <form onSubmit={handleImportCSV} style={{ marginTop: '20px' }}>
+                  <div className="import-drop-zone" onClick={() => document.getElementById('csv-input').click()}>
+                    <input
+                      id="csv-input"
+                      type="file"
+                      accept=".csv,text/csv"
+                      style={{ display: 'none' }}
+                      onChange={e => { setImportFile(e.target.files[0]); setImportResult(null); }}
+                    />
+                    {importFile ? (
+                      <div className="import-file-selected">
+                        <span style={{ fontSize: '2rem' }}>📄</span>
+                        <strong>{importFile.name}</strong>
+                        <span style={{ color: '#64748b', fontSize: '13px' }}>{(importFile.size / 1024).toFixed(1)} KB</span>
+                      </div>
+                    ) : (
+                      <div className="import-file-placeholder">
+                        <span style={{ fontSize: '2.5rem' }}>📂</span>
+                        <strong>Haz clic para seleccionar tu CSV</strong>
+                        <span style={{ color: '#64748b', fontSize: '13px' }}>o arrastra el archivo aquí</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {importResult && (
+                    <div className={`import-result ${importResult.success ? 'success' : 'error'}`}>
+                      {importResult.success ? (
+                        <>
+                          <span style={{ fontSize: '1.5rem' }}>✅</span>
+                          <div>
+                            <strong>{importResult.message}</strong>
+                            {importResult.skipped > 0 && <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#94a3b8' }}>{importResult.skipped} filas omitidas</p>}
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <span style={{ fontSize: '1.5rem' }}>❌</span>
+                          <strong>{importResult.message}</strong>
+                        </>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="form-actions" style={{ marginTop: '16px' }}>
+                    <button type="submit" className="btn-primary" disabled={!importFile || importing}>
+                      {importing ? 'Importando...' : '🚀 Importar Leads'}
+                    </button>
+                    <button type="button" className="btn-secondary" onClick={() => { setShowImport(false); setImportFile(null); setImportResult(null); }}>
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {/* Email Marketing Modal */}
+            {showMarketing && (
+              <div className="form-card" style={{ marginBottom: '24px' }}>
+                <h3>📧 Enviar Campaña de Email Marketing</h3>
+                <form onSubmit={handleSendMarketing}>
+                  <div className="form-grid">
+                    <div className="form-group">
+                      <label>Filtrar por Estado</label>
+                      <select value={marketing.targetStatus} onChange={e => setMarketing({ ...marketing, targetStatus: e.target.value })}>
+                        <option value="">Todos los leads con email</option>
+                        <option value="frio">Frío</option>
+                        <option value="interesado">Interesado</option>
+                        <option value="potencial">Potencial</option>
+                        <option value="cliente">Cliente</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label>Filtrar por Servicio</label>
+                      <select value={marketing.targetService} onChange={e => setMarketing({ ...marketing, targetService: e.target.value })}>
+                        <option value="">Todos los servicios</option>
+                        <option value="logo">Logo</option>
+                        <option value="web">Web</option>
+                        <option value="ambos">Logo + Web</option>
+                      </select>
+                    </div>
+                    <div className="form-group full-width">
+                      <label>Asunto *</label>
+                      <input value={marketing.subject} onChange={e => setMarketing({ ...marketing, subject: e.target.value })} placeholder="Ej: 🎨 Oferta especial para ti" required />
+                    </div>
+                    <div className="form-group full-width">
+                      <label>Contenido HTML (usa {'{{nombre}}'} para personalizar)</label>
+                      <textarea value={marketing.html} onChange={e => setMarketing({ ...marketing, html: e.target.value })}
+                        placeholder={'<p>Hola {{nombre}}, tenemos una oferta especial...</p>'} rows="6" required />
+                    </div>
+                  </div>
+                  <div className="form-actions">
+                    <button type="submit" className="btn-primary" disabled={sendingMarketing}>
+                      {sendingMarketing ? 'Enviando...' : '🚀 Enviar Campaña'}
+                    </button>
+                    <button type="button" className="btn-secondary" onClick={() => setShowMarketing(false)}>Cancelar</button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {/* Crear Lead */}
+            {showCreateLead && (
+              <div className="form-card" style={{ marginBottom: '24px' }}>
+                <h3>Nuevo Lead</h3>
+                <form onSubmit={handleCreateLead}>
+                  <div className="form-grid">
+                    <div className="form-group">
+                      <label>Nombre *</label>
+                      <input value={newLead.name} onChange={e => setNewLead({ ...newLead, name: e.target.value })} placeholder="Nombre completo" required />
+                    </div>
+                    <div className="form-group">
+                      <label>Email</label>
+                      <input type="email" value={newLead.email} onChange={e => setNewLead({ ...newLead, email: e.target.value })} placeholder="email@ejemplo.com" />
+                    </div>
+                    <div className="form-group">
+                      <label>Teléfono / WhatsApp</label>
+                      <input value={newLead.phone} onChange={e => setNewLead({ ...newLead, phone: e.target.value })} placeholder="+54 9 11 1234-5678" />
+                    </div>
+                    <div className="form-group">
+                      <label>País</label>
+                      <select value={newLead.country} onChange={e => setNewLead({ ...newLead, country: e.target.value })}>
+                        <option value="peru">Perú</option><option value="argentina">Argentina</option>
+                        <option value="chile">Chile</option><option value="venezuela">Venezuela</option>
+                        <option value="colombia">Colombia</option><option value="mexico">México</option>
+                        <option value="uruguay">Uruguay</option><option value="otro">Otro</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label>Servicio</label>
+                      <select value={newLead.service} onChange={e => setNewLead({ ...newLead, service: e.target.value })}>
+                        <option value="logo">Logo</option><option value="web">Web</option>
+                        <option value="ambos">Logo + Web</option><option value="otro">Otro</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label>Fuente</label>
+                      <select value={newLead.source} onChange={e => setNewLead({ ...newLead, source: e.target.value })}>
+                        <option value="directo">Directo</option><option value="portfolio">Portfolio</option>
+                        <option value="instagram">Instagram</option><option value="whatsapp">WhatsApp</option>
+                        <option value="referido">Referido</option><option value="otro">Otro</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label>Estado</label>
+                      <select value={newLead.status} onChange={e => setNewLead({ ...newLead, status: e.target.value })}>
+                        <option value="frio">🧊 Frío</option><option value="interesado">🔥 Interesado</option>
+                        <option value="potencial">⭐ Potencial</option><option value="cliente">✅ Cliente</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label>Presupuesto estimado</label>
+                      <input value={newLead.budget} onChange={e => setNewLead({ ...newLead, budget: e.target.value })} placeholder="Ej: $200 USD" />
+                    </div>
+                    <div className="form-group full-width">
+                      <label>Notas internas</label>
+                      <textarea value={newLead.notes} onChange={e => setNewLead({ ...newLead, notes: e.target.value })} placeholder="Notas sobre este lead..." rows="2" />
+                    </div>
+                  </div>
+                  <div className="form-actions">
+                    <button type="submit" className="btn-primary">Guardar Lead</button>
+                    <button type="button" className="btn-secondary" onClick={() => setShowCreateLead(false)}>Cancelar</button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {/* Filtros */}
+            <div className="crm-filters">
+              <input
+                className="crm-search"
+                placeholder="🔍 Buscar por nombre, email o teléfono..."
+                value={leadFilter.search}
+                onChange={e => { const f = { ...leadFilter, search: e.target.value }; setLeadFilter(f); fetchLeads(f); }}
+              />
+              <select
+                className="crm-filter-select"
+                value={leadFilter.status}
+                onChange={e => { const f = { ...leadFilter, status: e.target.value }; setLeadFilter(f); fetchLeads(f); }}
+              >
+                <option value="">Todos los estados</option>
+                <option value="frio">🧊 Frío</option>
+                <option value="interesado">🔥 Interesado</option>
+                <option value="potencial">⭐ Potencial</option>
+                <option value="cliente">✅ Cliente</option>
+                <option value="cerrado">❌ Cerrado</option>
+              </select>
+            </div>
+
+            {/* Layout: lista + detalle */}
+            <div className="crm-layout">
+              {/* Lista de leads */}
+              <div className="crm-list">
+                {leads.length === 0 ? (
+                  <div className="crm-empty">No hay leads todavía.<br />¡Los del portfolio aparecerán aquí!</div>
+                ) : leads.map(lead => (
+                  <div
+                    key={lead._id}
+                    className={`crm-lead-card ${selectedLead?._id === lead._id ? 'active' : ''}`}
+                    onClick={() => { setSelectedLead(lead); setEditingLead(false); }}
+                  >
+                    <div className="crm-lead-top">
+                      <span className="crm-lead-name">{lead.name}</span>
+                      <span className="crm-lead-status" style={{ background: getLeadStatusColor(lead.status) }}>
+                        {getLeadStatusLabel(lead.status)}
+                      </span>
+                    </div>
+                    <div className="crm-lead-meta">
+                      {lead.email && <span>✉️ {lead.email}</span>}
+                      {lead.phone && <span>📱 {lead.phone}</span>}
+                      <span>📍 {lead.source}</span>
+                    </div>
+                    <div className="crm-lead-service">
+                      🎨 {lead.service} · {new Date(lead.createdAt).toLocaleDateString('es-ES')}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Detalle del lead */}
+              {selectedLead && (
+                <div className="crm-detail">
+                  <div className="crm-detail-header">
+                    <div>
+                      <h3>{selectedLead.name}</h3>
+                      <span className="crm-lead-status" style={{ background: getLeadStatusColor(selectedLead.status), fontSize: '0.8rem', padding: '4px 10px', borderRadius: '20px', color: 'white' }}>
+                        {getLeadStatusLabel(selectedLead.status)}
+                      </span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      {buildWhatsAppLink(selectedLead) && (
+                        <a href={buildWhatsAppLink(selectedLead)} target="_blank" rel="noopener noreferrer" className="btn-whatsapp">
+                          💬 WhatsApp
+                        </a>
+                      )}
+                      <button className="btn-secondary" onClick={() => setEditingLead(!editingLead)}>
+                        ✏️ Editar
+                      </button>
+                      <button className="btn-danger-sm" onClick={() => handleDeleteLead(selectedLead._id)}>
+                        🗑️
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Edición del lead */}
+                  {editingLead ? (
+                    <form onSubmit={handleSaveLeadEdit} className="crm-edit-form">
+                      <div className="form-grid">
+                        <div className="form-group">
+                          <label>Nombre</label>
+                          <input value={selectedLead.name} onChange={e => setSelectedLead({ ...selectedLead, name: e.target.value })} />
+                        </div>
+                        <div className="form-group">
+                          <label>Email</label>
+                          <input value={selectedLead.email} onChange={e => setSelectedLead({ ...selectedLead, email: e.target.value })} />
+                        </div>
+                        <div className="form-group">
+                          <label>Teléfono</label>
+                          <input value={selectedLead.phone} onChange={e => setSelectedLead({ ...selectedLead, phone: e.target.value })} />
+                        </div>
+                        <div className="form-group">
+                          <label>Estado</label>
+                          <select value={selectedLead.status} onChange={e => setSelectedLead({ ...selectedLead, status: e.target.value })}>
+                            <option value="frio">🧊 Frío</option><option value="interesado">🔥 Interesado</option>
+                            <option value="potencial">⭐ Potencial</option><option value="cliente">✅ Cliente</option>
+                            <option value="cerrado">❌ Cerrado</option>
+                          </select>
+                        </div>
+                        <div className="form-group">
+                          <label>Presupuesto</label>
+                          <input value={selectedLead.budget} onChange={e => setSelectedLead({ ...selectedLead, budget: e.target.value })} />
+                        </div>
+                        <div className="form-group full-width">
+                          <label>Notas internas</label>
+                          <textarea value={selectedLead.notes} onChange={e => setSelectedLead({ ...selectedLead, notes: e.target.value })} rows="3" />
+                        </div>
+                      </div>
+                      <div className="form-actions">
+                        <button type="submit" className="btn-primary">Guardar cambios</button>
+                        <button type="button" className="btn-secondary" onClick={() => setEditingLead(false)}>Cancelar</button>
+                      </div>
+                    </form>
+                  ) : (
+                    <div className="crm-detail-info">
+                      <div className="crm-info-grid">
+                        {selectedLead.email && <div><span>✉️ Email</span><strong>{selectedLead.email}</strong></div>}
+                        {selectedLead.phone && <div><span>📱 Teléfono</span><strong>{selectedLead.phone}</strong></div>}
+                        <div><span>📍 País</span><strong>{selectedLead.country}</strong></div>
+                        <div><span>🎨 Servicio</span><strong>{selectedLead.service}</strong></div>
+                        <div><span>🔗 Fuente</span><strong>{selectedLead.source}</strong></div>
+                        {selectedLead.budget && <div><span>💰 Presupuesto</span><strong>{selectedLead.budget}</strong></div>}
+                        <div><span>📅 Creado</span><strong>{new Date(selectedLead.createdAt).toLocaleDateString('es-ES')}</strong></div>
+                      </div>
+                      {selectedLead.message && (
+                        <div className="crm-message-box">
+                          <span>💬 Mensaje del lead</span>
+                          <p>{selectedLead.message}</p>
+                        </div>
+                      )}
+                      {selectedLead.notes && (
+                        <div className="crm-notes-box">
+                          <span>📝 Notas internas</span>
+                          <p>{selectedLead.notes}</p>
+                        </div>
+                      )}
+                      {/* Cambio rápido de estado */}
+                      <div className="crm-status-quick">
+                        <span>Cambiar estado:</span>
+                        {['frio','interesado','potencial','cliente','cerrado'].map(s => (
+                          <button key={s}
+                            className={`crm-status-btn ${selectedLead.status === s ? 'active' : ''}`}
+                            style={{ borderColor: getLeadStatusColor(s), color: selectedLead.status === s ? 'white' : getLeadStatusColor(s), background: selectedLead.status === s ? getLeadStatusColor(s) : 'transparent' }}
+                            onClick={() => handleUpdateLeadStatus(selectedLead._id, s)}
+                          >
+                            {getLeadStatusLabel(s)}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Seguimientos */}
+                  <div className="crm-followups">
+                    <h4>📅 Seguimientos ({selectedLead.followUps?.length || 0})</h4>
+                    <form onSubmit={handleAddFollowUp} className="crm-followup-form">
+                      <textarea
+                        value={followUpData.note}
+                        onChange={e => setFollowUpData({ ...followUpData, note: e.target.value })}
+                        placeholder="Nota del seguimiento..."
+                        rows="2"
+                        required
+                      />
+                      <div style={{ display: 'flex', gap: '8px', marginTop: '8px', flexWrap: 'wrap' }}>
+                        <select value={followUpData.method} onChange={e => setFollowUpData({ ...followUpData, method: e.target.value })}>
+                          <option value="whatsapp">💬 WhatsApp</option>
+                          <option value="email">✉️ Email</option>
+                          <option value="llamada">📞 Llamada</option>
+                          <option value="otro">Otro</option>
+                        </select>
+                        <input type="date" value={followUpData.date} onChange={e => setFollowUpData({ ...followUpData, date: e.target.value })} />
+                        <button type="submit" className="btn-primary" style={{ padding: '8px 16px' }}>+ Agregar</button>
+                      </div>
+                    </form>
+                    <div className="crm-followup-list">
+                      {(selectedLead.followUps || []).slice().reverse().map(fu => (
+                        <div key={fu._id} className="crm-followup-item">
+                          <div className="crm-followup-meta">
+                            <span>{fu.method === 'whatsapp' ? '💬' : fu.method === 'email' ? '✉️' : fu.method === 'llamada' ? '📞' : '📌'} {fu.method}</span>
+                            <span>{new Date(fu.date || fu.createdAt).toLocaleDateString('es-ES')}</span>
+                            <button onClick={() => handleDeleteFollowUp(fu._id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444', padding: '0 4px' }}>🗑️</button>
+                          </div>
+                          <p>{fu.note}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
       {showPaymentModal && (
         <div className="modal-overlay" onClick={closePaymentModal}>
           <div className="modal-content modal-payment" onClick={(e) => e.stopPropagation()}>

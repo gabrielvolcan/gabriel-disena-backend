@@ -13,6 +13,7 @@ import adminRoutes from './routes/admin.js';
 import projectRoutes from './routes/projects.js';
 import analyticsRoutes from './routes/analyticsRoutes.js';
 import paymentRoutes from './routes/payments.js';
+import crmRoutes from './routes/crm.js';
 
 // Importar middleware
 import authMiddleware from './middleware/auth.js';
@@ -31,8 +32,10 @@ const httpServer = createServer(app);
 // =======================
 const allowedOrigins = [
   'http://localhost:5173',
+  'http://localhost:5174',
   'http://127.0.0.1:5173',
-  'https://gabrieldisena.com'
+  'https://gabrieldisena.com',
+  'https://www.gabrieldisena.com'
 ];
 
 // =======================
@@ -72,7 +75,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Servir archivos estáticos (uploads)
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 // Hacer io accesible en las rutas
 app.set('io', io);
@@ -138,6 +141,7 @@ app.use('/api/admin', adminRoutes); // ✅ El auth ya está en los middleware in
 app.use('/api/projects', projectRoutes); // Ya tiene auth dentro de cada ruta
 app.use('/api/analytics', authMiddleware, analyticsRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/crm', crmRoutes);
 
 // Ruta de prueba
 app.get('/', (req, res) => {
