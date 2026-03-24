@@ -1,3 +1,16 @@
+/* ========================================
+   LOGIN.CSS - Neumorphic Dark Design
+   ======================================== */
+
+/* ── Scrollbar ── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(59, 130, 246, 0.3) transparent;
+}
+*::-webkit-scrollbar { width: 4px; height: 4px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.3); border-radius: 2px; }
+
 .login-container {
   min-height: 100vh;
   display: flex;
@@ -5,7 +18,7 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
-  background: #020617;
+  background: #1a1b2e;
 }
 
 .login-background {
@@ -21,7 +34,7 @@
   position: absolute;
   border-radius: 50%;
   filter: blur(80px);
-  opacity: 0.3;
+  opacity: 0.18;
   animation: float 20s infinite ease-in-out;
 }
 
@@ -37,7 +50,7 @@
 .orb-2 {
   width: 400px;
   height: 400px;
-  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  background: linear-gradient(135deg, #8b5cf6, #3b82f6);
   bottom: -150px;
   right: -150px;
   animation-delay: 5s;
@@ -46,7 +59,7 @@
 .orb-3 {
   width: 350px;
   height: 350px;
-  background: linear-gradient(135deg, #3b82f6, #ec4899);
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -74,12 +87,11 @@
 }
 
 .login-card {
-  background: rgba(15, 23, 42, 0.8);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  border-radius: 24px;
+  background: #1e2040;
+  border-radius: 16px;
   padding: 48px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 6px 6px 14px #141525, -6px -6px 14px #222448;
 }
 
 .login-header {
@@ -93,6 +105,7 @@
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin: 0 0 8px 0;
 }
 
@@ -103,13 +116,14 @@
 }
 
 .error-message {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   margin-bottom: 24px;
   font-size: 14px;
+  font-weight: 500;
   text-align: center;
 }
 
@@ -128,23 +142,24 @@
 .form-group label {
   font-size: 14px;
   font-weight: 500;
-  color: #cbd5e1;
+  color: #94a3b8;
 }
 
 .form-group input {
   padding: 14px 16px;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: #1a1b2e;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 10px;
-  color: #ffffff;
+  color: #e2e8f0;
   font-size: 15px;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  box-shadow: inset 4px 4px 10px #141525, inset -4px -4px 10px #222448;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: inset 4px 4px 10px #141525, inset -4px -4px 10px #222448, 0 0 20px rgba(59, 130, 246, 0.15);
 }
 
 .form-group input::placeholder {
@@ -154,19 +169,21 @@
 .btn-login {
   margin-top: 8px;
   padding: 14px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  color: white;
+  background-color: #3b82f6;
+  background-image: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: #ffffff;
   border: none;
   border-radius: 10px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
 }
 
 .btn-login:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 8px 25px rgba(59, 130, 246, 0.35);
 }
 
 .btn-login:disabled {
@@ -189,7 +206,7 @@
   color: #3b82f6;
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease;
 }
 
 .login-footer a:hover {

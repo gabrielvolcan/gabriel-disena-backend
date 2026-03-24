@@ -1,12 +1,21 @@
 /* ========================================
-   HOME.CSS - Estilos Responsive para Home
+   HOME.CSS - Neumorphic Dark Design
    ======================================== */
+
+/* ── Scrollbar ── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(59, 130, 246, 0.3) transparent;
+}
+*::-webkit-scrollbar { width: 4px; height: 4px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.3); border-radius: 2px; }
 
 /* Contenedor principal del home */
 .home-container {
   min-height: 100vh;
-  background: #020617;
-  color: white;
+  background: #1a1b2e;
+  color: #e2e8f0;
   position: relative;
   overflow: hidden;
 }
@@ -18,7 +27,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  opacity: 0.4;
+  opacity: 0.25;
   z-index: 0;
 }
 
@@ -30,10 +39,11 @@
   top: 0;
   z-index: 100;
   padding: 1.5rem 2rem;
-  backdrop-filter: blur(10px);
-  background: rgba(2, 6, 23, 0.8);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
+  backdrop-filter: blur(12px);
+  background: rgba(26, 27, 46, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 20px rgba(20, 21, 37, 0.6);
+  transition: all 0.2s ease;
 }
 
 .nav-container {
@@ -51,7 +61,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  transition: transform 0.3s ease;
+  transition: transform 0.2s ease;
   cursor: pointer;
   text-decoration: none;
 }
@@ -69,7 +79,7 @@
 .nav-link {
   color: #94a3b8;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   position: relative;
 }
 
@@ -98,12 +108,13 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1.5rem;
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.25);
   border-radius: 2rem;
   margin-bottom: 2rem;
   font-size: 0.875rem;
-  color: #60a5fa;
+  color: #bfdbfe;
+  box-shadow: 6px 6px 14px #141525, -6px -6px 14px #222448;
 }
 
 .badge-dot {
@@ -111,6 +122,7 @@
   height: 8px;
   border-radius: 50%;
   background: #22c55e;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
 }
 
 .hero-title {
@@ -122,7 +134,7 @@
 }
 
 .hero-title-main {
-  background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+  background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -160,18 +172,67 @@
 }
 
 /* ========================================
+   BUTTONS (shared across sections)
+   ======================================== */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem 2rem;
+  background-color: #2563eb;
+  background-image: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem 2rem;
+  background: #1e2040;
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 6px 6px 14px #141525, -6px -6px 14px #222448;
+}
+
+.btn-secondary:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 6px 6px 14px #141525, -6px -6px 14px #222448, 0 0 20px rgba(59, 130, 246, 0.15);
+  color: #e2e8f0;
+}
+
+/* ========================================
    PORTFOLIO SECTIONS
    ======================================== */
 .portfolio-section {
   padding: 5rem 2rem;
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  background: #1e2040;
   position: relative;
   z-index: 1;
-  border-top: 1px solid rgba(236, 72, 153, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .portfolio-section.web-portfolio {
-  border-top: 1px solid rgba(59, 130, 246, 0.2);
+  border-top: 1px solid rgba(59, 130, 246, 0.15);
 }
 
 .portfolio-container {
@@ -206,7 +267,7 @@
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: normal;
   margin-bottom: 0.5rem;
-  color: white;
+  color: #e2e8f0;
   line-height: 1.1;
 }
 
@@ -228,7 +289,7 @@
 .section-description {
   font-size: 1rem;
   line-height: 1.7;
-  color: #cbd5e1;
+  color: #94a3b8;
   margin-bottom: 2rem;
 }
 
@@ -256,14 +317,16 @@
 
 .feature-dot.pink {
   background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+  box-shadow: 0 0 8px rgba(236, 72, 153, 0.5);
 }
 
 .feature-dot.blue {
   background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
 }
 
 .feature-title {
-  color: white;
+  color: #e2e8f0;
   font-weight: 600;
 }
 
@@ -276,23 +339,28 @@
   display: inline-block;
   margin-top: 2rem;
   padding: 1rem 2rem;
-  color: white;
-  border-radius: 0.75rem;
+  color: #ffffff;
+  border-radius: 10px;
   text-decoration: none;
   font-weight: bold;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .portfolio-cta.pink {
-  background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+  background-color: #ec4899;
+  background-image: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.2);
 }
 
 .portfolio-cta.blue {
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  background-color: #3b82f6;
+  background-image: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
 }
 
 .portfolio-cta:hover {
   transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 8px 25px rgba(59, 130, 246, 0.3);
 }
 
 /* ========================================
@@ -300,9 +368,10 @@
    ======================================== */
 .testimonials-section {
   padding: 5rem 2rem;
-  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  background: #1a1b2e;
   position: relative;
   z-index: 1;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .testimonials-container {
@@ -324,17 +393,19 @@
 
 .rating-box {
   flex: 0 0 250px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 1.5rem;
+  background: #1e2040;
+  border-radius: 16px;
   padding: 2rem;
   text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 6px 6px 14px #141525, -6px -6px 14px #222448;
 }
 
 .rating-title {
   font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
+  color: #e2e8f0;
 }
 
 .rating-stars {
@@ -367,9 +438,9 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  background: rgba(59, 130, 246, 0.2);
-  border: 1px solid rgba(59, 130, 246, 0.5);
-  color: white;
+  background: #1e2040;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #e2e8f0;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -378,12 +449,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  box-shadow: 6px 6px 14px #141525, -6px -6px 14px #222448;
 }
 
 .carousel-button:hover {
-  background: rgba(59, 130, 246, 0.4);
+  background: rgba(59, 130, 246, 0.15);
+  border-color: #3b82f6;
   transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
 }
 
 .carousel-button.prev {
@@ -402,16 +476,18 @@
 }
 
 .testimonial-card {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 1rem;
+  background: #1e2040;
+  border-radius: 16px;
   padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.5s ease;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.2s ease;
+  box-shadow: 6px 6px 14px #141525, -6px -6px 14px #222448;
 }
 
 .testimonial-card.center {
   opacity: 1;
   transform: scale(1.05);
+  box-shadow: 6px 6px 14px #141525, -6px -6px 14px #222448, 0 0 20px rgba(59, 130, 246, 0.15);
 }
 
 .testimonial-card.side {
@@ -435,6 +511,7 @@
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.25);
 }
 
 .testimonial-info {
@@ -447,6 +524,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  color: #e2e8f0;
 }
 
 .testimonial-role {
@@ -461,7 +539,7 @@
 }
 
 .testimonial-text {
-  color: #cbd5e1;
+  color: #94a3b8;
   font-size: 0.875rem;
   line-height: 1.5;
 }
@@ -479,19 +557,21 @@
 
 .cta-container {
   padding: 4rem 2rem;
-  border-radius: 2rem;
-  background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
-  border: 1px solid rgba(236, 72, 153, 0.2);
+  border-radius: 16px;
+  background: #1e2040;
+  border: 1px solid rgba(59, 130, 246, 0.15);
   text-align: center;
   position: relative;
   overflow: hidden;
   transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 6px 6px 14px #141525, -6px -6px 14px #222448;
 }
 
 .cta-title {
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: bold;
   margin-bottom: 1rem;
+  color: #e2e8f0;
 }
 
 .cta-description {
@@ -503,7 +583,7 @@
 .cta-button {
   font-size: 1.125rem;
   padding: 1.25rem 3rem;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .cta-button:hover {
@@ -514,11 +594,11 @@
    FOOTER
    ======================================== */
 .home-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   padding: 5rem 2rem 3rem;
   position: relative;
   z-index: 1;
-  background: linear-gradient(180deg, transparent 0%, #020617 50%);
+  background: linear-gradient(180deg, transparent 0%, #141525 100%);
 }
 
 .footer-container {
@@ -531,12 +611,13 @@
   width: 80px;
   height: 80px;
   margin: 0 auto 1.5rem;
-  background: linear-gradient(135deg, #ec4899 0%, #3b82f6 50%, #8b5cf6 100%);
-  border-radius: 1rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2rem;
+  box-shadow: 6px 6px 14px #141525, -6px -6px 14px #222448, 0 0 20px rgba(59, 130, 246, 0.2);
 }
 
 .footer-title {
@@ -544,6 +625,7 @@
   font-weight: normal;
   margin-bottom: 1rem;
   line-height: 1.1;
+  color: #e2e8f0;
 }
 
 .footer-subtitle {
@@ -551,7 +633,7 @@
   font-style: italic;
   font-weight: normal;
   margin-bottom: 3rem;
-  background: linear-gradient(135deg, #ec4899 0%, #3b82f6 50%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -559,7 +641,7 @@
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   padding-top: 2rem;
   margin-top: 3rem;
   color: #64748b;
