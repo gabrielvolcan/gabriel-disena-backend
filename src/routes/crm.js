@@ -261,7 +261,11 @@ router.post('/marketing/send', isAdminOrSuperAdmin, async (req, res) => {
     let recipients = [];
 
     if (customEmails && customEmails.length > 0) {
-      recipients = customEmails.filter(e => e && e.includes('@'));
+      recipients = customEmails.filter(e => {
+        if (!e) return false;
+        const addr = typeof e === 'string' ? e : e.email;
+        return addr && addr.includes('@');
+      });
     } else {
       const filter = { email: { $ne: '' } };
       if (targetStatus) filter.status = targetStatus;
