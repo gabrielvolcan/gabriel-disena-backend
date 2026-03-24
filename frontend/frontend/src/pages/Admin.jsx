@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import io from 'socket.io-client';
 import './Admin.css';
 
+const API_URL = import.meta.env.VITE_API_URL || 'https://gabriel-disena-backend.onrender.com';
+
 const Admin = () => {
   const navigate = useNavigate();
   const [socket, setSocket] = useState(null);
@@ -91,7 +93,7 @@ const Admin = () => {
 
     setCurrentUserRole(userRole);
 
-    const newSocket = io('https://gabriel-disena-backend.onrender.com', {
+    const newSocket = io(`${API_URL}`, {
       auth: { token }
     });
 
@@ -145,7 +147,7 @@ const Admin = () => {
   const fetchProjects = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/admin/projects', {
+      const response = await fetch(`${API_URL}/api/admin/projects`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!response.ok) {
@@ -166,7 +168,7 @@ const Admin = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/admin/users', {
+      const response = await fetch(`${API_URL}/api/admin/users`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!response.ok) return;
@@ -180,10 +182,10 @@ const Admin = () => {
   const fetchAdministrators = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/admin/administrators', {
+      const response = await fetch(`${API_URL}/api/admin/administrators`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         setAdministrators(data);
@@ -242,7 +244,7 @@ const Admin = () => {
       const token = localStorage.getItem('token');
       const endpoint = paymentData.paymentType === 'deposit' ? 'deposit' : 'final';
       
-      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/payments/${endpoint}/${paymentData.projectId}`, {
+      const response = await fetch(`${API_URL}/api/payments/${endpoint}/${paymentData.projectId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -293,7 +295,7 @@ const Admin = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/admin/users', {
+      const response = await fetch(`${API_URL}/api/admin/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -322,7 +324,7 @@ const Admin = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/admin/administrators', {
+      const response = await fetch(`${API_URL}/api/admin/administrators`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -352,7 +354,7 @@ const Admin = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/admin/administrators/${adminId}`, {
+      const response = await fetch(`${API_URL}/api/admin/administrators/${adminId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -413,7 +415,7 @@ const Admin = () => {
         status: newProject.status
       };
       
-      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/admin/projects', {
+      const response = await fetch(`${API_URL}/api/admin/projects`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -468,7 +470,7 @@ const Admin = () => {
         updatePayload.message = updateData.message.trim();
       }
 
-      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/admin/projects/${projectId}`, {
+      const response = await fetch(`${API_URL}/api/admin/projects/${projectId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -510,7 +512,7 @@ const Admin = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/projects/${selectedProject._id}/comment`, {
+      const response = await fetch(`${API_URL}/api/projects/${selectedProject._id}/comment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -558,7 +560,7 @@ const Admin = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/projects/${selectedProject._id}/comment/${commentId}`, {
+      const response = await fetch(`${API_URL}/api/projects/${selectedProject._id}/comment/${commentId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -619,7 +621,7 @@ const Admin = () => {
       formData.append('file', file);
 
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/projects/${selectedProject._id}/upload`, {
+      const response = await fetch(`${API_URL}/api/projects/${selectedProject._id}/upload`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData
@@ -659,7 +661,7 @@ const Admin = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/admin/projects/${projectId}`, {
+      const response = await fetch(`${API_URL}/api/admin/projects/${projectId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -678,7 +680,7 @@ const Admin = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/admin/users/${userId}`, {
+      const response = await fetch(`${API_URL}/api/admin/users/${userId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -699,7 +701,7 @@ const Admin = () => {
       const params = new URLSearchParams();
       if (filters.status) params.append('status', filters.status);
       if (filters.search) params.append('search', filters.search);
-      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/crm?${params}`, {
+      const response = await fetch(`${API_URL}/api/crm?${params}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -716,7 +718,7 @@ const Admin = () => {
     if (!newLead.name.trim()) { showNotification('El nombre es obligatorio', 'error'); return; }
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/crm', {
+      const response = await fetch(`${API_URL}/api/crm`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(newLead)
@@ -736,7 +738,7 @@ const Admin = () => {
   const handleUpdateLeadStatus = async (leadId, status) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/crm/${leadId}`, {
+      const response = await fetch(`${API_URL}/api/crm/${leadId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ status })
@@ -754,7 +756,7 @@ const Admin = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/crm/${selectedLead._id}`, {
+      const response = await fetch(`${API_URL}/api/crm/${selectedLead._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(selectedLead)
@@ -773,7 +775,7 @@ const Admin = () => {
     if (!window.confirm('¿Eliminar este lead?')) return;
     try {
       const token = localStorage.getItem('token');
-      await fetch(`https://gabriel-disena-backend.onrender.com/api/crm/${leadId}`, {
+      await fetch(`${API_URL}/api/crm/${leadId}`, {
         method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` }
       });
       setLeads(prev => prev.filter(l => l._id !== leadId));
@@ -787,7 +789,7 @@ const Admin = () => {
     if (!followUpData.note.trim()) { showNotification('La nota es obligatoria', 'error'); return; }
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/crm/${selectedLead._id}/followup`, {
+      const response = await fetch(`${API_URL}/api/crm/${selectedLead._id}/followup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(followUpData)
@@ -805,7 +807,7 @@ const Admin = () => {
   const handleDeleteFollowUp = async (followUpId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://gabriel-disena-backend.onrender.com/api/crm/${selectedLead._id}/followup/${followUpId}`, {
+      const response = await fetch(`${API_URL}/api/crm/${selectedLead._id}/followup/${followUpId}`, {
         method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -824,7 +826,7 @@ const Admin = () => {
     setSendingMarketing(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/crm/marketing/send', {
+      const response = await fetch(`${API_URL}/api/crm/marketing/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(marketing)
@@ -850,7 +852,7 @@ const Admin = () => {
       const token = localStorage.getItem('token');
       const formData = new FormData();
       formData.append('file', importFile);
-      const response = await fetch('https://gabriel-disena-backend.onrender.com/api/crm/import/csv', {
+      const response = await fetch(`${API_URL}/api/crm/import/csv`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData
@@ -869,7 +871,7 @@ const Admin = () => {
 
   const handleDownloadTemplate = () => {
     const token = localStorage.getItem('token');
-    fetch('https://gabriel-disena-backend.onrender.com/api/crm/import/template', {
+    fetch(`${API_URL}/api/crm/import/template`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(r => r.blob())
